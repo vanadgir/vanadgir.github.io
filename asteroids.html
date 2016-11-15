@@ -63,10 +63,10 @@ function loop(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.save();
 	ctx.lineWidth = 2;
-	ctx.strokeStyle = hasPoint(points, w, h, x, y) ? "#f00" : "#fff";
+	// ctx.strokeStyle = hasPoint(points, w, h, x, y) ? "#f00" : "#fff";
 	ctx.beginPath();
 	for (var i = 0, len = points.length; i < len; i += 2) {
-		if (i == 0) {
+		if (i === 0) {
 			ctx.moveTo(points[i] + w, points[i+1] + h)
 		} else {
 			ctx.lineTo(points[i] + w, points[i+1] + h)
