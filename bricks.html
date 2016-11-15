@@ -40,7 +40,7 @@
 <canvas id="myCanvas" width="480" height="320"></canvas>
 
 <script>
-var canvas = document.getElementById("myCanvas").style.backgroundColor="#FFFFFF";
+var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var ballRadius = 10;
 var x = canvas.width/2;
@@ -70,7 +70,7 @@ for(c=0; c<brickColumnCount; c++) {
 }
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+// document.addEventListener("mousemove", mouseMoveHandler, false);
 function keyDownHandler(e) {
     if(e.keyCode == 39) {
         rightPressed = true;
@@ -87,12 +87,12 @@ function keyUpHandler(e) {
         leftPressed = false;
     }
 }
-function mouseMoveHandler(e) {
+/* function mouseMoveHandler(e) {
     var relativeX = e.clientX - canvas.offsetLeft;
     if(relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth/2;
     }
-}
+} */
 function collisionDetection() {
     for(c=0; c<brickColumnCount; c++) {
         for(r=0; r<brickRowCount; r++) {
