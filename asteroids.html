@@ -43,6 +43,41 @@
 <script>
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+var points = [-4,-2,-2,-4,0,-2,-4,4,-2,3,0,4,2,1,4,-2,4,-4,2,-4,-2];
+var w = Math.round(canvas.width*0.5);
+var h = Math.round(canvas.height*0.5);
+var x = 0;
+var y = 0;
+
+document.onmousemove = function(evt) {
+	x = evt.pageX - canvas.offsetLeft;
+	y = evt.pageY - canvas.offsetTop;
+}
+
+for (var i = 0, len = points.length; i < len; i += 2) {
+	points[i] = points[i]*25;
+	points[i+1] = points[i+1]*25;
+}
+	
+function loop(){
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	ctx.save();
+	ctx.lineWidth = 2;
+	ctx.strokeStyle = hasPoint(points, w, h, x, y) ? "#f00" : "#fff";
+	ctx.beginPath();
+	for (var i = 0, len = points.length; i < len; i += 2) {
+		if (i == 0) {
+			ctx.moveTo(points[i] + w, points[i+1] + h)
+		} else {
+			ctx.lineTo(points[i] + w, points[i+1] + h)
+		}
+	}
+	ctx.stroke();
+	ctx.restore();
+	
+	window.requestAnimationFrame(loop, canvas);
+}
+window.requestAnimationFrame(loop, canvas);
 	
 </script>
 
