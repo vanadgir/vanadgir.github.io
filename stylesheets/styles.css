@@ -769,7 +769,7 @@ dt {
 }
 #header nav li.fork {
   float: left;
-  margin-left: 1px;
+  margin-left: 2px;
 }
 #header nav li.downloads {
   float: right;
