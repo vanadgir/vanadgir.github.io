@@ -251,10 +251,11 @@ function drawWin(){
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fill();
 	ctx.closePath();
-	ctx.fillStyle = '#000000'; // or whatever color the background is.
-	ctx.fillText("You win!", canvas.width/2, 200);
-	if (upPressed == true) {
-	ctx.fillStyle = '#FFFFFF'; // or whatever color the text should be.
+	ctx.fillStyle = '#FFFFFF'; // or whatever color the background is.
+	ctx.fillText("You win!", canvas.width/2-50, 100);
+	if (upPressed) {
+	ctx.fillStyle = '#000000'; // or whatever color the text should be.
+	ctx.fillText("You win!", canvas.width/2-50, 100);
 	refresh = true;
 	}
 }
@@ -263,13 +264,14 @@ function drawWin(){
 function drawLose(){
 	ctx.beginPath();
 	ctx.rect(0, 0, canvas.width, canvas.height);
-	ctx.fillStyle = "#FFFFFF";
+	ctx.fillStyle = "#000000";
 	ctx.fill();
 	ctx.closePath();
-	ctx.fillStyle = '#000000'; // or whatever color the background is.
-	ctx.fillText("You lose...", canvas.width/2, 200);
+	ctx.fillStyle = '#FFFFFF'; // or whatever color the background is.
+	ctx.fillText("You lose...", canvas.width/2-50, 100);
 	if (upPressed) {
-	ctx.fillStyle = '#FFFFFF'; // or whatever color the text should be.
+	ctx.fillStyle = '#000000'; // or whatever color the text should be.
+	ctx.fillText("You lose...", canvas.width/2-50, 100);
 	refresh = true;
 	}
 }
