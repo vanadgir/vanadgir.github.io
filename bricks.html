@@ -256,7 +256,6 @@ function drawWin(){
 	if (upPressed == true) {
 	context.fillStyle = '#FFFFFF'; // or whatever color the text should be.
 	refresh = true;
-	draw();
 	}
 }
 
@@ -272,12 +271,12 @@ function drawLose(){
 	if (upPressed) {
 	context.fillStyle = '#FFFFFF'; // or whatever color the text should be.
 	refresh = true;
-	draw();
 	}
 }
 	
 // run game while refresh is 1, menus are 0
 do {
+requestAnimationFrame(draw);
 draw();
 } while (refresh);
 	
