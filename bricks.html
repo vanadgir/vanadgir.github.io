@@ -218,7 +218,7 @@ function draw() {
         }
         else {
             lives--;
-            if(!lives) {
+            if(lives <= 0) {
 		refresh = false;
 		drawLose();
             }
