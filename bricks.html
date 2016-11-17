@@ -61,6 +61,7 @@ var paddleX = (canvas.width-paddleWidth)/2;
 // button booleans
 var rightPressed = false;
 var leftPressed = false;
+var upPressed = false;
 	
 // brick properties
 var brickRowCount = 7;
@@ -100,8 +101,9 @@ function keyDownHandler(e) {
     else if(e.keyCode == 37) {
         leftPressed = true;
     }
+	else if(e.keyCode == 38) {
+		upPressed = true;
 }
-
 function keyUpHandler(e) {
     if(e.keyCode == 39) {
         rightPressed = false;
@@ -109,6 +111,9 @@ function keyUpHandler(e) {
     else if(e.keyCode == 37) {
         leftPressed = false;
     }
+	else if(e.keyCode == 38) {
+		upPressed = false;
+	}
 }
 	
 /* function mouseMoveHandler(e) {
@@ -138,7 +143,8 @@ function collisionDetection() {
         }
     }
 }
-	
+
+// ball animation
 function drawBall() {
     ctx.beginPath();
     ctx.arc(x, y, ballRadius, 0, Math.PI*2);
@@ -146,7 +152,8 @@ function drawBall() {
     ctx.fill();
     ctx.closePath();
 }
-	
+
+// paddle animation
 function drawPaddle() {
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
@@ -154,6 +161,8 @@ function drawPaddle() {
     ctx.fill();
     ctx.closePath();
 }
+
+// brick spawn
 function drawBricks() {
     for(c=0; c<brickColumnCount; c++) {
         for(r=0; r<brickRowCount; r++) {
@@ -171,16 +180,22 @@ function drawBricks() {
         }
     }
 }
+
+// scorekeeper
 function drawScore() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Score: "+score, 8, 20);
 }
+
+// life counter
 function drawLives() {
     ctx.font = "16px Arial";
     ctx.fillStyle = "#0095DD";
     ctx.fillText("Lives: "+lives, canvas.width-65, 20);
 }
+	
+// main animation of game
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
@@ -228,6 +243,40 @@ function draw() {
     requestAnimationFrame(draw);
 }
 
+// win screen
+function drawWin(){
+	refresh = 0;
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fill();
+	ctx.closePath();
+	context.fillStyle = '#000000'; // or whatever color the background is.
+	context.fillText("You win!", canvas.width/2, 200);
+	if (upPressed == true) {
+	context.fillStyle = '#FFFFFF'; // or whatever color the text should be.
+	refresh = 1;
+	}
+}
+
+// lose screen
+function drawLose(){
+	refresh = 0;
+	ctx.beginPath();
+	ctx.rect(0, 0, canvas.width, canvas.height);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fill();
+	ctx.closePath();
+	context.fillStyle = '#000000'; // or whatever color the background is.
+	context.fillText("You lose...", canvas.width/2, 200);
+	if (upPressed) {
+	context.fillStyle = '#FFFFFF'; // or whatever color the text should be.
+	refresh = 1;
+	}
+}
+	
+
+// run game while refresh is 1, menus are 0
 do {
 draw();
 } while (refresh == 1);
