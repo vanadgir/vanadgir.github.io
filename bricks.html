@@ -44,7 +44,7 @@
 // canvas 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-var refresh = 1;
+var refresh = true;
 
 // ball size, spawn, speed
 var ballRadius = 10;
@@ -245,7 +245,7 @@ function draw() {
 
 // win screen
 function drawWin(){
-	refresh = 0;
+	refresh = false;
 	ctx.beginPath();
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = "#FFFFFF";
@@ -255,14 +255,14 @@ function drawWin(){
 	context.fillText("You win!", canvas.width/2, 200);
 	if (upPressed == true) {
 	context.fillStyle = '#FFFFFF'; // or whatever color the text should be.
-	refresh = 1;
+	refresh = true;
 	draw();
 	}
 }
 
 // lose screen
 function drawLose(){
-	refresh = 0;
+	refresh = false;
 	ctx.beginPath();
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = "#FFFFFF";
@@ -272,7 +272,7 @@ function drawLose(){
 	context.fillText("You lose...", canvas.width/2, 200);
 	if (upPressed) {
 	context.fillStyle = '#FFFFFF'; // or whatever color the text should be.
-	refresh = 1;
+	refresh = true;
 	draw();
 	}
 }
@@ -280,7 +280,7 @@ function drawLose(){
 // run game while refresh is 1, menus are 0
 do {
 draw();
-} while (refresh == 1);
+} while (refresh);
 	
 </script>
 
