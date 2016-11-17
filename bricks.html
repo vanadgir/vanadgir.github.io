@@ -135,8 +135,8 @@ function collisionDetection() {
 					brickTotalCount--;
                     score = score + (brickPoints*scoreMult);
                     if(brickTotalCount == 0) {
-                        drawWin();
-                        document.location.reload();
+			refresh = false;
+			drawWin();
                     }
                 }
             }
@@ -218,8 +218,8 @@ function draw() {
         else {
             lives--;
             if(!lives) {
-                drawLose();
-                document.location.reload();
+		refresh = false;
+		drawLose();
             }
             else {
                 x = canvas.width/2;
@@ -245,7 +245,6 @@ function draw() {
 
 // win screen
 function drawWin(){
-	refresh = false;
 	ctx.beginPath();
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = "#FFFFFF";
@@ -262,7 +261,6 @@ function drawWin(){
 
 // lose screen
 function drawLose(){
-	refresh = false;
 	ctx.beginPath();
 	ctx.rect(0, 0, canvas.width, canvas.height);
 	ctx.fillStyle = "#FFFFFF";
