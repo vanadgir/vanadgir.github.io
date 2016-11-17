@@ -129,7 +129,7 @@ function collisionDetection() {
 					brickTotalCount--;
                     score = score + (brickPoints*scoreMult);
                     if(brickTotalCount == 0) {
-                        alert("YOU WIN, CONGRATS!");
+                        drawWin();
                         document.location.reload();
                     }
                 }
@@ -202,7 +202,7 @@ function draw() {
         else {
             lives--;
             if(!lives) {
-                alert("GAME OVER");
+                drawLose();
                 document.location.reload();
             }
             else {
@@ -226,7 +226,10 @@ function draw() {
     y += dy;
     requestAnimationFrame(draw);
 }
+
+do while(refresh == 1){
 draw();
+}
 	
 </script>
 
