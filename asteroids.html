@@ -55,10 +55,10 @@ document.onmousemove = function(evt) {
 	y = evt.pageY - canvas.offsetTop;
 }
 
-for (var i = 0, len = points.length; i < len; i += 2) {
+/*for (var i = 0, len = points.length; i < len; i += 2) {
 	points[i] = points[i]*25;
 	points[i+1] = points[i+1]*25;
-}
+}*/
 	
 function loop(){
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
