@@ -772,6 +772,7 @@ dt {
 #header nav li.fork {
   float: left;
   margin-left: 2px;
+  font-style: black;
 }
 #header nav li.downloads {
   float: right;
