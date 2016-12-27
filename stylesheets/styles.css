@@ -774,7 +774,7 @@ dt {
   float: center;
   margin-left: 2px;
 }
-#header nav li.downloads {
+/* #header nav li.downloads {
   float: right;
   margin-left: 6px;
 }
@@ -782,7 +782,7 @@ dt {
   float: right;
   margin-right: 10px;
   font-size: 11px;
-}
+} */
 
 section {
   max-width: 650px;
