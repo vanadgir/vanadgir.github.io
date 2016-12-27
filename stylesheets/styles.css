@@ -771,8 +771,10 @@ dt {
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 0px rgba(0, 0, 0, 0);
 }
 #header nav li.fork {
-  float: left;
-  margin-left: 2px;
+	display:inline-block;
+	float:none;
+	margin:0 20px;
+	vertical-align:middle;
 }
 #header nav li.downloads {
   float: right;
