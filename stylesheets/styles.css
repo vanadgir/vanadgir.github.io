@@ -771,11 +771,10 @@ dt {
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 0px rgba(0, 0, 0, 0);
 }
 #header nav li.fork {
-  float: none;
-  display: inline-block;
+  float: left;
   margin-left: 2px;
 }
-/* #header nav li.downloads {
+#header nav li.downloads {
   float: right;
   margin-left: 6px;
 }
@@ -783,7 +782,7 @@ dt {
   float: right;
   margin-right: 10px;
   font-size: 11px;
-} */
+} 
 
 section {
   max-width: 650px;
