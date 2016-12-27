@@ -772,6 +772,7 @@ dt {
 }
 #header nav li.fork {
   float: none;
+  display: inline-block;
   margin-left: 2px;
 }
 /* #header nav li.downloads {
