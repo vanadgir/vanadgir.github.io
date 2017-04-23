@@ -1,0 +1,149 @@
+body {
+  position: absolute;
+  width: 90%;
+  left: 5%;
+  background-color: black;
+  margin-bottom: 250px;
+  font-family: 'Roboto', sans-serif;
+}
+button {
+  height: 64px;
+  width: 64px;
+  border: solid 1px;
+  border-color: white;
+  border-radius: 10px;
+  margin-bottom: 2px;
+}
+
+#navbar {
+  position: fixed;
+  height: 250px;
+  width: 100%;
+  left: 0%;
+  background-color: #4E4D4A;
+  bottom: 0;
+}
+
+#top {
+  position: absolute;
+  text-align: center;
+  background-color: #F8A13F;
+  top: 0;
+  width: 100%;
+  height: 45px;
+  line-height: 0px;
+  border: solid 2px;
+  border-color: yellow;
+}
+
+#middle {
+  position: absolute;
+  top: 22%;
+  width: 100%;
+}
+
+div.item1{
+  position: relative;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  width: 290px;
+  left: 5%;
+  background-color: white;
+  height: 150px;
+  border-radius: 10px;
+  border: solid 3px;
+  border-color: black;
+}
+
+div.combo{
+  position: relative;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  width: 290px;
+  left: 20%;
+  background-color: white;
+  height: 150px;
+  border-radius: 10px;
+  border: solid 3px;
+  border-color: black;
+}
+
+div.item2{
+  position: relative;
+  vertical-align: top;
+  display: inline-block;
+  text-align: center;
+  width: 290px;
+  left: 35%;
+  background-color: white;
+  height: 150px;
+  border-radius: 10px;
+  border: solid 3px;
+  border-color: black;
+}
+
+#item1-image {
+  position: absolute;
+  background-color: #bdbdbd;
+  height: 64px;
+  width: 64px;
+  left: 0%;
+  border: solid 1px;
+  border-color: orange;
+  border-radius: 10px;
+  margin: 6px;
+  text-align: center;
+
+}
+
+.info {
+  position: relative;
+  display: block;
+}
+
+#combo-image {
+  position: absolute;
+  background-color: #bdbdbd;
+  height: 64px;
+  width: 64px;
+  left: 0%;
+  border: solid 1px;
+  border-color: orange;
+  border-radius: 10px;
+  margin: 6px;
+  text-align: center;
+}
+
+#item2-image {
+  position: absolute;
+  background-color: #bdbdbd;
+  height: 64px;
+  width: 64px;
+  left: 0%;
+  border: solid 1px;
+  border-color: orange;
+  border-radius: 10px;
+  margin: 6px;
+  text-align: center;
+}
+
+.name {
+  font-size: 24px;
+  position: relative;
+  left: 10px;
+}
+
+.cost {
+  font-size: 18px;
+  font-style: italic;
+  text-align: center;
+}
+
+.stats {
+  font-size: 18px;
+  text-align: center;
+  margin: 6px;
+
+}
