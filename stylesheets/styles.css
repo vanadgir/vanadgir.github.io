@@ -778,6 +778,11 @@ dt {
   float: right;
   margin-left: 2px;
 }
+#header nav li.navigate {
+  float: center;
+  margin-left: 2px;
+  margin-right: 2px;
+}
 #header nav li.title {
   float: right;
   margin-right: 10px;
