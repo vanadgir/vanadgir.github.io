@@ -193,6 +193,7 @@ h2 {
 h3 {
   font-size: 1.17em;
   margin: 1em 0;
+  text-align: center;
 }
 
 h4 {
@@ -534,7 +535,7 @@ table {
 body {
   padding: 0px 0 20px 0px;
   margin: 0px;
-  font: 14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 18px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #f0e7d5;
   font-weight: normal;
   background: #252525;
@@ -793,7 +794,7 @@ section {
 section #title {
   border: 0;
   outline: none;
-  margin: 0 0 50px 0;
+  margin: 0 0 0 0;
   padding: 0 0 5px 0;
 }
 section #title h1 {

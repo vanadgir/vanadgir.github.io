@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Blog</title>
+  <link rel='shortcut icon' href='../favicons/varunfav.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="../stylesheets/styles.css">
+  <link rel="stylesheet" href="../stylesheets/github-dark.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="js/respond.js"></script>
+  <script>
+    $(function () {
+      $("#header").load("../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+</head>
+
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
+
+  <div class="wrapper"> <!-- start content -->
+    <section>
+      <div id="title"> <!-- start title -->
+        <h1>My Blog</h1>
+        <br>
+        <hr>
+      </div> <!-- end title -->
+
+      <div id="blog-posts"></div> <!-- dynamically insert blog posts -->
+
+
+  </div> <!-- end content -->
+</body>
+
+</html>
