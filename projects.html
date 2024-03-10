@@ -9,9 +9,18 @@
   <link rel="stylesheet" href="../stylesheets/styles.css">
   <link rel="stylesheet" href="../stylesheets/github-dark.css">
   <script>
-    window.location.href = "/projects"
+    $(function () {
+      $("#header").load("header.html");
+    });
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
 </head>
+
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
+  <script>
+    window.location.href = "https://www.varun.pro/projects"
+  </script>
+</body>
 
 </html>
