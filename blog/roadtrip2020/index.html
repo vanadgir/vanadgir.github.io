@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Roadtrip 2020</title>
+  <link rel='shortcut icon' href='../../favicons/car.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="../../stylesheets/styles.css">
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="../../js/respond.js"></script>
+  <script>
+    // page tracker
+    var page = 0;
+
+    // import nav
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+
+    // content load function
+    function loadContent() {
+      $("#page-content").load(`entries.html .page-${page}`);
+    }
+
+    // initial content load
+    document.addEventListener("DOMContentLoaded", function () {
+      loadContent();
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+</head>
+
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
+  <div class="wrapper">
+    <section>
+      <div id="blog-controls">
+        <button id="prevBtn">Prev</button>
+        <button id="indexBtn">Index</button>
+        <button id="nextBtn">Next</button>
+      </div>
+      <div id="page-content">
+
+      </div>
+
+  </div> <!-- end wrapper -->
+
+</body>
+<script>
+  // prev button
+  document.getElementById("prevBtn").addEventListener("click", function () {
+    if (page > 0) {
+      page--;
+      loadContent();
+    }
+  });
+
+  // next button
+  document.getElementById("nextBtn").addEventListener("click", function () {
+    if (page < 11) {
+      page++;
+      loadContent();
+    }
+  });
+
+  // index button
+  document.getElementById("indexBtn").addEventListener("click", function () {
+    if (page != 0) {
+      page = 0;
+      loadContent();
+    }
+  });
+
+  // index page links
+  $("#page-content").on("click", ".page-link", function (event) {
+    event.preventDefault();
+    const targetPage = $(this).data("page");
+    page = parseInt(targetPage);
+    loadContent();
+  });
+
+</script>
+
+</html>
