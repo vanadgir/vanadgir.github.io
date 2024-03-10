@@ -1,55 +1,86 @@
 <!doctype html>
 <html>
 
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Roadtrip 2020</title>
-    <link rel='shortcut icon' href='../../favicons/car.ico' type='image/x-icon'/ >
-    <link rel="stylesheet" href="../../stylesheets/styles.css">
-    <link rel="stylesheet" href="../../stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-     <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
-  </head>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>Roadtrip 2020</title>
+  <link rel='shortcut icon' href='../../favicons/car.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="../../stylesheets/styles.css">
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="../../js/respond.js"></script>
+  <script>
+    // page tracker
+    var page = 0;
 
-  <body>
+    // import nav
+    $(function () {
+      $("#header").load("../../header.html");
+    });
 
-   <div id="header">
-    <nav>
-      <li class="fork"><a href="https://vanadgir.github.io"> Home </a></li>
-      <li class="downloads"><a href="http://www.varun.pro/roadtrip2020/day1.html"> Begin </a></li>
-      <!-- <li class="downloads"><a href=""> Prev </a></li> -->
+    // content load function
+    function loadContent() {
+      $("#page-content").load(`entries.html .page-${page}`);
+    }
 
-    </nav>
-   </div> <!-- end header -->
+    // initial content load
+    document.addEventListener("DOMContentLoaded", function () {
+      loadContent();
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+</head>
 
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
   <div class="wrapper">
     <section>
-      <div id="title">
-      <h1>Roadtrip 2020</h1>
-        <hr>
-   </div> <!-- end wrapper -->
+      <div id="blog-controls">
+        <button id="prevBtn">Prev</button>
+        <button id="indexBtn">Index</button>
+        <button id="nextBtn">Next</button>
+      </div>
+      <div id="page-content">
 
-  <h3>Index: </h3>
+      </div>
 
-      <b> Day 1: </b> <a href="http://www.varun.pro/roadtrip2020/day1.html"> September 26, 2020 </a> (Philadelphia PA) <br>
-      <b> Day 2: </b> <a href="http://www.varun.pro/roadtrip2020/day2.html"> September 27, 2020 </a> (Cave City KY) <br>
-      <b> Day 3: </b> <a href="http://www.varun.pro/roadtrip2020/day3.html"> September 28, 2020 </a> (Memphis TN, Hot Springs AK) <br>
-      <b> Day 4: </b> <a href="http://www.varun.pro/roadtrip2020/day4.html"> September 29, 2020 </a> (Hot Springs AK) <br>
-      <b> Day 5: </b> <a href="http://www.varun.pro/roadtrip2020/day5.html"> September 30, 2020 </a> (Dallas TX, Carlsbad NM) <br>
-      <b> Day 6: </b> <a href="http://www.varun.pro/roadtrip2020/day6.html"> October 1, 2020 </a> (Lincoln National Forest, White Sands National Park, Albuquerque NM) <br>
-      <b> Day 7: </b> <a href="http://www.varun.pro/roadtrip2020/day7.html"> October 2, 2020 </a> (Painted Desert / Petrified Forest National Park) <br>
-      <b> Day 8: </b> <a href="http://www.varun.pro/roadtrip2020/day8.html"> October 3, 2020 </a> (Moab UT, Canyonlands National Park / Island in the Sky) <br>
-      <b> Day 9: </b> <a href="http://www.varun.pro/roadtrip2020/day9.html"> October 4, 2020 </a> (Salt Lake City UT, Reno NV) <br>
-      <b> Day 10: </b> <a href="http://www.varun.pro/roadtrip2020/day10.html"> October 5, 2020 </a> (Lake Tahoe CA, Oakland CA) <br>
-      <b> Final: </b> <a href="http://www.varun.pro/roadtrip2020/final.html"> Final Thoughts </a> <br>
+  </div> <!-- end wrapper -->
 
-  </body>
+</body>
+<script>
+  // prev button
+  document.getElementById("prevBtn").addEventListener("click", function () {
+    if (page > 0) {
+      page--;
+      loadContent();
+    }
+  });
+
+  // next button
+  document.getElementById("nextBtn").addEventListener("click", function () {
+    if (page < 11) {
+      page++;
+      loadContent();
+    }
+  });
+
+  // index button
+  document.getElementById("indexBtn").addEventListener("click", function () {
+    if (page != 0) {
+      page = 0;
+      loadContent();
+    }
+  });
+
+  // index page links
+  $("#page-content").on("click", ".page-link", function (event) {
+    event.preventDefault();
+    const targetPage = $(this).data("page");
+    page = parseInt(targetPage);
+    loadContent();
+  });
+
+</script>
+
 </html>
