@@ -5,11 +5,20 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <title>Processing</title>
-  <link rel='shortcut icon' href='../../favicons/car.ico' type='image/x-icon' />
+  <link rel='shortcut icon' href='../../favicons/docfav.ico' type='image/x-icon' />
   <link rel="stylesheet" href="../../stylesheets/styles.css">
   <link rel="stylesheet" href="../../stylesheets/github-dark.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script src="../../js/respond.js"></script>
+  <style>
+    pre {
+      background-color: #7e7e7eab;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      white-space: pre-wrap;
+    }
+  </style>
   <script>
     // page tracker
     var page = 0;
@@ -59,7 +68,7 @@
 
   // next button
   document.getElementById("nextBtn").addEventListener("click", function () {
-    if (page < 1) {
+    if (page < 3) {
       page++;
       loadContent();
     }

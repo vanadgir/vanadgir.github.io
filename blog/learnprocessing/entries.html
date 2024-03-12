@@ -1,17 +1,168 @@
 <div class="page-0">
   <div id="title">
     <h1>Processing</h1>
+    <h3>Making Art with Code</h3>
     <hr>
   </div>
   <br>
-  <p> Processing is an incredible piece of software, allowing users to create amazing visuals in both 2D and 3D with some knowledge of Java. In this blog series, I will be documenting my learning journey, both to "think aloud" as well as to share the cool things I make. I hope you enjoy! </p>
+  <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
+  <b> ii. </b> <a href="#" class="page-link" data-page="2"> Getting Started </a> <br>
+  <b> iii. </b> <a href="#" class="page-link" data-page="3"> Coming Soon... </a> <br>
 </div>
 
 <div class="page-1">
   <div id="title">
-    <h1>Work In Progress</h1>
+    <h1>Introduction</h1>
+    <br>
     <hr>
   </div>
   <br>
-  <p> This page is a work in progress. </p>
+  <p> Processing is an incredible application, allowing users to create amazing visuals in both 2D and 3D with just some
+    knowledge of Java. In this blog series, I will be documenting my learning journey, both to "think aloud" as
+    well as to share the cool things I make. If you'd like to follow along and learn with me, go ahead and <a
+      href="https://processing.org/download" target="_blank">download</a> Processing on your machine.</p>
+
+  <p> Before I begin, let me also shout out two amazing resources I've been using to learn. It's always good to read the
+    docs - and Processing has pretty high quality ones - but this journey has been made so much more fun thanks to <a
+      href="https://twitter.com/shiffman" target="_blank">Daniel Shiffman</a> and his channel <a
+      href="https://www.youtube.com/@TheCodingTrain" target="_blank">The Coding Train</a>. You'll see his name on a lot
+    of the Processing docs, and he has put an insane amount of effort into making hundreds of videos to teach you the
+    fundamentals of Processing and even programming in general. In particular, I watched almost the entirety of his <a
+      href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZiZxtDDRCi6uhfTH4FilpH" target="_blank">Coding
+      Challenges</a> playlist, and I still refer back to a handful of them when trying to brainstorm new creations. </p>
+
+  <p>The other creator I must thank is <a href="https://www.youtube.com/@thedotisblack"
+      target="_blank">thedotisblack</a>. On his channel, you can dive right into some incredibly cool animations and see
+    how he makes them. I've picked up a few neat tricks from what he's shared and I'm sure I will be inspired by him
+    again. Sometimes when I am stumped, I'll just browse through his videos to remind myself of the kinds of things I
+    hope to create and hop right back in!</p>
+
+  <p>Since I am still pretty early in my journey, there are bound to be other resources and creators I find along the
+    way. If you
+    come across any art or artist you'd like to share with me, feel free to send me a message or email!</p>
+
+  <p>Now... let's get to it!</p>
+</div>
+
+<div class="page-2">
+  <div id="title">
+    <h1>Getting Started</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+  <p> When creating animations with Processing, there are two core functions that need to be invoked - <i>setup()</i>
+    and
+    <i>draw()</i>. In the <i>setup()</i> function, we can do things like set the canvas dimensions, assign values to
+    global variables,
+    instantiate objects for later manipulation, and any other steps that need to happen on or before the first frame.
+    Then,
+    in <i>draw()</i>, we can apply transformations, scaling, variable recalculation, and lots more to bring the canvas
+    to life.
+    Each unit of time in our case here is a single frame, or one whole execution of the <i>draw()</i> function.
+  </p>
+
+  <pre><code>    
+    // setup function
+    void setup() {
+      size(600, 600);
+      background(0);
+      ellipse(width/2, height/2, 100, 100);
+    }
+    
+    // render function
+    void draw() {
+      // what do we want to make happen?
+    }
+  </code></pre>
+
+  <p>In this example, we're setting our canvas to 600px by 600px and giving it a black background. Although the default
+    color mode is RGB and usually requires 3 values, we can shorthand black and white with 0 and 255 respectively. When
+    creating the ellipse, you'll notice I used variables called <i>width</i> and <i>height</i> without ever creating or
+    assigning them. That's because Processing holds on to a number of system variables as well - <i>width</i> and
+    <i>height</i> being the dimensions of the canvas itself. By setting the center of the ellipse to half the width and
+    height of the canvas, we ensure it will be centered in our view even if we were to set the dimensions to something
+    other than (600, 600). </p>
+
+  <center> <img src="./images/post1_1.png" title="White Circle Black Background"> </center> <br>
+
+  <p>We've drawn our first shape to the canvas! Now to make it do something interesting. Why not make it slide to the
+    right and then wrap back around to the left side for a simple and satisfying loop? Here's how we might achieve that.
+  </p>
+
+  <pre><code>    
+    int x, y;
+    int speed = 5;
+    
+    // setup function
+    void setup() {
+      size(600, 600);
+      background(0);
+      x = width/2;
+      y = height/2;
+    }
+    
+    // render function
+    void draw() {
+      ellipse(x, y, 100, 100);
+      x += speed;
+      if (x >= width) {
+        x = 0;
+      }
+    }
+  </code></pre>
+
+  <p>Now, we initialize some variables globally, since we would like to change them later on within the <i>draw()</i>
+    scope. The variables <i>x</i> and <i>y</i> are set to half the width and height so that we can simplify our
+    formulas, while <i>speed</i> is set to an arbitrary value of 5. We can play with this one to adjust how quickly the
+    circle will slide. </p>
+
+  <p>This time around, we create our ellipse within <i>draw()</i> because we want to be able to change where we place it
+    and draw its new location each frame. We also add a check for when <i>x</i> goes beyond the width of the canvas,
+    setting it back to 0 which would send it back to the left side. Everything seems about right, so then how does it
+    look? </p>
+
+  <center> <img src="./images/post1_2.gif" title="White Circle Trail Gif"> </center> <br>
+
+  <p>Wait a second... that's right. Currently, when we draw new frames, they are being overlaid on each other and creating this trailing effect. It looks cool, but wasn't quite what we wanted. Luckily, this is an easy fix.</p>
+
+  <pre><code>    
+    int x, y;
+    int speed = 5;
+    
+    // setup function
+    void setup() {
+      size(600, 600);
+      background(0);
+      x = width/2;
+      y = height/2;
+    }
+    
+    // render function
+    void draw() {
+      background(0);
+      ellipse(x, y, 100, 100);
+      x += speed;
+      if (x >= width) {
+        x = 0;
+      }
+    }
+  </code></pre>
+
+  <p>All that is needed here is a <i>background(0)</i> in the render loop. Now, before new circles are drawn, the entire canvas will be set to a black background again. This should now give us the desired effect. </p>
+
+  <center> <img src="./images/post1_3.gif" title="White Circle Motion Gif"> </center> <br>
+
+  <p>Excellent!</p>
+
+  <p>As we'll see in later entries, both methods can be utilised depending on the context and type of effect we are going for. Next time, we'll look at the <i>random()</i> function for some of its clever uses as well as different ways to involve colors. Thanks for reading and see you in the next one!</p>
+</div>
+
+<div class="page-3">
+  <div id="title">
+    <h1>Coming Soon...</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
 </div>
