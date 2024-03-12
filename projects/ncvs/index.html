@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>NCVS</title>
+  <link rel='shortcut icon' href='../favicons/docfav.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="../../stylesheets/styles.css">
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="../../js/respond.js"></script>
+  <script>
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+</head>
+
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
+
+  <div class="wrapper"> <!-- start content -->
+    <section>
+      <div id="title">
+        <h1>NCVS Data Mining</h1>
+        <br>
+        <hr>
+      </div>
+      <p>In this research project, we try to identify the factors which lead to bullying using the National Crime Victimization Survey data. Using R and a wide variety of models, we try to build the best predictive model (in this case, a binary classifier). Below is an embed of the final report, knitted from RMarkdown into PDF, but you can also view it in a separate tab <a href="../../docs/NCVSFinalReport.pdf" target="_blank">here</a>. You can also view the original study's <a href="../../docs/NCVSCodebook.pdf" target="_blank">codebook</a>, which describes the data collection method and has an in-depth data dictionary of all the questions and responses.</p>
+      <center><iframe src="../../docs/NCVSFinalReport.pdf" width="650" height="850" frameborder="0" scrolling="no"></iframe></center>
+  </div> <!-- end content -->
+
+</body>
+
+</html>
