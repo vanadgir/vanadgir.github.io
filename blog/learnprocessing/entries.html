@@ -7,7 +7,8 @@
   <br>
   <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
   <b> ii. </b> <a href="#" class="page-link" data-page="2"> Getting Started </a> <br>
-  <b> iii. </b> <a href="#" class="page-link" data-page="3"> Coming Soon... </a> <br>
+  <b> iii. </b> <a href="#" class="page-link" data-page="3"> Using Classes</a> <br>
+  <b> iv. </b> <a href="#" class="page-link" data-page="4"> Coming Soon... </a> <br>
 </div>
 
 <div class="page-1">
@@ -155,10 +156,111 @@
 
   <p>Excellent!</p>
 
-  <p>As we'll see in later entries, both methods can be utilised depending on the context and type of effect we are going for. Next time, we'll look at the <i>random()</i> function for some of its clever uses as well as different ways to involve colors. Thanks for reading and see you in the next one!</p>
+  <p>As we'll see in later entries, both methods can be utilised depending on the context and type of effect we are going for. Next time, we'll look at the <i>map()</i> function for rescaling values as well as the <i>random()</i> function for some of its clever uses. Thanks for reading and see you in the next one!</p>
 </div>
 
 <div class="page-3">
+  <div id="title">
+    <h1>Using Classes</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+  <p>Now that we have a basic grasp of the two core functions and getting a shape on screen, why not try to make something truly generative? One of the first examples I learned was to create a raining effect, so let's go through that together. Let's first try and get a basic shape to fall from the top of the screen to the bottom, and then extend that logic.</p>
+
+  <pre><code>    
+    float x, y; // starting position of the shape
+    float len = 10; // length of the shape
+    float speed = 5; // fall speed
+  
+    void setup() {
+      size(600, 480);
+      x = width/2;
+      y = 0;
+    }
+    
+    void draw() {
+      background(200);
+      strokeWeight(4);
+      stroke(0, 0, 200);
+      line(x, y, x, y+len);
+      y += speed;
+    }
+  </code></pre>
+
+  <center> <img src="./images/post2_1.gif" title="Single Raindrop Gif"> </center> <br>
+
+  <p>This gives us a line segment drawn in the center of the screen with weight 4, and it falls at a rate of 5 pixels per frame. If we want to extend this to mimic falling rain, then we can use this basic behavior in the form of a Drop class. To do this in Processing, we just create a new tab and name it Drop. Instead of creating global variables in our main file, we can instead have these be inherent properties of a Drop. At time of creation, we can assign a Drop a new starting height, fall speed, stroke weight, or really anything we want.  </p>
+
+  <pre><code>    
+    class Drop {
+      float x = random(width); // random horizontal position
+      float y = random(-500, -100); // random height, can be offscreen
+      float z = random(0, 20); // create sense of depth
+      float len = map(z, 0, 20, 10, 20); // length of Drop
+      float yspeed = map(z, 0, 20, 4, 10); // speed of Drop
+
+      // fall & reset method
+      void fall() {
+        y = y + yspeed;
+    
+        if (y > height) {
+          y = random(-200, -100);
+          yspeed = map(z, 0, 20, 4, 10);
+        }
+      }
+    
+      // display method
+      void show() {
+        float thick = map(z, 0, 20, 1, 3);
+        strokeWeight(thick);
+        stroke(0, 0, 200);
+        line(x, y, x, y+len);
+      }
+    }
+  </code></pre>
+
+  <p>Two functions are doing a lot of the heavy lifting in here - <i>random()</i> and <i>map()</i>. The <i>random()</i> function gives us a number in the given range of two arguments, or a number from 0 to the given single argument. It is being used in this class for multiple purposes, such as giving the Drop a random starting position, both horizontally and vertically. These values are such that a new Drop may start well offscreen before passing through the visible canvas. The value of <i>z</i> here lets us do some neat tricks to create a sense of depth despite rendering in 2D, with the use of the <i>map()</i> function. To use this function, we tell it a value, its original range, and then the new range to which to scale it. This means we can take the value of <i>z</i> and use it to inform multiple features of the Drop, like its stroke weight and fall speed, allowing us to give each Drop a separated, staggered animation for falling.</p>
+
+  <p>Now that we've defined the class and its methods, we can go back to our main script to initialize, draw, and update a large number of Drops. Since most of our behavior and logic is stored in the Drop class, we should have pretty simple <i>setup()</i> and <i>draw()</i> functions.</p>
+
+  <pre><code>    
+    // initialize array of 500 Drop objects
+    Drop[] drops = new Drop[500];
+    
+    // setup function 
+    void setup() {
+      size(600, 480);
+
+      // loop through and create a new Drop for every index
+      for (int i = 0; i < drops.length; i++) {
+        drops[i] = new Drop();
+      }
+    }
+    
+    // render function
+    void draw() {
+      background(200);
+
+      // each frame, show and update the new location
+      for (int i = 0; i < drops.length; i++) {
+        drops[i].show();
+        drops[i].fall();
+      }
+    }
+  </code></pre>
+
+  <center> <img src="./images/post2_2.gif" title="Rain Simulation Gif"> </center> <br>
+
+  <p>If you were to run this in Processing, it would appear to rain endlessly. Unfortunately, having to export to gif means I have to use a limited number of frames. In fact, this may even motivate a shift over to p5.js at some point, the Javascript library built to support a lot of the same functionality as Processing. However, before moving on, there are still more fundamentals to Processing to discuss!</p>
+
+  <p>Now that we've built and utilized a Class, we can certainly imagine how dynamic some of our creations can be. Just like <i>random()</i> and <i>map()</i>, there are lots of functions available to us that are simple in concept, yet lead to awesome results. Next time, we'll take a look at involving a morphing color palette. Additionally, we'll even try to solve the problem of having limited frames for gif uploads - is there a way we can ensure a smooth loop in a limited frame count?</p>
+
+  <p>Thanks for reading and see you next time!</p>
+
+</div>
+
+<div class="page-4">
   <div id="title">
     <h1>Coming Soon...</h1>
     <br>
