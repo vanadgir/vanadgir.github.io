@@ -7,8 +7,12 @@
   <br>
   <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
   <b> ii. </b> <a href="#" class="page-link" data-page="2"> Getting Started </a> <br>
+  <a href="#" class="page-link" data-page="2"><img class="preview" src="./images/post1_3.gif" title="White Circle Motion Gif"></a><br>
   <b> iii. </b> <a href="#" class="page-link" data-page="3"> Using Classes</a> <br>
-  <b> iv. </b> <a href="#" class="page-link" data-page="4"> Coming Soon... </a> <br>
+  <a href="#" class="page-link" data-page="3"><img class="preview" src="./images/post2_2.gif" title="Rain Simulation Gif"></a><br>
+  <b> iv. </b> <a href="#" class="page-link" data-page="4"> Controlled Looping </a> <br>
+  <a href="#" class="page-link" data-page="4"><img class="preview" src="./images/post3_1.gif" title="Color Circles A 60 Frames"></a><br>
+  <b> v. </b> <a href="#" class="page-link" data-page="5"> Coming Soon... </a> <br>
 </div>
 
 <div class="page-1">
@@ -261,6 +265,98 @@
 </div>
 
 <div class="page-4">
+  <div id="title">
+    <h1>Controlled Looping</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+  <p>Technically, we've already achived a smooth loop in one of our first examples - the white circle moving right then reseting to the left. Let's take a quick look at it again to see how it was achieved.</p>
+
+  <center> <img src="./images/post1_3.gif" title="White Circle Motion Gif"> </center> <br>
+
+  <p>Remember when I told you that Processing provides us with a number of system variables? It's time I introduce the <i>frameCount</i> variable, a counter that is incremented by Processing for us on every render cycle of the <i>draw()</i> function. In the case of the moving circle, I knew I would achieve a loop at 120 frames, based on the width of the canvas and the travel speed (x displacement). By having Processing export a .png image every frame, I can hard stop the program after 120 images, and then use some other method of stitching them together into a gif (I use <a href="https://ezgif.com/maker" target="_blank">ezgif.com</a>). </p>
+
+  <p>The uses of <i>frameCount</i> don't stop there - it can even be leveraged for some great artistic generations using colors. You may have once seen colors expressed in a color wheel, showing how various hues can blend into each other seamlessly and eventually loop back to the start. If we can somehow make use of this seamless transitioning, then we should be able to have our colors loop as well.</p>
+
+  <pre><code>    
+    // setup function
+    void setup() {
+      size(600, 600);
+      colorMode(HSB); // hue, saturation, brightness
+    }
+    
+    // render function
+    void draw() {
+      background(0);
+      float shift = map(frameCount%60, 0, 60, 0, 255);
+    
+      for (int r = 900; r > 0; r -= 20) {
+        strokeWeight(4);
+        stroke((r+shift)%255, 255, 255);
+        noFill();
+        ellipse(width/2, height/2, r, r);
+      }
+      
+      // uncomment to export
+      // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+
+      // if (frameCount == 60) {
+      //   exit();
+      // }
+    }
+  </code></pre>
+
+  <center> <img src="./images/post3_1.gif" title="Color Circles A 60 Frames"> </center> <br>
+
+  <p>Couple of things to note - the default color mode in Processing is RGB, where the color is based on values of red, green, and blue. By using color mode HSB, we instead need to provide a hue, saturation, and brightness. In this mode, going from 0 to 255 lets us traverse the "color wheel", meaning it can neatly loop. The other clever trick being used is the modulo operator in combination with the <i>map()</i> function. With this, we are telling Processing that we want to divide the current <i>frameCount</i> by 60, and use this remainder to inform what color to use. This means, every 60 frames, we should traverse the color wheel one time. To export, we would just un-comment the lines at the bottom and our images would save in an /output folder of our sketch.</p>
+
+  <p>All in all, the output is pretty mesmerizing! Since our loop has the radius of each concentric circle decreasing by 20, what would happen if we create a new set of circles offset from these and have the colors of those propogate outwards instead of inwards? Something like this: </p>
+
+  <pre><code>    
+    // setup function
+    void setup() {
+      size(600, 600);
+      colorMode(HSB);
+    }
+    
+    // render function
+    void draw() {
+      background(0);
+      float shift = map(frameCount%60, 0, 60, 0, 255);
+    
+      for (int r = 900; r > 0; r -= 20) {
+        strokeWeight(4);
+        stroke((r+shift)%255, 255, 255);
+        noFill();
+        ellipse(width/2, height/2, r, r);
+      }
+    
+      for (int r = 10; r < 900; r += 20) {
+        strokeWeight(4);
+        stroke((r+255-shift)%255, 255, 255);
+        noFill();
+        ellipse(width/2, height/2, r, r);
+      }
+      
+      // uncomment to export 
+      // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+    
+      // if (frameCount == 60) {
+      //   exit();
+      // }
+    }
+  </code></pre>
+
+  <center> <img src="./images/post3_2.gif" title="Color Circles B 60 Frames"> </center> <br>
+
+  <p>Now that is cool! And all just in 60 frames!</p>
+
+  <p>I am still currently going through some videos of my own, so no concrete plans yet on the subject of the next entry. At the moment, I am playing around with map generation, noise algorithms, and cellular automata, but with such a vast number of ideas and topics to play with, it's hard to pick just a few! But as always, thank you for reading and I'll see you in the next one.</p>
+
+</div>
+
+<div class="page-5">
   <div id="title">
     <h1>Coming Soon...</h1>
     <br>
