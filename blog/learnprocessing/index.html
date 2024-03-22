@@ -30,6 +30,7 @@
 
     // content load function
     function loadContent() {
+      document.documentElement.scrollTop = 0;
       $("#page-content").load(`entries.html .page-${page}`);
     }
 
