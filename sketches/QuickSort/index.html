@@ -1,179 +1,190 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>QuickSort</title>
-  <link rel='shortcut icon' href='../favicons/docfav.ico' type='image/x-icon' />
-  <link rel="stylesheet" href="../../stylesheets/styles.css">
-  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <style>
-    body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    canvas {
-      max-width: 750px;
-      max-height: 750px;
-    }
-  </style>
-  <script>
-    $(function () {
-      $("#header").load("../../header.html");
-    });
-  </script>
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
-</head>
-
-<body>
-  <div id="header"></div> <!-- imported header/navbar -->
-
-  <div class="wrapper"> <!-- start content -->
-    <section>
-      <div id="title">
-        <h1>QuickSort</h1>
-        <h3><a href="/sketches/">Gallery Home</a></h3>
-        <hr>
-      </div>
-  </div>
-  <script>
-    // globals
-    let centerX, centerY;
-    let radius;
-    let radScale;
-    let numbers = [];
-    let states = [];
-    let angleInc = 0.5;
-
-    // smaller dimensions for mobile
-    function windowResized() {
-      if (windowWidth < 550) {
-        radius = 100;
-        radScale = 0.4;
-      } else {
-        radius = 400;
-        radScale = 0.6;
-      }
-    }
-
-    // setup function
-    function setup() {
-      windowResized();
-      createCanvas(radius * 2, radius * 2);
-      background("#252525");
-      centerX = width / 2;
-      centerY = height / 2;
-      angleMode(DEGREES);
-      colorMode(HSB, 359); // set hue max to 359
-      frameRate(120);
-
-      // fill numbers array 0 to 359
-      for (let i = 0; i < 360; i++) {
-        numbers.push(i);
-        states.push(-1);
-      }
-      // fisher-yates shuffle
-      for (let i = numbers.length - 1; i > 0; i--) {
-        const j = floor(random(i + 1));
-        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
-      }
-      // render arcs of circle based on order of numbers array
-      for (let i = 0; i < 360; i++) {
-        fill(numbers[i], 255, 255);
-        arc(centerX, centerY, radius * 2, radius * 2, i, i + angleInc, PIE);
-        fill("#252525");
-        ellipse(centerX, centerY, radScale * radius, radScale * radius);
-      }
-      // sort values
-      quickSort(numbers, 0, numbers.length - 1);
-    }
-
-    // draw loop
-    function draw() {
-      background("#252525");
-      for (let i = 0; i < 360; i++) {
-        fill(numbers[i], 255, 255);
-        switch (states[i]) {
-          case 0:
-            strokeWeight(2);
-            stroke(255);
-            break;
-          case -1:
-            noStroke();
-            break;
-          default:
-            noStroke();
-            break;
-        }
-        arc(centerX, centerY, radius * 2, radius * 2, i, i + angleInc, PIE);
-        fill(0);
-        noStroke();
-        ellipse(centerX, centerY, radScale * radius, radScale * radius);
-      }
-      stroke(0);
-      noFill();
-      ellipse(centerX, centerY, radius * 2, radius * 2);
-    }
-
-    // QUICKSORT ALGORITHM 
-    // main recursive functon
-    async function quickSort(arr, start, end) {
-      if (start >= end) {
-        return
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <title>QuickSort</title>
+    <link
+      rel="shortcut icon"
+      href="../favicons/docfav.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="../../stylesheets/styles.css" />
+    <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
-      let index = await partition(arr, start, end);
-      states[index] = -1;
+      canvas {
+        max-width: 750px;
+        max-height: 750px;
+      }
+    </style>
+    <script>
+      $(function () {
+        $("#header").load("../../header.html");
+      });
+    </script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=0.5, user-scalable=yes"
+    />
+  </head>
 
-      await Promise.all([
-        quickSort(arr, start, index - 1),
-        quickSort(arr, index + 1, end)]
-      );
-    }
+  <body>
+    <div id="header"></div>
+    <!-- imported header/navbar -->
 
-    // partition function
-    async function partition(arr, start, end) {
-      let pivotIndex = start;
-      let pivotValue = arr[end];
-      states[pivotIndex] = 0;
-      for (let i = start; i < end; i++) {
-        if (arr[i] < pivotValue) {
-          await swap(arr, i, pivotIndex);
-          states[pivotIndex] = -1;
-          pivotIndex++;
-          states[pivotIndex] = 0;
+    <div class="wrapper">
+      <!-- start content -->
+      <section>
+        <div id="title">
+          <h1>QuickSort</h1>
+          <h3><a href="/sketches/">Gallery Home</a></h3>
+          <hr />
+        </div>
+      </section>
+    </div>
+    <script>
+      // globals
+      let centerX, centerY;
+      let radius;
+      let radScale;
+      let numbers = [];
+      let states = [];
+      let angleInc = 0.5;
+
+      // smaller dimensions for mobile
+      function windowResized() {
+        if (windowWidth < 550) {
+          radius = 100;
+          radScale = 0.4;
+        } else if (windowHeight < 700) {
+          radius = 200;
+        } else {
+          radius = 400;
+          radScale = 0.6;
         }
       }
 
-      await swap(arr, pivotIndex, end);
+      // setup function
+      function setup() {
+        windowResized();
+        createCanvas(radius * 2, radius * 2);
+        background("#252525");
+        centerX = width / 2;
+        centerY = height / 2;
+        angleMode(DEGREES);
+        colorMode(HSB, 359); // set hue max to 359
+        frameRate(120);
 
-      for (let i = start; i < end; i++) {
-        if (i != pivotIndex) {
-          states[i] = -1;
+        // fill numbers array 0 to 359
+        for (let i = 0; i < 360; i++) {
+          numbers.push(i);
+          states.push(-1);
         }
+        // fisher-yates shuffle
+        for (let i = numbers.length - 1; i > 0; i--) {
+          const j = floor(random(i + 1));
+          [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+        }
+        // render arcs of circle based on order of numbers array
+        for (let i = 0; i < 360; i++) {
+          fill(numbers[i], 255, 255);
+          arc(centerX, centerY, radius * 2, radius * 2, i, i + angleInc, PIE);
+          fill("#252525");
+          ellipse(centerX, centerY, radScale * radius, radScale * radius);
+        }
+        // sort values
+        quickSort(numbers, 0, numbers.length - 1);
       }
 
-      return pivotIndex;
-    }
+      // draw loop
+      function draw() {
+        background("#252525");
+        for (let i = 0; i < 360; i++) {
+          fill(numbers[i], 255, 255);
+          switch (states[i]) {
+            case 0:
+              strokeWeight(2);
+              stroke(255);
+              break;
+            case -1:
+              noStroke();
+              break;
+            default:
+              noStroke();
+              break;
+          }
+          arc(centerX, centerY, radius * 2, radius * 2, i, i + angleInc, PIE);
+          fill(0);
+          noStroke();
+          ellipse(centerX, centerY, radScale * radius, radScale * radius);
+        }
+        stroke(0);
+        noFill();
+        ellipse(centerX, centerY, radius * 2, radius * 2);
+      }
 
-    // swap function
-    async function swap(arr, a, b) {
-      await sleep(15); // change this to make sorting slower/faster
-      let temp = arr[a];
-      arr[a] = arr[b];
-      arr[b] = temp;
-    }
+      // QUICKSORT ALGORITHM
+      // main recursive functon
+      async function quickSort(arr, start, end) {
+        if (start >= end) {
+          return;
+        }
 
-    // custom delay function
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    }
-  </script> <!-- end content -->
-</body>
+        let index = await partition(arr, start, end);
+        states[index] = -1;
 
+        await Promise.all([
+          quickSort(arr, start, index - 1),
+          quickSort(arr, index + 1, end),
+        ]);
+      }
+
+      // partition function
+      async function partition(arr, start, end) {
+        let pivotIndex = start;
+        let pivotValue = arr[end];
+        states[pivotIndex] = 0;
+        for (let i = start; i < end; i++) {
+          if (arr[i] < pivotValue) {
+            await swap(arr, i, pivotIndex);
+            states[pivotIndex] = -1;
+            pivotIndex++;
+            states[pivotIndex] = 0;
+          }
+        }
+
+        await swap(arr, pivotIndex, end);
+
+        for (let i = start; i < end; i++) {
+          if (i != pivotIndex) {
+            states[i] = -1;
+          }
+        }
+
+        return pivotIndex;
+      }
+
+      // swap function
+      async function swap(arr, a, b) {
+        await sleep(15); // change this to make sorting slower/faster
+        let temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+      }
+
+      // custom delay function
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+    </script>
+    <!-- end content -->
+  </body>
 </html>
