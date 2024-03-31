@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <title>Steam Game Ratings</title>
+    <title>MapGen</title>
     <link
       rel="shortcut icon"
       href="../favicons/docfav.ico"
@@ -12,6 +12,19 @@
     <link rel="stylesheet" href="../../stylesheets/styles.css" />
     <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      canvas {
+        max-width: 750px;
+        max-height: 750px;
+      }
+    </style>
     <script>
       $(function () {
         $("#header").load("../../header.html");
@@ -31,22 +44,21 @@
       <!-- start content -->
       <section>
         <div id="title">
-          <h1>p5.js Sketch Gallery</h1>
-          <br />
+          <h1>MapGen</h1>
+          <h3><a href="/sketches/">Gallery Home</a></h3>
           <hr />
-          <!-- start gallery item -->
-          <p><a href="/sketches/QuickSort/">QuickSort</a></p>
-          <p>Colorful visualization of the QuickSort algorithm</p>
-          <hr />
-          <!-- end gallery item -->
-          <!-- start gallery item -->
-          <p><a href="/sketches/MapGen/">MapGen</a></p>
-          <p>2D Map Generator using Wave Function Collapse algorithm</p>
-          <hr />
-          <!-- end gallery item -->
         </div>
       </section>
     </div>
+    <script>
+      function setup(){
+
+      }
+
+      function draw(){
+        
+      }
+    </script>
     <!-- end content -->
   </body>
 </html>
