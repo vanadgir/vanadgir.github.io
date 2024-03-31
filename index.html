@@ -1,45 +1,207 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <title>Varun Nadgir</title>
+    <link
+      rel="shortcut icon"
+      href="/favicons/varunfav.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="stylesheets/styles.css" />
+    <link rel="stylesheet" href="stylesheets/github-dark.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>Varun Nadgir</title>
-  <link rel='shortcut icon' href='/favicons/varunfav.ico' type='image/x-icon' />
-  <link rel="stylesheet" href="stylesheets/styles.css">
-  <link rel="stylesheet" href="stylesheets/github-dark.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script src="js/respond.js"></script>
-  <script>
-    $(function() {
-      $("#header").load("header.html");
-    });
-  </script>
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
-</head>
+      canvas {
+        max-width: 750px;
+        max-height: 750px;
+      }
 
-<body>
-  <div id="header"></div> <!-- imported header/navbar -->
+      section {
+        margin-bottom: 0%;
+        padding-bottom: 2%;
+      }
+    </style>
+    <script>
+      $(function () {
+        $("#header").load("header.html");
+      });
+    </script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=0.5, user-scalable=yes"
+    />
+  </head>
 
-  <div class="wrapper"> <!-- start content -->
-    <section>
-      <div id="title"> <!-- start title -->
-        <h1>Varun Nadgir</h1>
-        <h3>Mathematician | Programmer | Musician </h3>
-        <hr>
-      </div> <!-- end title -->
+  <body>
+    <div id="header"></div>
+    <!-- imported header/navbar -->
+
+    <div class="wrapper">
+      <!-- start content -->
+      <section>
+        <div id="title">
+          <!-- start title -->
+          <div id="canvas-container"></div>
+          <h3>Mathematician | Programmer | Musician</h3>
+          <hr />
+        </div>
+        <!-- end title -->
+      </section>
 
       <p>Welcome!</p>
 
-      <p>Thanks for visiting my corner of the internet. My name is Varun and I am a developer and musician from Massachusetts. I recently acquired my MS in Computer Science with a concentration in Data Analytics, and I am now looking for work as a Data Analyst or Software Developer. If you need a motivated and creative problem solver for your team, look no further! For my work history and contact information, please see my <a href="/docs/VNResume.pdf" target="_blank">resume</a>.</p> 
+      <p>
+        Thanks for visiting my corner of the internet. My name is Varun and I am
+        a developer and musician from Massachusetts. I recently acquired my MS
+        in Computer Science with a concentration in Data Analytics, and I am now
+        looking for work as a Data Analyst or Software Developer. If you need a
+        motivated and creative problem solver for your team, look no further!
+        For my work history and contact information, please see my
+        <a href="/docs/VNResume.pdf" target="_blank">resume</a>.
+      </p>
 
-      <p>My most recent work is my final project for a full stack web development course during my MS program at Boston University. <a href="https://www.varun.pro/drawble" target="_blank">drawble</a> is a collaborative drawing and chat application for making doodles with your friends, built primarily with web sockets and Google Auth. Both in and outside of school, I have collaborated on a number of projects with other students and friends, most of which can be found in my <a href="/projects">Portfolio</a>.</p>
-      
-      <p> In addition to programming, I also enjoy writing music. I have been commissioned for a few tracks in the past and am open to new projects, whether for your video game or short film. The majority of my music is on <a href="https://soundcloud.com/barntunes" target="_blank">SoundCloud</a>, but you can also find my EP on <a href="https://open.spotify.com/album/1SOnl0iA2kZJb86d3VnlX0?si=7SDAyX4BS5WQnSV95Rchtw" target="_blank">Spotify</a>. Reach out to me on SoundCloud or my email and we can discuss further!</p>
+      <p>
+        My most recent work is my final project for a full stack web development
+        course during my MS program at Boston University.
+        <a href="https://www.varun.pro/drawble" target="_blank">drawble</a> is a
+        collaborative drawing and chat application for making doodles with your
+        friends, built primarily with web sockets and Google Auth. Both in and
+        outside of school, I have collaborated on a number of projects with
+        other students and friends, most of which can be found in my
+        <a href="/projects">Portfolio</a>.
+      </p>
 
-      <iframe style="border-radius:12px" src="https://open.spotify.com/embed/album/1SOnl0iA2kZJb86d3VnlX0?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-  </div> <!-- end content -->
+      <p>
+        In addition to programming, I also enjoy writing music. I have been
+        commissioned for a few tracks in the past and am open to new projects,
+        whether for your video game or short film. The majority of my music is
+        on
+        <a href="https://soundcloud.com/barntunes" target="_blank">SoundCloud</a
+        >, but you can also find my EP on
+        <a
+          href="https://open.spotify.com/album/1SOnl0iA2kZJb86d3VnlX0?si=7SDAyX4BS5WQnSV95Rchtw"
+          target="_blank"
+          >Spotify</a
+        >. Reach out to me on SoundCloud or my email and we can discuss further!
+      </p>
 
-</body>
+      <iframe
+        style="border-radius: 12px"
+        src="https://open.spotify.com/embed/album/1SOnl0iA2kZJb86d3VnlX0?utm_source=generator"
+        width="100%"
+        height="352"
+        frameborder="0"
+        allowfullscreen=""
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+      ></iframe>
+    </div>
+    <!-- end content -->
+  </body>
+  <script>
+    let canvas;
+    let font;
+    let vehicles = [];
 
+    function preload() {
+      font = loadFont("OpenSans-Light.ttf");
+    }
+
+    function setup() {
+      canvas = createCanvas(650, 110);
+      canvas.parent("canvas-container");
+      background("#252525");
+
+      let points = font.textToPoints("VARUN", 120, 100, 128);
+      for (let i = 0; i < points.length; i++) {
+        let pt = points[i];
+        let vehicle = new Vehicle(pt.x, pt.y);
+        vehicles.push(vehicle);
+      }
+    }
+
+    function draw() {
+      background("#252525");
+      for (let i = 0; i < vehicles.length; i++) {
+        var v = vehicles[i];
+        v.behaviors();
+        v.update();
+        v.show();
+      }
+    }
+
+    function Vehicle(x, y) {
+      this.pos = createVector(random(width), random(height));
+      this.target = createVector(x, y);
+      this.vel = p5.Vector.random2D();
+      this.acc = createVector();
+      this.r = 8;
+      this.maxspeed = 10;
+      this.maxforce = 1;
+    }
+
+    Vehicle.prototype.behaviors = function () {
+      let arrive = this.arrive(this.target);
+      let mouse = createVector(mouseX, mouseY);
+      let flee = this.flee(mouse);
+
+      arrive.mult(1);
+      flee.mult(1.5);
+
+      this.applyForce(arrive);
+      this.applyForce(flee);
+    };
+
+    Vehicle.prototype.applyForce = function (f) {
+      this.acc.add(f);
+    };
+
+    Vehicle.prototype.update = function () {
+      this.pos.add(this.vel);
+      this.vel.add(this.acc);
+      this.acc.mult(0);
+    };
+
+    Vehicle.prototype.show = function () {
+      stroke(255);
+      strokeWeight(4);
+      point(this.pos.x, this.pos.y);
+    };
+
+    Vehicle.prototype.arrive = function (target) {
+      let desired = p5.Vector.sub(target, this.pos);
+      let d = desired.mag();
+      let speed = this.maxspeed;
+      if (d < 100) {
+        speed = map(d, 0, 100, 0, this.maxspeed);
+      }
+      desired.setMag(speed);
+      let steer = p5.Vector.sub(desired, this.vel);
+      steer.limit(this.maxforce);
+      return steer;
+    };
+
+    Vehicle.prototype.flee = function (target) {
+      let desired = p5.Vector.sub(target, this.pos);
+      let d = desired.mag();
+      if (d < 75) {
+        desired.setMag(this.maxspeed);
+        desired.mult(-1);
+        let steer = p5.Vector.sub(desired, this.vel);
+        steer.limit(this.maxforce);
+        return steer;
+      } else {
+        return createVector(0, 0);
+      }
+    };
+  </script>
 </html>
