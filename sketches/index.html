@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <title>Sketch Gallery</title>
+    <link
+      rel="shortcut icon"
+      href="../favicons/docfav.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="../../stylesheets/styles.css" />
+    <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+      $(function () {
+        $("#header").load("../../header.html");
+      });
+    </script>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=0.5, user-scalable=yes"
+    />
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>Steam Game Ratings</title>
-  <link rel='shortcut icon' href='../favicons/docfav.ico' type='image/x-icon' />
-  <link rel="stylesheet" href="../../stylesheets/styles.css">
-  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script>
-    $(function () {
-      $("#header").load("../../header.html");
-    });
-  </script>
-  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
-</head>
+  <body>
+    <div id="header"></div>
+    <!-- imported header/navbar -->
 
-<body>
-  <div id="header"></div> <!-- imported header/navbar -->
-
-  <div class="wrapper"> <!-- start content -->
-    <section>
-      <div id="title">
-        <h1>p5.js Sketch Gallery</h1>
-        <br>
-        <hr>
-        <!-- start gallery item -->
-         <p><a href="/sketches/QuickSort/">QuickSort</a></p>
-         <p>Colorful visualization of the QuickSort algorithm </p>
-        <hr>
-        <!-- end gallery item -->
-      </div>
-  </div> <!-- end content -->
-</body>
-
+    <div class="wrapper">
+      <!-- start content -->
+      <section>
+        <div id="title">
+          <h1>p5.js Sketch Gallery</h1>
+          <br />
+          <hr />
+          <!-- start gallery item -->
+          <p><a href="/sketches/QuickSort/">QuickSort</a></p>
+          <p>Colorful visualization of the QuickSort algorithm</p>
+          <hr />
+          <!-- end gallery item -->
+          <!-- start gallery item -->
+          <p><a href="/sketches/MapGen/">MapGen</a></p>
+          <p>2D Map Generator using Wave Function Collapse algorithm</p>
+          <hr />
+          <!-- end gallery item -->
+        </div>
+      </section>
+    </div>
+    <!-- end content -->
+  </body>
 </html>
