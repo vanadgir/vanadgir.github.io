@@ -840,10 +840,20 @@ dt {
   box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 0px rgba(0, 0, 0, 0);
 }
 
+.icon-list{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 16px;
+}
+
+.icon{
+  max-height: 64px;
+}
+
 section {
   max-width: 650px;
-  padding: 30px 0px 50px 0px;
-  margin: 20px 0;
+  padding: 30px 0px 20px 0px;
   margin-top: 70px;
 }
 section #title {
