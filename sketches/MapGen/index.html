@@ -119,8 +119,10 @@
     }
 
     // click to reset
-    function mousePressed(){
-      startOver();
+    function mousePressed() {
+      if (mouseButton == LEFT) {
+        startOver();
+      }
     }
 
     // render loop
@@ -237,7 +239,7 @@
           }
         }
       }
-      
+
       grid = nextGrid;
     }
 
