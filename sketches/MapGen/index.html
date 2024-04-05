@@ -60,7 +60,7 @@
     // load images
     function preload() {
       const path = "./tiles";
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 14; i++) {
         tileImages[i] = loadImage(`${path}/${i}.png`);
       }
     }
@@ -75,13 +75,17 @@
       tiles[3] = new Tile(tileImages[3], ["AAA", "CDD", "DDC", "AAA"]);
       tiles[4] = new Tile(tileImages[4], ["AAA", "CDD", "DDC", "ABA"]);
       tiles[5] = new Tile(tileImages[5], ["AAA", "CDD", "DDC", "ABA"]);
-      tiles[6] = new Tile(tileImages[6], ["AAA", "ABA", "AAA", "ABA"]);
-      tiles[7] = new Tile(tileImages[7], ["AAA", "ABA", "AAA", "ABA"]);
-      tiles[8] = new Tile(tileImages[8], ["AAA", "AAA", "ABA", "AAA"]);
-      tiles[9] = new Tile(tileImages[9], ["AAA", "AAA", "ABA", "AAA"]);
+      tiles[6] = new Tile(tileImages[6], ["AAA", "AAA", "CDD", "DDC"]);
+      tiles[7] = new Tile(tileImages[7], ["AAA", "AAA", "CDD", "DDC"]);
+      tiles[8] = new Tile(tileImages[8], ["AAA", "ABA", "CDD", "DDC"]);
+      tiles[9] = new Tile(tileImages[9], ["AAA", "ABA", "CDD", "DDC"]);
+      tiles[10] = new Tile(tileImages[10], ["AAA", "ABA", "AAA", "ABA"]);
+      tiles[11] = new Tile(tileImages[11], ["AAA", "ABA", "AAA", "ABA"]);
+      tiles[12] = new Tile(tileImages[12], ["AAA", "AAA", "ABA", "AAA"]);
+      tiles[13] = new Tile(tileImages[13], ["AAA", "AAA", "ABA", "AAA"]);
 
       // rotate tiles
-      for (let i = 1; i < 10; i++) {
+      for (let i = 1; i < 14; i++) {
         for (let j = 1; j < 4; j++) {
           tiles.push(tiles[i].rotate(j));
         }
@@ -114,14 +118,16 @@
       }
     }
 
+    // click to reset
     function mousePressed(){
       startOver();
     }
 
+    // render loop
     function draw() {
       background(0);
 
-      // Draw the grid
+      // draw the grid
       const w = width / DIM;
       const h = height / DIM;
       for (let j = 0; j < DIM; j++) {
@@ -138,24 +144,23 @@
         }
       }
 
-      // Make a copy of grid
+      // make grid copy
       let gridCopy = grid.slice();
-      // Remove any collapsed cells
+      // remove already collapsed cells
       gridCopy = gridCopy.filter((a) => !a.collapsed);
 
-      // The algorithm has completed if everything is collapsed
-      if (grid.length == 0) {
+      // finish if everything collapsed
+      if (gridCopy.length == 0) {
         return;
       }
 
-      // Pick a cell with least entropy
-
-      // Sort by entropy
+      // pick a cell with least entropy
+      // sort
       gridCopy.sort((a, b) => {
         return a.options.length - b.options.length;
       });
 
-      // Keep only the lowest entropy cells
+      // keep only lowest entropy cells
       let len = gridCopy[0].options.length;
       let stopIndex = 0;
       for (let i = 1; i < gridCopy.length; i++) {
@@ -167,7 +172,7 @@
       if (stopIndex > 0) gridCopy.splice(stopIndex);
 
 
-      // Collapse a cell
+      // collapse cell
       const cell = random(gridCopy);
       cell.collapsed = true;
       const pick = random(cell.options);
@@ -177,7 +182,7 @@
       }
       cell.options = [pick];
 
-      // Calculate entropy
+      // calculate entropy
       const nextGrid = [];
       for (let j = 0; j < DIM; j++) {
         for (let i = 0; i < DIM; i++) {
@@ -186,7 +191,7 @@
             nextGrid[index] = grid[index];
           } else {
             let options = new Array(tiles.length).fill(0).map((x, i) => i);
-            // Look up
+            // UP
             if (j > 0) {
               let up = grid[i + (j - 1) * DIM];
               let validOptions = [];
@@ -196,7 +201,7 @@
               }
               checkValid(options, validOptions);
             }
-            // Look right
+            // RIGHT
             if (i < DIM - 1) {
               let right = grid[i + 1 + j * DIM];
               let validOptions = [];
@@ -206,7 +211,7 @@
               }
               checkValid(options, validOptions);
             }
-            // Look down
+            // DOWN
             if (j < DIM - 1) {
               let down = grid[i + (j + 1) * DIM];
               let validOptions = [];
@@ -216,7 +221,7 @@
               }
               checkValid(options, validOptions);
             }
-            // Look left
+            // LEFT
             if (i > 0) {
               let left = grid[i - 1 + j * DIM];
               let validOptions = [];
@@ -232,7 +237,7 @@
           }
         }
       }
-
+      
       grid = nextGrid;
     }
 
