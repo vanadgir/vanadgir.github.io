@@ -21,6 +21,11 @@
       max-width: 750px;
       max-height: 750px;
     }
+
+    button {
+      user-select: none;
+      margin-top: 20px;
+    }
   </style>
   <script>
     $(function () {
@@ -47,6 +52,9 @@
   <script src="../../js/Tile.js"></script>
   <script src="../../js/Cell.js"></script>
   <script>
+    // globals
+    let button;
+
     // array for tiles and tile images
     const tiles = [];
     const tileImages = [];
@@ -97,6 +105,9 @@
         tile.analyze(tiles);
       }
 
+      button = createButton("reset");
+      button.mousePressed(startOver);
+
       // start over
       startOver();
     }
@@ -115,13 +126,6 @@
         if (!valid.includes(element)) {
           arr.splice(i, 1);
         }
-      }
-    }
-
-    // click to reset
-    function mousePressed() {
-      if (mouseButton == LEFT) {
-        startOver();
       }
     }
 
