@@ -17,6 +17,14 @@
       align-items: center;
     }
 
+    #loading-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+    }
+
     canvas {
       max-width: 750px;
       max-height: 750px;
@@ -51,6 +59,7 @@
   </div>
   <script src="../../js/Tile.js"></script>
   <script src="../../js/Cell.js"></script>
+  <div id="loading-message">Loading Tiles...</div>
   <script>
     // globals
     let button;
@@ -74,9 +83,11 @@
     }
 
     function setup() {
-      createCanvas(600, 600);
+      // remove loading message and create canvas
+      document.getElementById("loading-message").style.display = "none";
+      canvas = createCanvas(600, 600);
 
-      // Create and label the tiles
+      // create and label tiles
       tiles[0] = new Tile(tileImages[0], ["AAA", "ABA", "ABA", "ABA"]);
       tiles[1] = new Tile(tileImages[1], ["AAA", "ABA", "ABA", "ABA"]);
       tiles[2] = new Tile(tileImages[2], ["AAA", "CDD", "DDC", "AAA"]);
@@ -238,7 +249,7 @@
               checkValid(options, validOptions);
             }
 
-            // I could immediately collapse if only one option left?
+            // immediately collapse when 1 option
             nextGrid[index] = new Cell(options);
           }
         }

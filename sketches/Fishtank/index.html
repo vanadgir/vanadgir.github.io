@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <title>Fishtank</title>
+  <link rel="shortcut icon" href="../../favicons/docfav.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../stylesheets/styles.css" />
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    canvas {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
+  </style>
+  <script>
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes" />
+</head>
+
+<body>
+  <div id="header"></div>
+  <!-- imported header/navbar -->
+
+  <div class="wrapper">
+    <!-- start content -->
+    <section>
+      <div id="title">
+        <h1>Fishtank</h1>
+        <h3><a href="/sketches/">Gallery Home</a></h3>
+        <hr />
+      </div>
+    </section>
+  </div>
+  <div id="canvas-container"></div>
+  <script src="../../js/Fish.js"></script>
+  <script src="../../js/Food.js"></script>
+  <script>
+    // globals
+    let canvas, slider;
+    let food = [];
+    let fish = [];
+    let population = 50;
+    let waterColor;
+    let angle = 0;
+
+    // setup function
+    function setup() {
+      canvas = createCanvas(windowWidth, 0.75 * windowHeight);
+      canvas.parent("canvas-container");
+      colorMode(HSB, 360);
+      background(waterColor, 255, 255);
+
+      // starting food
+      // for (let i = 0; i < 2000; i++) {
+      //   let x = random(width);
+      //   let y = random(height);
+      //   food.push(new Food(x, y));
+      // }
+
+      // create fish
+      for (let i = 0; i < population; i++) {
+        fish[i] = new Fish(random(width), random(height));
+      }
+    }
+
+    // draw loop
+    function draw() {
+      waterColor = map(sin(angle), -1, 1, 200, 240);
+      background(waterColor, 255, 255);
+
+      // make food when mouse pressed
+      if (mouseIsPressed) {
+        for (let i = 0; i < 5; i++) {
+          let r = 30;
+          let offset = createVector(random(-r, r), random(-r, r));
+          let mouse = createVector(mouseX, mouseY).add(offset);
+          food.push(new Food(mouse.x, mouse.y));
+        }
+
+      }
+
+      // food behaviors
+      for (let i = 0; i < food.length; i++) {
+        food[i].display();
+        food[i].fall();
+      }
+
+      // fish behaviors
+      for (let i = 0; i < fish.length; i++) {
+        if (food.length > 0) {
+          fish[i].eat(food);
+        } else {
+          fish[i].wander();
+        }
+        fish[i].update();
+        fish[i].display();
+      }
+
+      angle += 0.01;
+    }
+  </script>
+  <!-- end content -->
+</body>
+
+</html>
