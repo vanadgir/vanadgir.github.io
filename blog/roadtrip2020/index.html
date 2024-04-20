@@ -72,7 +72,7 @@
 
   // next button
   document.getElementById("nextBtn").addEventListener("click", function () {
-    if (page < 11) {
+    if (page < maxPage) {
       page++;
       loadContent();
       toggleButtons();
