@@ -792,10 +792,27 @@ dt {
 }
 
 #blog-controls{
-  display: flex;
-  justify-content: space-between;
+  position: relative;
+  height: 4vh;
   padding-bottom: 4%;
+
+  #prevBtn {
+    position: absolute;
+    left: 0;
+  }
+
+  #indexBtn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  #nextBtn {
+    position: absolute;
+    right: 0;
+  }
 }
+
 #blog-controls button{
   color: black;
   border: 1px solid #5d910b;

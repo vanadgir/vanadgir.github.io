@@ -21,6 +21,7 @@
   <script>
     // page tracker
     var page = 0;
+    var maxPage = 5;
 
     // import nav
     $(function () {
@@ -36,6 +37,7 @@
     // initial content load
     document.addEventListener("DOMContentLoaded", function () {
       loadContent();
+      toggleButtons();
     });
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
@@ -63,14 +65,16 @@
     if (page > 0) {
       page--;
       loadContent();
+      toggleButtons();
     }
   });
 
   // next button
   document.getElementById("nextBtn").addEventListener("click", function () {
-    if (page < 4) {
+    if (page < maxPage) {
       page++;
       loadContent();
+      toggleButtons();
     }
   });
 
@@ -79,8 +83,30 @@
     if (page != 0) {
       page = 0;
       loadContent();
+      toggleButtons();
     }
   });
+
+  // button rendering
+  function toggleButtons() {
+    var prevBtn = document.getElementById('prevBtn');
+    var indexBtn = document.getElementById('indexBtn');
+    var nextBtn = document.getElementById('nextBtn');
+
+    if (page === 0) {
+      prevBtn.style.display = 'none';
+      indexBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'block';
+      indexBtn.style.display = 'block';
+    }
+
+    if (page === maxPage) {
+      nextBtn.style.display = 'none';
+    } else {
+      nextBtn.style.display = 'block';
+    }
+  }
 
   // index page links
   $("#page-content").on("click", ".page-link", function (event) {
