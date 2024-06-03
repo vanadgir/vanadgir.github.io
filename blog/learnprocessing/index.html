@@ -21,7 +21,7 @@
   <script>
     // page tracker
     var page = 0;
-    var maxPage = 5;
+    var maxPage = 6;
 
     // import nav
     $(function () {
@@ -124,6 +124,7 @@
     const targetPage = $(this).data("page");
     page = parseInt(targetPage);
     loadContent();
+    toggleButtons();
   });
 
 </script>

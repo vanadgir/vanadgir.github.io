@@ -5,18 +5,24 @@
     <hr>
   </div>
   <br>
-    <p> Processing is an incredible application, allowing users to create amazing visuals in both 2D and 3D with just some
+  <p> Processing is an incredible application, allowing users to create amazing visuals in both 2D and 3D with just some
     knowledge of Java. In this blog series, I will be documenting my learning journey, both to "think aloud" as
     well as to share the cool things I make. If you'd like to follow along and learn with me, go ahead and <a
       href="https://processing.org/download" target="_blank">download</a> Processing on your machine.</p>
   <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
   <b> ii. </b> <a href="#" class="page-link" data-page="2"> Getting Started </a> <br>
-  <a href="#" class="page-link" data-page="2"><img class="preview" src="./images/post1_3.gif" title="White Circle Motion Gif"></a><br>
+  <a href="#" class="page-link" data-page="2"><img class="preview" src="./images/post1_3.gif"
+      title="White Circle Motion Gif"></a><br>
   <b> iii. </b> <a href="#" class="page-link" data-page="3"> Using Classes</a> <br>
-  <a href="#" class="page-link" data-page="3"><img class="preview" src="./images/post2_2.gif" title="Rain Simulation Gif"></a><br>
+  <a href="#" class="page-link" data-page="3"><img class="preview" src="./images/post2_2.gif"
+      title="Rain Simulation Gif"></a><br>
   <b> iv. </b> <a href="#" class="page-link" data-page="4"> Controlled Looping </a> <br>
-  <a href="#" class="page-link" data-page="4"><img class="preview" src="./images/post3_1.gif" title="Color Circles A 60 Frames"></a><br>
-  <b> v. </b> <a href="#" class="page-link" data-page="5"> Coming Soon... </a> <br>
+  <a href="#" class="page-link" data-page="4"><img class="preview" src="./images/post3_1.gif"
+      title="Color Circles A 60 Frames"></a><br>
+  <b> v. </b> <a href="#" class="page-link" data-page="5"> Dipping into 3D </a> <br>
+  <a href="#" class="page-link" data-page="5"><img class="preview" src="./images/post4_2.gif"
+      title="Sine 3D Circles"></a><br>
+  <b> vi. </b> <a href="#" class="page-link" data-page="5"> Coming Soon... </a> <br>
 </div>
 
 <div class="page-1">
@@ -86,7 +92,8 @@
     assigning them. That's because Processing holds on to a number of system variables as well - <i>width</i> and
     <i>height</i> being the dimensions of the canvas itself. By setting the center of the ellipse to half the width and
     height of the canvas, we ensure it will be centered in our view even if we were to set the dimensions to something
-    other than (600, 600). </p>
+    other than (600, 600).
+  </p>
 
   <center> <img src="./images/post1_1.png" title="White Circle Black Background"> </center> <br>
 
@@ -128,7 +135,8 @@
 
   <center> <img src="./images/post1_2.gif" title="White Circle Trail Gif"> </center> <br>
 
-  <p>Wait a second... ah, that's right. Currently, when we draw new frames, they are being overlaid on each other and creating this trailing effect. It looks cool, but wasn't quite what we wanted. Luckily, this is an easy fix.</p>
+  <p>Wait a second... ah, that's right. Currently, when we draw new frames, they are being overlaid on each other and
+    creating this trailing effect. It looks cool, but wasn't quite what we wanted. Luckily, this is an easy fix.</p>
 
   <pre><code>    
     int x, y;
@@ -153,13 +161,16 @@
     }
   </code></pre>
 
-  <p>All that is needed here is a <i>background(0)</i> in the render loop. Now, before new circles are drawn, the entire canvas will be set to a black background again. This should now give us the desired effect. </p>
+  <p>All that is needed here is a <i>background(0)</i> in the render loop. Now, before new circles are drawn, the entire
+    canvas will be set to a black background again. This should now give us the desired effect. </p>
 
   <center> <img src="./images/post1_3.gif" title="White Circle Motion Gif"> </center> <br>
 
   <p>Excellent!</p>
 
-  <p>As we'll see in later entries, both methods can be utilised depending on the context and type of effect we are going for. Next time, we'll look at the <i>map()</i> function for rescaling values as well as the <i>random()</i> function for some of its clever uses. Thanks for reading and see you in the next one!</p>
+  <p>As we'll see in later entries, both methods can be utilised depending on the context and type of effect we are
+    going for. Next time, we'll look at the <i>map()</i> function for rescaling values as well as the <i>random()</i>
+    function for some of its clever uses. Thanks for reading and see you in the next one!</p>
 </div>
 
 <div class="page-3">
@@ -169,7 +180,10 @@
     <hr>
   </div>
   <br>
-  <p>Now that we have a basic grasp of the two core functions and getting a shape on screen, why not try to make something truly generative? One of the first examples I learned was to create a raining effect, so let's go through that together. Let's first try and get a basic shape to fall from the top of the screen to the bottom, and then extend that logic.</p>
+  <p>Now that we have a basic grasp of the two core functions and getting a shape on screen, why not try to make
+    something truly generative? One of the first examples I learned was to create a raining effect, so let's go through
+    that together. Let's first try and get a basic shape to fall from the top of the screen to the bottom, and then
+    extend that logic.</p>
 
   <pre><code>    
     float x, y; // starting position of the shape
@@ -193,7 +207,11 @@
 
   <center> <img src="./images/post2_1.gif" title="Single Raindrop Gif"> </center> <br>
 
-  <p>This gives us a line segment drawn in the center of the screen with weight 4, and it falls at a rate of 5 pixels per frame. If we want to extend this to mimic falling rain, then we can use this basic behavior in the form of a Drop class. To do this in Processing, we just create a new tab and name it Drop. Instead of creating global variables in our main file, we can instead have these be inherent properties of a Drop. At time of creation, we can assign a Drop a new starting height, fall speed, stroke weight, or really anything we want.  </p>
+  <p>This gives us a line segment drawn in the center of the screen with weight 4, and it falls at a rate of 5 pixels
+    per frame. If we want to extend this to mimic falling rain, then we can use this basic behavior in the form of a
+    Drop class. To do this in Processing, we just create a new tab and name it Drop. Instead of creating global
+    variables in our main file, we can instead have these be inherent properties of a Drop. At time of creation, we can
+    assign a Drop a new starting height, fall speed, stroke weight, or really anything we want. </p>
 
   <pre><code>    
     class Drop {
@@ -223,9 +241,19 @@
     }
   </code></pre>
 
-  <p>Two functions are doing a lot of the heavy lifting in here - <i>random()</i> and <i>map()</i>. The <i>random()</i> function gives us a number in the given range of two arguments, or a number from 0 to the given single argument. It is being used in this class for multiple purposes, such as giving the Drop a random starting position, both horizontally and vertically. These values are such that a new Drop may start well offscreen before passing through the visible canvas. The value of <i>z</i> here lets us do some neat tricks to create a sense of depth despite rendering in 2D, with the use of the <i>map()</i> function. To use this function, we tell it a value, its original range, and then the new range to which to scale it. This means we can take the value of <i>z</i> and use it to inform multiple features of the Drop, like its stroke weight and fall speed, allowing us to give each Drop a separated, staggered animation for falling.</p>
+  <p>Two functions are doing a lot of the heavy lifting in here - <i>random()</i> and <i>map()</i>. The <i>random()</i>
+    function gives us a number in the given range of two arguments, or a number from 0 to the given single argument. It
+    is being used in this class for multiple purposes, such as giving the Drop a random starting position, both
+    horizontally and vertically. These values are such that a new Drop may start well offscreen before passing through
+    the visible canvas. The value of <i>z</i> here lets us do some neat tricks to create a sense of depth despite
+    rendering in 2D, with the use of the <i>map()</i> function. To use this function, we tell it a value, its original
+    range, and then the new range to which to scale it. This means we can take the value of <i>z</i> and use it to
+    inform multiple features of the Drop, like its stroke weight and fall speed, allowing us to give each Drop a
+    separated, staggered animation for falling.</p>
 
-  <p>Now that we've defined the class and its methods, we can go back to our main script to initialize, draw, and update a large number of Drops. Since most of our behavior and logic is stored in the Drop class, we should have pretty simple <i>setup()</i> and <i>draw()</i> functions.</p>
+  <p>Now that we've defined the class and its methods, we can go back to our main script to initialize, draw, and update
+    a large number of Drops. Since most of our behavior and logic is stored in the Drop class, we should have pretty
+    simple <i>setup()</i> and <i>draw()</i> functions.</p>
 
   <pre><code>    
     // initialize array of 500 Drop objects
@@ -255,9 +283,16 @@
 
   <center> <img src="./images/post2_2.gif" title="Rain Simulation Gif"> </center> <br>
 
-  <p>If you were to run this in Processing, it would appear to rain endlessly. Unfortunately, having to export to gif means I have to use a limited number of frames. In fact, this may even motivate a shift over to p5.js at some point, the Javascript library built to support a lot of the same functionality as Processing. However, before moving on, there are still more fundamentals to Processing to discuss!</p>
+  <p>If you were to run this in Processing, it would appear to rain endlessly. Unfortunately, having to export to gif
+    means I have to use a limited number of frames. In fact, this may even motivate a shift over to p5.js at some point,
+    the Javascript library built to support a lot of the same functionality as Processing. However, before moving on,
+    there are still more fundamentals to Processing to discuss!</p>
 
-  <p>Now that we've built and utilized a Class, we can certainly imagine how dynamic some of our creations can be. Just like <i>random()</i> and <i>map()</i>, there are lots of functions available to us that are simple in concept, yet lead to awesome results. Next time, we'll take a look at involving a morphing color palette. Additionally, we'll even try to solve the problem of having limited frames for gif uploads - is there a way we can ensure a smooth loop in a limited frame count?</p>
+  <p>Now that we've built and utilized a Class, we can certainly imagine how dynamic some of our creations can be. Just
+    like <i>random()</i> and <i>map()</i>, there are lots of functions available to us that are simple in concept, yet
+    lead to awesome results. Next time, we'll take a look at involving a morphing color palette. Additionally, we'll
+    even try to solve the problem of having limited frames for gif uploads - is there a way we can ensure a smooth loop
+    in a limited frame count?</p>
 
   <p>Thanks for reading and see you next time!</p>
 
@@ -270,13 +305,22 @@
     <hr>
   </div>
   <br>
-  <p>Technically, we've already achived a smooth loop in one of our first examples - the white circle moving right then reseting to the left. Let's take a quick look at it again to see how it was achieved.</p>
+  <p>Technically, we've already achived a smooth loop in one of our first examples - the white circle moving right then
+    reseting to the left. Let's take a quick look at it again to see how it was achieved.</p>
 
   <center> <img src="./images/post1_3.gif" title="White Circle Motion Gif"> </center> <br>
 
-  <p>Remember when I told you that Processing provides us with a number of system variables? It's time I introduce the <i>frameCount</i> variable, a counter that is incremented by Processing for us on every render cycle of the <i>draw()</i> function. In the case of the moving circle, I knew I would achieve a loop at 120 frames, based on the width of the canvas and the travel speed (x displacement). By having Processing export a .png image every frame, I can hard stop the program after 120 images, and then use some other method of stitching them together into a gif (I use <a href="https://ezgif.com/maker" target="_blank">ezgif.com</a>). </p>
+  <p>Remember when I told you that Processing provides us with a number of system variables? It's time I introduce the
+    <i>frameCount</i> variable, a counter that is incremented by Processing for us on every render cycle of the
+    <i>draw()</i> function. In the case of the moving circle, I knew I would achieve a loop at 120 frames, based on the
+    width of the canvas and the travel speed (x displacement). By having Processing export a .png image every frame, I
+    can hard stop the program after 120 images, and then use some other method of stitching them together into a gif (I
+    use <a href="https://ezgif.com/maker" target="_blank">ezgif.com</a>). </p>
 
-  <p>The uses of <i>frameCount</i> don't stop there - it can even be leveraged for some great artistic generations using colors. You may have once seen colors expressed in a color wheel, showing how various hues can blend into each other seamlessly and eventually loop back to the start. If we can somehow make use of this seamless transitioning, then we should be able to have our colors loop as well.</p>
+  <p>The uses of <i>frameCount</i> don't stop there - it can even be leveraged for some great artistic generations using
+    colors. You may have once seen colors expressed in a color wheel, showing how various hues can blend into each other
+    seamlessly and eventually loop back to the start. If we can somehow make use of this seamless transitioning, then we
+    should be able to have our colors loop as well.</p>
 
   <pre><code>    
     // setup function
@@ -308,9 +352,17 @@
 
   <center> <img src="./images/post3_1.gif" title="Color Circles A 60 Frames"> </center> <br>
 
-  <p>Couple of things to note - the default color mode in Processing is RGB, where the color is based on values of red, green, and blue. By using color mode HSB, we instead need to provide a hue, saturation, and brightness. In this mode, going from 0 to 255 lets us traverse the "color wheel", meaning it can neatly loop. The other clever trick being used is the modulo operator in combination with the <i>map()</i> function. With this, we are telling Processing that we want to divide the current <i>frameCount</i> by 60, and use this remainder to inform what color to use. This means, every 60 frames, we should traverse the color wheel one time. To export, we would just un-comment the lines at the bottom and our images would save in an /output folder of our sketch.</p>
+  <p>Couple of things to note - the default color mode in Processing is RGB, where the color is based on values of red,
+    green, and blue. By using color mode HSB, we instead need to provide a hue, saturation, and brightness. In this
+    mode, going from 0 to 255 lets us traverse the "color wheel", meaning it can neatly loop. The other clever trick
+    being used is the modulo operator in combination with the <i>map()</i> function. With this, we are telling
+    Processing that we want to divide the current <i>frameCount</i> by 60, and use this remainder to inform what color
+    to use. This means, every 60 frames, we should traverse the color wheel one time. To export, we would just
+    un-comment the lines at the bottom and our images would save in an /output folder of our sketch.</p>
 
-  <p>All in all, the output is pretty mesmerizing! Since our loop has the radius of each concentric circle decreasing by 20, what would happen if we create a new set of circles offset from these and have the colors of those propogate outwards instead of inwards? Something like this: </p>
+  <p>All in all, the output is pretty mesmerizing! Since our loop has the radius of each concentric circle decreasing by
+    20, what would happen if we create a new set of circles offset from these and have the colors of those propogate
+    outwards instead of inwards? Something like this: </p>
 
   <pre><code>    
     // setup function
@@ -351,11 +403,76 @@
 
   <p>Now that is cool! And all just in 60 frames!</p>
 
-  <p>I am still currently going through some videos of my own, so no concrete plans yet on the subject of the next entry. At the moment, I am playing around with map generation, noise algorithms, and cellular automata, but with such a vast number of ideas and topics to play with, it's hard to pick just a few! But as always, thank you for reading and I'll see you in the next one.</p>
+  <p>I am still currently going through some videos of my own, so no concrete plans yet on the subject of the next
+    entry. At the moment, I am playing around with map generation, noise algorithms, and cellular automata, but with
+    such a vast number of ideas and topics to play with, it's hard to pick just a few! But as always, thank you for
+    reading and I'll see you in the next one.</p>
 
 </div>
 
 <div class="page-5">
+  <div id="title">
+    <h1>Dipping into 3D</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>Honestly, I hadn't drafted anything up for this post, but I'm quite proud of what I made and wanted to share. Since it's my first post involving 3D, I thought it would be nice to show you how it works in code and I will do my best to walk you through how to make something like this on your own!
+    One change you might notice immediately in the code below is the addition of a new argument in the <i>size()</i> function - this is
+    how we tell Processing to use a 3D renderer, in this case P3D. </p>
+
+  <pre><code>    
+    // setup function
+    void setup() {
+      size(800, 800, P3D); // use 3D renderer
+      colorMode(HSB); // hue, saturation, brightness
+    }
+    
+    // render function
+    void draw() {
+      background(0);
+      translate(width/2, height/2); // translate origin to center
+    
+      rotateX(radians(60)); // comment this line out for 2D top view
+    
+      noFill();
+      strokeWeight(3);
+    
+      for (int i = 0; i < 55; i++) {
+        // define line color using frame count and circle position
+        float strokeCol = map(sin(radians(frameCount + i * 10)), -1, 1, 0, 255);
+        stroke(strokeCol, 255, 255);
+    
+        // beginShape & endShape for custom shapes
+        beginShape();
+        for (int j = 0; j < 360; j += 5) {
+          int rad = i * 5;
+          float x = rad * cos(radians(j));
+          float y = rad * sin(radians(j));
+          float z = sin(radians(frameCount + i * 10)) * 200;
+          vertex(x, y, z);
+        }
+        endShape(CLOSE);
+      }
+    }
+  </code></pre>
+
+  <p>Here is what this sketch will look like if we comment out the <i>rotateX()</i> function, meaning our sketch is still functionally 2D like the others. This is basically our "top view".</p>
+
+  <center> <img src="./images/post4_1.gif" title="Sine 3D Circles Top View" height="600px" width="600px"> </center> <br>
+
+  <p>First, you can probably notice a similar pattern to a previous post where I use the global variable <i>frameCount</i> to inform my sketch on what to color something. By also using the loop variable <i>i</i>, it can also be offset by the position of the shape itself. Next, instead of calling <i>ellipse()</i> like I have before, I am instead using <i>beginShape()</i> and <i>endShape()</i>, a pair of functions that can be used to define a custom shape with calls to <i>vertex()</i> between them. In this example, I am using the loop variable <i>j</i> to increment around the radius and place a vertex at a number of equally spaced points. The <i>CLOSE</i> argument simply tells Processing to close off the shape by connecting the final vertex with the first one. A smaller increment means more vertices, meaning our shape is closer to resembling a circle. I encourage you to try this with larger increments, or even dynamic increments to see what sort of shapes and patterns you might get! </p>
+
+  <p>Now let's have our big reveal. By applying <i>rotateX()</i> (and remember, we have to supply our angle in radians), we tell our renderer to perform the necessary transformations for the illusion of depth. Now our Z axis comes fully into view. </p>
+
+  <center> <img src="./images/post4_2.gif" title="Sine 3D Circles" height="600px" width="600px"> </center> <br>
+
+  <p>Another satisfying and smooth loop! Thanks to the oscillatory nature of the sine function, we are able to capture the entirety of one phase, export our frames, and stitch it together into a nice gif! </p>
+
+</div>
+
+<div class="page-6">
   <div id="title">
     <h1>Coming Soon...</h1>
     <br>
