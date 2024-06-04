@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <title>Mandala</title>
+  <link rel="shortcut icon" href="../favicons/docfav.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../stylesheets/styles.css" />
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* canvas {
+      max-width: 750px;
+      max-height: 750px;
+    } */
+
+    button {
+      user-select: none;
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes" />
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBP8C5TMB1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-SBP8C5TMB1');
+</script>
+
+<body>
+  <div id="header"></div>
+  <!-- imported header/navbar -->
+
+  <div class="wrapper">
+    <!-- start content -->
+    <section>
+      <div id="title">
+        <h1>Mandala</h1>
+        <h3><a href="/sketches/">Gallery Home</a></h3>
+        <hr />
+      </div>
+    </section>
+  </div>
+  <div id="canvas-container"></div>
+  <script>
+    // globals
+    let canvas;
+
+    let spinAngle = 0;
+    let angle = 0;
+
+    let initialCenter;
+
+    let radius;
+    const circWidth = 3;
+
+    let numPoints;
+    let depth;
+
+    let circleDrawSpeed;
+    let spinSpeed;
+
+    // helper function for setting two circle points
+    function drawCircle(center, radius) {
+      push();
+      translate(center.x, center.y);
+      rotate(angle);
+      const x = radius * cos(angle);
+      const y = radius * sin(angle);
+      ellipse(x, y, circWidth, circWidth);
+      ellipse(-x, -y, circWidth, circWidth);
+      pop();
+    }
+
+    // helper function for getting equally spaced points on circle
+    function getEquidistantPoints(center, radius, numPoints) {
+      let points = [];
+      const angleIncrement = TWO_PI / numPoints;
+      for (let i = 0; i < numPoints; i++) {
+        const angle = i * angleIncrement;
+        const x = center.x + radius * cos(angle);
+        const y = center.y + radius * sin(angle);
+        points.push(createVector(x, y));
+      }
+
+      return points;
+    }
+
+    // recursive function for generating mandala
+    function generateMandala(center, radius, numPoints, depth) {
+      if (depth === 0) {
+        return;
+      }
+
+      drawCircle(center, radius);
+
+      let points = getEquidistantPoints(center, radius, numPoints);
+      for (let p of points) {
+        drawCircle(p, radius);
+        generateMandala(p, radius, numPoints, depth - 1);
+      }
+
+    }
+
+    // reset mandala when mouse clicked inside canvas
+    function mousePressed() {
+      if (mouseX >= 0 && mouseX <= width && mouseY >= 0 && mouseY <= height) {
+        depth = 0;
+        background(0);
+        radius = random(75, 150);
+        
+        numPoints = floor(random(2, 4));
+        depth = floor(random(2, 5));
+
+        circleDrawSpeed = random(0.004, 0.0065);
+        spinSpeed = circleDrawSpeed * random(2, 5);
+      }
+    }
+
+    // setup function
+    function setup() {
+      let dimension = Math.min(windowWidth, windowHeight) * 0.7;
+      canvas = createCanvas(dimension, dimension);
+      canvas.parent("canvas-container");
+
+      colorMode(HSB);
+
+      radius = random(75, 150);
+
+      initialCenter = createVector(0, 0);
+      numPoints = floor(random(2, 4));
+      depth = floor(random(2, 5));
+
+      circleDrawSpeed = random(0.004, 0.0065);
+      spinSpeed = circleDrawSpeed * random(2, 5);
+
+      background(0);
+    }
+
+    // draw loop
+    function draw() {
+      // background(0);
+      translate(width / 2, height / 2);
+
+      rotate(angle);
+
+      noStroke();
+      const fillCol = map(sin(radians(frameCount)), -1, 1, 0, 255);
+      fill(fillCol, 255, 255);
+
+      generateMandala(initialCenter, radius, numPoints, depth);
+
+      let spinShift = map(sin(radians(frameCount)), -1, 1, -.004, .004);
+
+      angle += circleDrawSpeed;
+      spinAngle += spinSpeed - spinShift;
+    }
+  </script>
+  <!-- end content -->
+</body>
+
+</html>
