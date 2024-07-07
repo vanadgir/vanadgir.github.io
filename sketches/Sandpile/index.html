@@ -72,7 +72,7 @@
       visibility: hidden;
     }
 
-    .option{
+    .option {
       align-items: center;
       text-align: center;
       padding: 3px;
@@ -157,9 +157,11 @@
       if (document.getElementById(elmnt.id + "-header")) {
         // look for clickable part at top
         document.getElementById(elmnt.id + "-header").onmousedown = dragMouseDown;
+        document.getElementById(elmnt.id + "-header").ontouchstart = dragTouchStart;
       } else {
-        // if no header, allow click anywhere inside
+        // if no header, allow click/touch anywhere inside
         elmnt.onmousedown = dragMouseDown;
+        elmnt.ontouchstart = dragTouchStart;
       }
 
       function dragMouseDown(e) {
@@ -169,8 +171,18 @@
         pos3 = e.clientX;
         pos4 = e.clientY;
         document.onmouseup = closeDragElement;
-        // call a function whenever the cursor moves:
         document.onmousemove = elementDrag;
+      }
+
+      function dragTouchStart(e) {
+        e = e || window.event;
+        e.preventDefault();
+        var touch = e.touches[0];
+        // get the touch position at startup:
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        document.ontouchend = closeDragElement;
+        document.ontouchmove = elementTouchDrag;
       }
 
       function elementDrag(e) {
@@ -186,13 +198,31 @@
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
       }
 
+      function elementTouchDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        var touch = e.touches[0];
+        // calculate the new touch position:
+        pos1 = pos3 - touch.clientX;
+        pos2 = pos4 - touch.clientY;
+        pos3 = touch.clientX;
+        pos4 = touch.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
       function closeDragElement() {
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
+        // stop moving when touch ends:
+        document.ontouchend = null;
+        document.ontouchmove = null;
       }
     }
   </script>
+
   <!-- START OF SKETCH -->
   <script>
     // globals
