@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <title>Sandpiles</title>
+  <link rel="shortcut icon" href="../../favicons/docfav.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../stylesheets/styles.css" />
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h4 {
+      user-select: none;
+      padding: 6px;
+      font-size: 28px;
+      border: 2px black;
+      border-style: outset;
+      cursor: pointer;
+    }
+
+    h4:hover {
+      box-shadow: inset -4px -4px 0 #888, inset 4px 4px 0 #ddd;
+    }
+
+    h4:active {
+      background-color: lightgray;
+      color: black;
+    }
+
+    button {
+      user-select: none;
+      margin-top: 20px;
+    }
+
+    label {
+      cursor: pointer;
+    }
+
+    #canvas-controls {
+      user-select: none;
+      padding: 2px;
+      border: 2px black;
+      border-style: solid;
+      display: flex;
+      height: auto;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      background-color: lightgray;
+      color: black;
+      max-width: 50vw;
+      position: absolute;
+      top: 25%;
+      font-size: 24px;
+      z-index: 999;
+    }
+
+    #canvas-controls-header {
+      width: 100%;
+      background-color: #888;
+    }
+
+    .hidden {
+      visibility: hidden;
+    }
+
+    .option{
+      align-items: center;
+      text-align: center;
+      padding: 3px;
+    }
+  </style>
+  <script>
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes" />
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBP8C5TMB1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-SBP8C5TMB1');
+</script>
+
+<body>
+  <div id="header"></div>
+  <!-- imported header/navbar -->
+
+  <div class="wrapper">
+    <!-- start content -->
+    <section>
+      <div id="title">
+        <h1>Sandpiles</h1>
+        <h3><a href="/sketches/">Gallery Home</a></h3>
+        <hr />
+      </div>
+    </section>
+  </div>
+  <script src="./Cell.js"></script>
+  <script src="./Grid.js"></script>
+  <h4 id="options-header">Options</h4>
+  <div id="canvas-controls" class="hidden">
+    <div id="canvas-controls-header">&nbsp;</div>
+    <span class="option">
+      <label for="showGridCheckbox">Show Grid</label>
+      <input type="checkbox" id="showGridCheckbox">
+    </span>
+    <span class="option">
+      <label for="activeClickCheckbox">Sand Dump Mode</label>
+      <input type="checkbox" id="activeClickCheckbox">
+    </span>
+    <span class="option">
+      <label for="initialAmountField">Initial Amt:</label>
+      <input type="number" id="initialAmountField" value="500" size="5" min="10" max="5000" step="10">
+    </span>
+    <span class="option">
+      <label for="droppedWhenClickedField">Drop When Click:</label>
+      <input type="number" id="droppedWhenClickedField" value="10" size="3" min="5" max="50">
+    </span>
+    <span class="option">
+      <label for="cellMaximumField">Cell Maximum:</label>
+      <input type="number" id="cellMaximumField" value="5" size="2" min="0" max="5">
+    </span>
+    <span class="option">
+      <label for="cellWidthField">Cell Width:</label>
+      <input type="number" id="cellWidthField" value="10" size="3" min="10" max="100" step="5">
+    </span>
+    <input type="button" id="resetButton" value="Reset">
+  </div>
+  <script>
+    // options visibility toggle
+    $(document).ready(function () {
+      $('#options-header').click(function () {
+        $('#canvas-controls').toggleClass('hidden');
+      });
+    });
+
+    // div dragging functionality
+    dragElement(document.getElementById("canvas-controls"));
+
+    function dragElement(elmnt) {
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      if (document.getElementById(elmnt.id + "-header")) {
+        // look for clickable part at top
+        document.getElementById(elmnt.id + "-header").onmousedown = dragMouseDown;
+      } else {
+        // if no header, allow click anywhere inside
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+      }
+
+      function closeDragElement() {
+        // stop moving when mouse button is released:
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+  </script>
+  <!-- START OF SKETCH -->
+  <script>
+    // globals
+    let INITIAL_SAND = 500;
+    let DROP_WHEN_CLICKED = 100;
+    let CELL_MAXIMUM = 5;
+    let REFRESH_RATE = 6;
+
+    let dimension;
+    let cellWidth = 10;
+
+    let rows, columns;
+    let grid;
+
+    let showGrid = false;
+    let paused = false;
+    let activeClick = false;
+
+    // setup function
+    function setup() {
+      dimension = Math.floor(Math.min(windowWidth, windowHeight) * 0.65);
+      createCanvas(dimension, dimension);
+      background(0);
+
+      rows = Math.floor(dimension / cellWidth);
+      columns = Math.floor(dimension / cellWidth);
+
+      if (rows % 2 == 0) {
+        rows++;
+        columns++;
+      }
+
+      grid = new Grid(rows, columns);
+      grid.dropSand(Math.floor(rows / 2), Math.floor(columns / 2), INITIAL_SAND);
+
+      document.getElementById('showGridCheckbox').addEventListener('change', function () {
+        showGrid = this.checked;
+      });
+
+      document.getElementById('activeClickCheckbox').addEventListener('change', function () {
+        activeClick = this.checked;
+      });
+
+      document.getElementById('resetButton').addEventListener('click', function () {
+        cellWidth = parseInt(document.getElementById('cellWidthField').value);
+        setup();
+      });
+
+      // frameRate(144);
+    }
+
+    // render loop
+    function draw() {
+      background(0);
+
+      INITIAL_SAND = parseInt($('#initialAmountField').val());
+      DROP_WHEN_CLICKED = parseInt($('#droppedWhenClickedField').val());
+      CELL_MAXIMUM = parseInt($('#cellMaximumField').val());
+
+      if (showGrid) {
+        stroke(80);
+      } else {
+        noStroke();
+      }
+
+      translate((width - columns * cellWidth) / 2, (height - rows * cellWidth) / 2);
+      grid.render();
+
+      if (frameCount % REFRESH_RATE == 0 && !paused) {
+        grid.topple();
+      }
+
+      if (mouseIsPressed & activeClick) {
+        grid.clicked();
+      }
+    }
+
+  </script>
+  <!-- END OF SKETCH -->
+  <!-- end content -->
+</body>
+
+</html>
