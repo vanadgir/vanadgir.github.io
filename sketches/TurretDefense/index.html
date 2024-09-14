@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+  <title>Turret Defense Demo</title>
+  <link rel="shortcut icon" href="../../favicons/docfav.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="../../stylesheets/styles.css" />
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+  <script>
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes" />
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBP8C5TMB1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-SBP8C5TMB1');
+</script>
+
+<body>
+  <div id="header"></div>
+  <!-- imported header/navbar -->
+
+  <div class="wrapper">
+    <!-- start content -->
+    <section>
+      <div id="title">
+        <h1>Turret Defense Demo</h1>
+        <h3><a href="/sketches/">Gallery Home</a></h3>
+        <hr />
+      </div>
+    </section>
+  </div>
+
+  <script src="./Bullet.js"></script>
+  <script src="./Seeker.js"></script>
+  <script src="./Target.js"></script>
+
+  <div id="canvas-container"></div>
+
+  <!-- START OF SKETCH -->
+  <script>
+    // globals
+    let canvas;
+    let button;
+
+    const NUM_TARGETS = 100;
+    let SCORE = 0;
+
+    let s;
+    let bullets = [];
+    let targets = [];
+
+    function resetSketch() {
+      SCORE = 0;
+      bullets = [];
+      targets = [];
+      s.center = createVector(width / 2, height / 3);
+      s.velocity = createVector(random(-3, 3), random(-3, 3));
+      for (let i = 0; i < NUM_TARGETS; i++) {
+        const posx = random(0, width);
+        const posy = random(height, height * 2);
+
+        targets.push(new Target(i, createVector(posx, posy)));
+      }
+    }
+
+    // setup function
+    function setup() {
+      let dimension = Math.min(windowWidth, windowHeight) * 0.7;
+      canvas = createCanvas(dimension, dimension);
+      canvas.parent("canvas-container");
+
+      button = createButton("Reset");
+      button.mousePressed(resetSketch);
+
+      s = new Seeker(createVector(width / 2, height / 3));
+
+      for (let i = 0; i < NUM_TARGETS; i++) {
+        const posx = random(0, width);
+        const posy = random(height, height * 2);
+
+        targets.push(new Target(i, createVector(posx, posy)));
+      }
+
+      strokeWeight(2);
+      frameRate(144);
+    }
+
+    // render loop
+    function draw() {
+      background(0);
+
+      if (targets.length === 0) { 
+        bullets = [];
+        text("EASY!!!", width/2-25, height/3);
+      }
+
+      for (let i = targets.length - 1; i >= 0; i--) {
+        const t = targets[i];
+        t.insideRadius(s);
+        t.update();
+        t.show();
+
+        for (let j = bullets.length - 1; j >= 0; j--) {
+          const b = bullets[j];
+
+          if (b.collidesWith(t)) {
+            bullets.splice(j, 1);
+            targets.splice(i, 1);
+
+            break;
+          }
+
+          if (b.offScreen) {
+            bullets.splice(j, 1);
+
+            break;
+          }
+        }
+      }
+
+      s.update();
+      s.moveSeeker();
+      s.scan(targets);
+      s.show();
+
+      fill(255);
+      textSize(20);
+      text("TARGETS: " + targets.length, 10, 25);
+      text("TIMES BREACHED: " + SCORE, 10, 50);
+
+      text("BULLETS: " + bullets.length, 10, height - 10);
+    }
+
+  </script>
+  <!-- END OF SKETCH -->
+  <!-- end content -->
+</body>
+
+</html>
