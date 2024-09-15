@@ -139,9 +139,13 @@
       }
 
       s.update();
-      s.moveSeeker();
+      // s.moveSeeker();
       s.scan(targets);
       s.show();
+
+      if (mouseIsPressed) {
+        s.moveSeeker(createVector(mouseX, mouseY));
+      }
 
       fill(255);
       textSize(20);
