@@ -2,7 +2,7 @@ class Seeker {
   constructor(center) {
     this.center = center;
     this.previousBullet = millis();
-    this.velocity = createVector(random(-3, 3), random(-3, 3));
+    this.velocity = createVector(random(-2, 2), random(-2, 2));
     this.size = 20;
     this.visionRadius = 200;
     this.SHOT_INTERVAL = 30;
@@ -33,13 +33,19 @@ class Seeker {
     this.closest = newClosest;
   }
 
-  moveSeeker() {
-    if (
-      (dist(mouseX, mouseY, this.center.x, this.center.y) <= this.size) &
-      mouseIsPressed
-    ) {
-      this.center.x = constrain(mouseX, 0, width);
-      this.center.y = constrain(mouseY, 0, height);
+  moveSeeker(mousePos) {
+    let direction = mousePos.copy().sub(this.center);
+    let distance = direction.mag();  // Calculate the distance to the mouse
+  
+    if (distance > 5) {  // Only adjust movement if far enough from the mouse
+      direction.normalize();
+      
+      // Retain the original speed (magnitude)
+      let speed = this.velocity.mag();
+      
+      // Calculate the target velocity and interpolate
+      let targetVelocity = direction.mult(speed);
+      this.velocity = p5.Vector.lerp(this.velocity, targetVelocity, 1);
     }
   }
 
