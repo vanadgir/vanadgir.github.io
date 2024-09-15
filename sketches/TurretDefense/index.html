@@ -143,7 +143,7 @@
       s.scan(targets);
       s.show();
 
-      if (mouseIsPressed) {
+      if (mouseIsPressed && mouseInside()) {
         s.moveSeeker(createVector(mouseX, mouseY));
       }
 
@@ -153,6 +153,13 @@
       text("TIMES BREACHED: " + SCORE, 10, 50);
 
       text("BULLETS: " + bullets.length, 10, height - 10);
+    }
+
+    function mouseInside() {
+      const mouseXInside = (mouseX > 0 && mouseX < width);
+      const mouseYInside = (mouseY > 0 && mouseY < height);
+
+      return mouseXInside && mouseYInside;
     }
 
   </script>
