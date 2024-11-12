@@ -1,0 +1,430 @@
+<div class="page-0">
+  <div id="title">
+    <h1>UE5 Hex Grid</h1>
+    <h3>Create Procedural Grids in Unreal Engine 5</h3>
+    <hr>
+  </div>
+  <br>
+  <p>In this blog series, we will look at how to create procedural hexagonal tile grids in Unreal Engine 5. I'll do my
+    best
+    to explain what details I can, but will assume some basic familiarity with Unreal Engine and C++ (or any language,
+    really). If you are more comfortable working with Blueprints in Unreal, you should still be able to follow along!
+  </p>
+
+  <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
+  <b> ii. </b> <a href="#" class="page-link" data-page="2"> Classes and Grid Logic</a> <br>
+  <a href="#" class="page-link" data-page="2"><img class="preview" src="./images/post1_1.gif"
+      title="Hex Grid Tiling Dynamic Height and Width"></a><br>
+  <b> iii. </b> <a href="#" class="page-link" data-page="3"> 2D Perlin Noise and Applying Textures </a> <br>
+  <a href="#" class="page-link" data-page="3"><img class="preview" src="./images/post1_2.gif"
+      title="Hex Grid Tiling Perlin Noise Height Map"></a><br>
+  <b> iv. </b> <a href="#" class="page-link" data-page="3"> Coming Soon... </a> <br>
+
+</div>
+
+<div class="page-1">
+  <div id="title">
+    <h1>Introduction</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+  <p> As someone new to Unreal but familiar with coding, I felt more of a pull towards C++ development over learning
+    Blueprints. I've also been playing a lot of Civilization 5 and 6 around the time of writing this, and so I've had
+    the picture of hexagon maps in my head and thought it'd be a good exercise to get some practice with the engine. I
+    won't be getting into environment
+    setup in this series, but do keep in mind that setting up Unreal Engine with your code editor of choice may take
+    some time and troubleshooting. In my case, I am using Visual Studio Code and Unreal Engine 5.4.4. I also created my
+    own regular hexagon tile in Blender and exported it for use in Unreal, which I recommend doing for full control of
+    the tile, but I'm sure you can also find one online somewhere.
+  </p>
+
+  <p> I'd also like to point you to two great resources that helped me. The first is <a
+      href="https://youtu.be/vSevINGWtEc?si=CQhyLgH4GoAyXKfv&t=0" target="_blank">this video</a> from Gisli's game
+    development channel. He creates a tool that generates a hexagonal grid using Blueprints and shows the whole process,
+    and the higher level concepts are still relevant when working with C++. The other is <a
+      href="https://www.redblobgames.com/grids/hexagons/" target="_blank">this blog post</a> from Red Blob Games. This
+    is likely the best blog post around for understand how hex tiling works and the numerous ways you can set up
+    coordinate systems with them (a bit overkill for this project but exciting to learn nonetheless). </p>
+
+  <p>The key takeaway: the dimensions of a regular hexagon make it so you cannot simply offset by a
+    single width value to get proper tiling - with some trigonometry, you would find that you need to use <i>sqrt(3)</i>
+    somewhere depending on if you are using
+    flat-top or pointy-top orientation. We'll be working with flat-top orientation here, but the formulae and logic can
+    be easily repurposed to work with pointy-top. </p>
+
+  <p> Now, let's get into it!</p>
+
+</div>
+
+<div class="page-2">
+  <div id="title">
+    <h1>Classes and Grid Logic</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>First, let's define a simple HexTile class. This class represents a single hexagonal tile, which we will provide
+    with
+    a mesh and material. By using C++ to expose these variables to Unreal Engine's editor, we can use Unreal's UI to
+    find and assign these easily. To create the class, we need to define a HexTile.h and a HexTile.cpp. The first is a
+    header
+    file where we declare variables, functions, and expose things to the editor. The second is where we define the class
+    logic. Let's take a look at both real quick: </p>
+
+
+  <h3>HexTile.h:</h3>
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "HexTile.generated.h"
+
+// allcaps methods are for interfacing UE5
+
+// initialize as a subclass of Actor
+UCLASS() 
+class TILETACTICS_API AHexTile : public AActor
+{
+    GENERATED_BODY()
+
+public:
+    AHexTile();
+
+    // lets you assign a mesh in the editor
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Hex Tile")
+    UStaticMeshComponent* MeshComponent;
+
+    // setter method for the material
+    UFUNCTION(BlueprintCallable, Category = "Hex Tile")
+    void SetTileMaterial(UMaterialInterface* MyMaterial);
+
+    // setter method for the mesh
+    UFUNCTION(BlueprintCallable, Category = "Hex Tile")
+    void SetTileMesh(UStaticMesh* NewMesh);
+
+// these are inherited from Actor
+protected:
+    virtual void BeginPlay() override;
+    virtual void OnConstruction(const FTransform& Transform) override;
+};
+    </code></pre>
+  </div>
+
+  <h3>HexTile.cpp:</h3>
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>
+#include "HexTile.h"
+
+// constructor
+AHexTile::AHexTile()
+{
+    PrimaryActorTick.bCanEverTick = false; // disable tick for performance
+    
+    MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+    RootComponent = MeshComponent;
+}
+
+// called when simulation starts
+void AHexTile::BeginPlay()
+{
+    Super::BeginPlay();
+}
+
+// called when actor spawns or is changed
+void AHexTile::OnConstruction(const FTransform& Transform)
+{
+    Super::OnConstruction(Transform);
+}
+
+// this sets the tile mesh to the given mesh
+void AHexTile::SetTileMesh(UStaticMesh* NewMesh)
+{
+    if (NewMesh)
+    {
+        MeshComponent->SetStaticMesh(NewMesh);
+    }
+}
+
+// this sets the tile material to the given material
+void AHexTile::SetTileMaterial(UMaterialInterface* MyMaterial)
+{
+    if (MyMaterial)
+    {
+        MeshComponent->SetMaterial(0, MyMaterial);
+    }
+}      
+    </code></pre>
+  </div>
+
+  <p>The parts in all caps in the header file are UE functions for interfacing with the editor and determining what to expose, while the rest is basically boilerplate code. In the cpp file, we write the rest of our logic. With these set, we are able to use the UI of Unreal to control variables or function calls without needing to recompile the code. However, changing any core functionality or global constants will likely require a recompile or a refactor to expose it to the editor as well. Not necessarily impossible, but just something to think about.</p>
+
+  <p>Next, we want to make an Actor that behaves as the grid origin or generator - something that does the math of positioning the tiles and then spawns them accordingly. We will give this Actor the ability to use the Tile's setter functions to change how to look as well. In fact, we can get pretty creative with what we expose to the editor here and come up with our own custom constants or variables. This is the part that can contain a lot of math, so let's do the fun part of showing the demo first 😏</p>
+
+  <center> <img src="./images/post1_1.gif" title="Hex Grid Tiling Dynamic Height and Width"> </center> <br>
+
+  <p>What you're seeing here is a hex grid with an adjustable width and height, which is then performing the act of spawning the tiles where needed. This is being done when a custom button is pressed, but you can also refactor this to happen every frame (and in turn, more expensive). The dark black floor material was just a stock material picked from the default asset library. We can call this Actor the HexGridOrigin, indicating that it is the (0, 0) coordinate of the 2D grid. Just like in the Tile class where we had to provide the mesh and material through the editor, we can provide these to the HexGridOrigin as well, which can then apply different textures based on rules we come up with. We'll look at noise and heights in the next one, where I'll share the full .h and .cpp code for the HexGridOrigin class.</p>
+
+  <p>See you there!</p>
+
+</div>
+
+<div class="page-3">
+  <div id="title">
+    <h1>2D Perlin Noise and Textures</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>To build off from the last post, let's give these tiles a height using <a href="https://en.wikipedia.org/wiki/Perlin_noise" target="_blank">Perlin noise</a>, and then use that to determine what material to apply. We'll also theorycraft some other variables we could introduce to add some spice to the map generation. First off, let me share the header and cpp files for the HexGridOrigin class. If you're just skimming through, you probably want to see the <i>AHexGridOrigin::BuildGrid()</i> function in the .cpp file.</p>
+
+  <h3>HexGridOrigin.h:</h3>
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Actor.h"
+#include "HexTile.h"
+#include "HexGridOrigin.generated.h"
+
+// custom rendering type
+UENUM(BlueprintType)
+enum class EHexGridMode : uint8
+{
+  Tile UMETA(DisplayName = "Tile"),
+  Fill UMETA(DisplayName = "Fill")
+};
+
+UCLASS()
+class TILETACTICS_API AHexGridOrigin : public AActor
+{
+  GENERATED_BODY()
+
+public:
+  AHexGridOrigin();
+
+  // set class of HexTile in editor
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid")
+  TSubclassOf<AHexTile> HexTileClass;
+
+  // set all materials that will be needed
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid Materials")
+  UMaterialInterface *GrassMaterial;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid Materials")
+  UMaterialInterface *StoneMaterial;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid Materials")
+  UMaterialInterface *SnowMaterial;
+
+  // ...
+  // add any more material options here
+
+  // set mesh that will be passed to HexTile
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Tile")
+  UStaticMesh *TileMesh;
+
+  // grid properties 
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid")
+  int32 GridWidth;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid")
+  int32 GridHeight;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid")
+  float GridSpacing;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid", meta = (Delta = "0.01"))
+  float NoiseStrength;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid")
+  int32 ZScaling;
+
+  UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Hex Grid")
+  EHexGridMode GridMode;
+
+  // array to keep track of spawned HexTile actors
+  UPROPERTY()
+  TArray<AHexTile *> SpawnedTiles;
+
+  // buttons
+  UFUNCTION(BlueprintCallable, Category = "Hex Grid", CallInEditor)
+  void BuildGrid();
+
+  UFUNCTION(BlueprintCallable, Category = "Hex Grid", CallInEditor)
+  void ClearGrid();
+
+protected:
+  virtual void BeginPlay() override;
+};
+
+    </code></pre>
+  </div>
+
+  <h3>HexGridOrigin.cpp:</h3>
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>
+#include "HexGridOrigin.h"
+#include "HexTile.h"
+#include "Kismet/KismetMathLibrary.h"
+
+// constructor
+AHexGridOrigin::AHexGridOrigin()
+{
+    // don't need per tick calcs
+  PrimaryActorTick.bCanEverTick = false;
+
+  // initial grid settings
+  GridMode = EHexGridMode::Tile;
+  GridWidth = 5;
+  GridHeight = 5;
+  GridSpacing = 100.0f;
+  NoiseStrength = 0.1f;
+  ZScaling = 10;
+}
+
+// when simulation starts
+void AHexGridOrigin::BeginPlay()
+{
+  Super::BeginPlay();
+
+  BuildGrid();
+}
+
+// this does the whole thing
+void AHexGridOrigin::BuildGrid()
+{
+    // clear previous tiles
+    for (AHexTile *Tile : SpawnedTiles)
+    {
+        if (Tile)
+        {
+            Tile->Destroy();
+        }
+    }
+    SpawnedTiles.Empty();
+
+    // calculate X and Y spacing
+    float YSpacing = GridSpacing * 1.5f;
+    float XSpacing = FMath::Sqrt(3.0f) * GridSpacing;
+
+    // set clamp ranges for noise and scaling
+    float MinNoiseValue = 0.1f;
+    float MaxNoiseValue = 1.0f;
+    float MinZScale = 0.1f; 
+
+    for (int32 y = 0; y < GridHeight; ++y)
+    {
+        for (int32 x = 0; x < GridWidth; ++x)
+        {
+            float XPos = x * XSpacing;
+            float YPos = y * YSpacing;
+
+            // odd row offset
+            if (y % 2 != 0)
+            {
+                XPos += (XSpacing / 2.0f);
+            }
+
+            // store the X and Y of the centerpoint, Z comes later
+            FVector CenterPoint(XPos, YPos, 0.0f);
+
+            // get a noise value
+            float NoiseValue = FMath::PerlinNoise2D(FVector2D(CenterPoint.X, CenterPoint.Y) * NoiseStrength); 
+            NoiseValue = FMath::Clamp(NoiseValue, MinNoiseValue, MaxNoiseValue);  // clamp it
+
+            float RoundedZ = UKismetMathLibrary::Round(NoiseValue * 20.0f) * 0.05f; // round it
+            if (HexTileClass)
+            {
+                AHexTile *NewTile = GetWorld()->SpawnActor<AHexTile>(HexTileClass, CenterPoint, FRotator::ZeroRotator);
+                if (NewTile)
+                {
+                    NewTile->SetTileMesh(TileMesh); 
+
+                    // grid mode branches
+                    if (GridMode == EHexGridMode::Tile)
+                    {
+                        // Tile Mode: set the tile's center at the Z point
+                        CenterPoint.Z = RoundedZ * ZScaling;
+                        NewTile->SetActorLocation(CenterPoint);
+                    }
+                    else if (GridMode == EHexGridMode::Fill)
+                    {
+                        // Fill Mode: scale the mesh up to the Z point
+                        FVector NewScale = NewTile->GetActorScale3D();
+                        NewScale.Z = FMath::Max(RoundedZ * ZScaling, MinZScale);
+                        NewTile->SetActorScale3D(NewScale);
+                    }
+
+                    // use the Z height to determine material
+                    UMaterialInterface *TileMaterial;
+                    if (RoundedZ < 0.33f) // low thresh
+                    {
+                        TileMaterial = GrassMaterial; 
+                    }
+                    else if (RoundedZ < 0.55f)  // middle thresh
+                    {
+                        TileMaterial = StoneMaterial;
+                    }
+                    else  // high 
+                    {
+                        TileMaterial = SnowMaterial;
+                    }
+
+                    NewTile->SetTileMaterial(TileMaterial);
+                    SpawnedTiles.Add(NewTile); 
+                }
+            }
+        }
+    }
+}
+
+// destroys all actors
+void AHexGridOrigin::ClearGrid()
+{
+  for (AHexTile *Tile : SpawnedTiles)
+  {
+    if (Tile)
+    {
+      Tile->Destroy();
+    }
+  }
+  SpawnedTiles.Empty();
+}
+
+    </code></pre>
+  </div>
+
+  <center> <img src="./images/post1_2.gif" title="Hex Grid Tiling Perlin Noise Height Map"> </center> <br>
+
+  <p>Beyond Perlin noise, we also added:
+     <ul>
+       <li><i>GridMode</i> : toggle between Tile and Fill mode</li>
+       <li><i>GridSpacing</i> : adjusts the gap between tiles</li>
+       <li><i>NoiseStrength</i> : changes the visible noise pattern</li>
+       <li><i>ZScaling</i> : how strongly noise values get scaled to height</li>
+     </ul>
+
+     What else could we add for cool effects or generative patterns? In this demo, I created a HexGridOrigin Actor that spawns several Tile Actors so that I had individual control of each Tile when necessary, but is there a better way to achieve this? As one of my first projects in Unreal Engine, I've still got a lot to learn! Hope this was a fun read for you, and if you have any questions or suggestions, don't hesitate to get in touch.
+  </p>
+
+  <p>Until next time!</p>
+
+</div>
+
+<div class="page-4">
+  <div id="title">
+    <h1>Coming Soon...</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>I would love to get this sort of demo working in the browser with Three.js, so keep an eye out for that!</p>
+
+</div>

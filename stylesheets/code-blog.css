@@ -1,0 +1,31 @@
+pre {
+  width: 95%;
+  margin: auto;
+  text-align: left;
+}
+
+.code-container {
+  padding-bottom: 20px;
+}
+
+.copy-button {
+  position: absolute;
+  right: 5%;
+  background-color: #3b309b;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.copy-button:hover {
+  background-color: #212366;
+}
+
+p {
+  line-height: 1.618;
+}
+
+code {
+  font-size: 17px;
+}

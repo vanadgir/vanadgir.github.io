@@ -8,16 +8,9 @@
   <link rel='shortcut icon' href='../../favicons/docfav.ico' type='image/x-icon' />
   <link rel="stylesheet" href="../../stylesheets/styles.css">
   <link rel="stylesheet" href="../../stylesheets/github-dark.css">
+  <link rel="stylesheet" href="../../stylesheets/code-blog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <style>
-    pre {
-      background-color: #7e7e7eab;
-      padding: 10px;
-      border: 2px solid #ccc;
-      border-radius: 5px;
-      white-space: pre-wrap;
-    }
-  </style>
   <script>
     // page tracker
     var page = 0;
@@ -31,14 +24,32 @@
     // content load function
     function loadContent() {
       document.documentElement.scrollTop = 0;
-      $("#page-content").load(`entries.html .page-${page}`);
+      $("#page-content").load(`entries.html .page-${page}`, function () {
+        hljs.highlightAll(); // reinitialize highlight.js after content loads
+      });
     }
+
 
     // initial content load
     document.addEventListener("DOMContentLoaded", function () {
       loadContent();
       toggleButtons();
     });
+
+    // copy code block text to clipboard
+    function copyToClipboard(button) {
+      // get the code block sibling of the button
+      const codeBlock = button.nextElementSibling;
+
+      // create a temporary textarea to copy the code from
+      const textarea = document.createElement('textarea');
+      textarea.value = codeBlock.textContent; 
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
 </head>
@@ -47,7 +58,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-SBP8C5TMB1"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
 
   gtag('config', 'G-SBP8C5TMB1');
@@ -128,5 +139,7 @@
   });
 
 </script>
+<!-- Highlight.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
 
 </html>
