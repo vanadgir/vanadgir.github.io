@@ -72,19 +72,22 @@
     Each unit of time in our case here is a single frame, or one whole execution of the <i>draw()</i> function.
   </p>
 
-  <pre><code>    
-    // setup function
-    void setup() {
-      size(600, 600);
-      background(0);
-      ellipse(width/2, height/2, 100, 100);
-    }
-    
-    // render function
-    void draw() {
-      // what do we want to make happen?
-    }
+  <div class="code-container">
+
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+// setup function
+void setup() {
+  size(600, 600);
+  background(0);
+  ellipse(width/2, height/2, 100, 100);
+}
+
+// render function
+void draw() {
+  // what do we want to make happen?
+}
   </code></pre>
+  </div>
 
   <p>In this example, we're setting our canvas to 600px by 600px and giving it a black background. Although the default
     color mode is RGB and usually requires 3 values, we can shorthand black and white with 0 and 255 respectively. When
@@ -101,27 +104,29 @@
     right and then wrap back around to the left side for a simple and satisfying loop? Here's how we might achieve that.
   </p>
 
-  <pre><code>    
-    int x, y;
-    int speed = 5;
-    
-    // setup function
-    void setup() {
-      size(600, 600);
-      background(0);
-      x = width/2;
-      y = height/2;
-    }
-    
-    // render function
-    void draw() {
-      ellipse(x, y, 100, 100);
-      x += speed;
-      if (x >= width) {
-        x = 0;
-      }
-    }
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+int x, y;
+int speed = 5;
+
+// setup function
+void setup() {
+  size(600, 600);
+  background(0);
+  x = width/2;
+  y = height/2;
+}
+
+// render function
+void draw() {
+  ellipse(x, y, 100, 100);
+  x += speed;
+  if (x >= width) {
+    x = 0;
+  }
+}
   </code></pre>
+  </div>
 
   <p>Now, we initialize some variables globally, since we would like to change them later on within the <i>draw()</i>
     scope. The variables <i>x</i> and <i>y</i> are set to half the width and height so that we can simplify our
@@ -138,28 +143,30 @@
   <p>Wait a second... ah, that's right. Currently, when we draw new frames, they are being overlaid on each other and
     creating this trailing effect. It looks cool, but wasn't quite what we wanted. Luckily, this is an easy fix.</p>
 
-  <pre><code>    
-    int x, y;
-    int speed = 5;
-    
-    // setup function
-    void setup() {
-      size(600, 600);
-      background(0);
-      x = width/2;
-      y = height/2;
-    }
-    
-    // render function
-    void draw() {
-      background(0);
-      ellipse(x, y, 100, 100);
-      x += speed;
-      if (x >= width) {
-        x = 0;
-      }
-    }
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+int x, y;
+int speed = 5;
+
+// setup function
+void setup() {
+  size(600, 600);
+  background(0);
+  x = width/2;
+  y = height/2;
+}
+
+// render function
+void draw() {
+  background(0);
+  ellipse(x, y, 100, 100);
+  x += speed;
+  if (x >= width) {
+    x = 0;
+  }
+}
   </code></pre>
+  </div>
 
   <p>All that is needed here is a <i>background(0)</i> in the render loop. Now, before new circles are drawn, the entire
     canvas will be set to a black background again. This should now give us the desired effect. </p>
@@ -185,25 +192,27 @@
     that together. Let's first try and get a basic shape to fall from the top of the screen to the bottom, and then
     extend that logic.</p>
 
-  <pre><code>    
-    float x, y; // starting position of the shape
-    float len = 10; // length of the shape
-    float speed = 5; // fall speed
-  
-    void setup() {
-      size(600, 480);
-      x = width/2;
-      y = 0;
-    }
-    
-    void draw() {
-      background(200);
-      strokeWeight(4);
-      stroke(0, 0, 200);
-      line(x, y, x, y+len);
-      y += speed;
-    }
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+float x, y; // starting position of the shape
+float len = 10; // length of the shape
+float speed = 5; // fall speed
+
+void setup() {
+  size(600, 480);
+  x = width/2;
+  y = 0;
+}
+
+void draw() {
+  background(200);
+  strokeWeight(4);
+  stroke(0, 0, 200);
+  line(x, y, x, y+len);
+  y += speed;
+}
   </code></pre>
+  </div>
 
   <center> <img src="./images/post2_1.gif" title="Single Raindrop Gif"> </center> <br>
 
@@ -213,33 +222,35 @@
     variables in our main file, we can instead have these be inherent properties of a Drop. At time of creation, we can
     assign a Drop a new starting height, fall speed, stroke weight, or really anything we want. </p>
 
-  <pre><code>    
-    class Drop {
-      float x = random(width); // random horizontal position
-      float y = random(-500, -100); // random height, can be offscreen
-      float z = random(0, 20); // create sense of depth
-      float len = map(z, 0, 20, 10, 20); // length of Drop
-      float yspeed = map(z, 0, 20, 4, 10); // speed of Drop
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+class Drop {
+  float x = random(width); // random horizontal position
+  float y = random(-500, -100); // random height, can be offscreen
+  float z = random(0, 20); // create sense of depth
+  float len = map(z, 0, 20, 10, 20); // length of Drop
+  float yspeed = map(z, 0, 20, 4, 10); // speed of Drop
 
-      // fall & reset method
-      void fall() {
-        y = y + yspeed;
-    
-        if (y > height) {
-          y = random(-200, -100);
-          yspeed = map(z, 0, 20, 4, 10);
-        }
-      }
-    
-      // display method
-      void show() {
-        float thick = map(z, 0, 20, 1, 3);
-        strokeWeight(thick);
-        stroke(0, 0, 200);
-        line(x, y, x, y+len);
-      }
+  // fall & reset method
+  void fall() {
+    y = y + yspeed;
+
+    if (y > height) {
+      y = random(-200, -100);
+      yspeed = map(z, 0, 20, 4, 10);
     }
+  }
+
+  // display method
+  void show() {
+    float thick = map(z, 0, 20, 1, 3);
+    strokeWeight(thick);
+    stroke(0, 0, 200);
+    line(x, y, x, y+len);
+  }
+}
   </code></pre>
+  </div>
 
   <p>Two functions are doing a lot of the heavy lifting in here - <i>random()</i> and <i>map()</i>. The <i>random()</i>
     function gives us a number in the given range of two arguments, or a number from 0 to the given single argument. It
@@ -255,31 +266,33 @@
     a large number of Drops. Since most of our behavior and logic is stored in the Drop class, we should have pretty
     simple <i>setup()</i> and <i>draw()</i> functions.</p>
 
-  <pre><code>    
-    // initialize array of 500 Drop objects
-    Drop[] drops = new Drop[500];
-    
-    // setup function 
-    void setup() {
-      size(600, 480);
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+// initialize array of 500 Drop objects
+Drop[] drops = new Drop[500];
 
-      // loop through and create a new Drop for every index
-      for (int i = 0; i < drops.length; i++) {
-        drops[i] = new Drop();
-      }
-    }
-    
-    // render function
-    void draw() {
-      background(200);
+// setup function 
+void setup() {
+  size(600, 480);
 
-      // each frame, show and update the new location
-      for (int i = 0; i < drops.length; i++) {
-        drops[i].show();
-        drops[i].fall();
-      }
-    }
+  // loop through and create a new Drop for every index
+  for (int i = 0; i < drops.length; i++) {
+    drops[i] = new Drop();
+  }
+}
+
+// render function
+void draw() {
+  background(200);
+
+  // each frame, show and update the new location
+  for (int i = 0; i < drops.length; i++) {
+    drops[i].show();
+    drops[i].fall();
+  }
+}
   </code></pre>
+  </div>
 
   <center> <img src="./images/post2_2.gif" title="Rain Simulation Gif"> </center> <br>
 
@@ -315,40 +328,43 @@
     <i>draw()</i> function. In the case of the moving circle, I knew I would achieve a loop at 120 frames, based on the
     width of the canvas and the travel speed (x displacement). By having Processing export a .png image every frame, I
     can hard stop the program after 120 images, and then use some other method of stitching them together into a gif (I
-    use <a href="https://ezgif.com/maker" target="_blank">ezgif.com</a>). </p>
+    use <a href="https://ezgif.com/maker" target="_blank">ezgif.com</a>).
+  </p>
 
   <p>The uses of <i>frameCount</i> don't stop there - it can even be leveraged for some great artistic generations using
     colors. You may have once seen colors expressed in a color wheel, showing how various hues can blend into each other
     seamlessly and eventually loop back to the start. If we can somehow make use of this seamless transitioning, then we
     should be able to have our colors loop as well.</p>
 
-  <pre><code>    
-    // setup function
-    void setup() {
-      size(600, 600);
-      colorMode(HSB); // hue, saturation, brightness
-    }
-    
-    // render function
-    void draw() {
-      background(0);
-      float shift = map(frameCount%60, 0, 60, 0, 255);
-    
-      for (int r = 900; r > 0; r -= 20) {
-        strokeWeight(4);
-        stroke((r+shift)%255, 255, 255);
-        noFill();
-        ellipse(width/2, height/2, r, r);
-      }
-      
-      // uncomment to export
-      // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+// setup function
+void setup() {
+  size(600, 600);
+  colorMode(HSB); // hue, saturation, brightness
+}
 
-      // if (frameCount == 60) {
-      //   exit();
-      // }
-    }
+// render function
+void draw() {
+  background(0);
+  float shift = map(frameCount%60, 0, 60, 0, 255);
+
+  for (int r = 900; r > 0; r -= 20) {
+    strokeWeight(4);
+    stroke((r+shift)%255, 255, 255);
+    noFill();
+    ellipse(width/2, height/2, r, r);
+  }
+  
+  // uncomment to export
+  // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+
+  // if (frameCount == 60) {
+  //   exit();
+  // }
+}
   </code></pre>
+  </div>
 
   <center> <img src="./images/post3_1.gif" title="Color Circles A 60 Frames"> </center> <br>
 
@@ -364,40 +380,42 @@
     20, what would happen if we create a new set of circles offset from these and have the colors of those propogate
     outwards instead of inwards? Something like this: </p>
 
-  <pre><code>    
-    // setup function
-    void setup() {
-      size(600, 600);
-      colorMode(HSB);
-    }
-    
-    // render function
-    void draw() {
-      background(0);
-      float shift = map(frameCount%60, 0, 60, 0, 255);
-    
-      for (int r = 900; r > 0; r -= 20) {
-        strokeWeight(4);
-        stroke((r+shift)%255, 255, 255);
-        noFill();
-        ellipse(width/2, height/2, r, r);
-      }
-    
-      for (int r = 10; r < 900; r += 20) {
-        strokeWeight(4);
-        stroke((r+255-shift)%255, 255, 255);
-        noFill();
-        ellipse(width/2, height/2, r, r);
-      }
-      
-      // uncomment to export 
-      // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
-    
-      // if (frameCount == 60) {
-      //   exit();
-      // }
-    }
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+// setup function
+void setup() {
+  size(600, 600);
+  colorMode(HSB);
+}
+
+// render function
+void draw() {
+  background(0);
+  float shift = map(frameCount%60, 0, 60, 0, 255);
+
+  for (int r = 900; r > 0; r -= 20) {
+    strokeWeight(4);
+    stroke((r+shift)%255, 255, 255);
+    noFill();
+    ellipse(width/2, height/2, r, r);
+  }
+
+  for (int r = 10; r < 900; r += 20) {
+    strokeWeight(4);
+    stroke((r+255-shift)%255, 255, 255);
+    noFill();
+    ellipse(width/2, height/2, r, r);
+  }
+  
+  // uncomment to export 
+  // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+
+  // if (frameCount == 60) {
+  //   exit();
+  // }
+}
   </code></pre>
+  </div>
 
   <center> <img src="./images/post3_2.gif" title="Color Circles B 60 Frames"> </center> <br>
 
@@ -418,57 +436,75 @@
   </div>
   <br>
 
-  <p>I've been playing around with 3D more recently, and now that I've made something cool enough to share, I thought it would be nice to show you how it works in code and I will do my best to walk you through how to make something like this on your own!
-    One change you might notice immediately in the code below is the addition of a new argument in the <i>size()</i> function - this is
+  <p>I've been playing around with 3D more recently, and now that I've made something cool enough to share, I thought it
+    would be nice to show you how it works in code and I will do my best to walk you through how to make something like
+    this on your own!
+    One change you might notice immediately in the code below is the addition of a new argument in the <i>size()</i>
+    function - this is
     how we tell Processing to use a 3D renderer, in this case P3D. </p>
 
-  <pre><code>    
-    // setup function
-    void setup() {
-      size(800, 800, P3D); // use 3D renderer
-      colorMode(HSB); // hue, saturation, brightness
-    }
-    
-    // render function
-    void draw() {
-      background(0);
-      translate(width/2, height/2); // translate origin to center
-    
-      rotateX(radians(60)); // comment this line out for 2D top view
-    
-      noFill();
-      strokeWeight(3);
-    
-      for (int i = 0; i < 55; i++) {
-        // define line color using frame count and circle position
-        float strokeCol = map(sin(radians(frameCount + i * 10)), -1, 1, 0, 255);
-        stroke(strokeCol, 255, 255);
-    
-        // beginShape & endShape for custom shapes
-        beginShape();
-        for (int j = 0; j < 360; j += 5) {
-          int rad = i * 5;
-          float x = rad * cos(radians(j));
-          float y = rad * sin(radians(j));
-          float z = sin(radians(frameCount + i * 10)) * 200;
-          vertex(x, y, z);
-        }
-        endShape(CLOSE);
-      }
-    }
-  </code></pre>
+  <div class="code-container">
+    <pre><button class="copy-button" onclick="copyToClipboard(this)">Copy</button><code>    
+// setup function
+void setup() {
+  size(800, 800, P3D); // use 3D renderer
+  colorMode(HSB); // hue, saturation, brightness
+}
 
-  <p>Here is what this sketch will look like if we comment out the <i>rotateX()</i> function, meaning our sketch is still functionally 2D like the others. This is basically our "top view".</p>
+// render function
+void draw() {
+  background(0);
+  translate(width/2, height/2); // translate origin to center
+
+  rotateX(radians(60)); // comment this line out for 2D top view
+
+  noFill();
+  strokeWeight(3);
+
+  for (int i = 0; i < 55; i++) {
+    // define line color using frame count and circle position
+    float strokeCol = map(sin(radians(frameCount + i * 10)), -1, 1, 0, 255);
+    stroke(strokeCol, 255, 255);
+
+    // beginShape & endShape for custom shapes
+    beginShape();
+    for (int j = 0; j < 360; j += 5) {
+      int rad = i * 5;
+      float x = rad * cos(radians(j));
+      float y = rad * sin(radians(j));
+      float z = sin(radians(frameCount + i * 10)) * 200;
+      vertex(x, y, z);
+    }
+    endShape(CLOSE);
+  }
+}
+  </code></pre>
+  </div>
+
+  <p>Here is what this sketch will look like if we comment out the <i>rotateX()</i> function, meaning our sketch is
+    still functionally 2D like the others. This is basically our "top view".</p>
 
   <center> <img src="./images/post4_1.gif" title="Sine 3D Circles Top View" height="600px" width="600px"> </center> <br>
 
-  <p>First, you can probably notice a similar pattern to a previous post where I use the global variable <i>frameCount</i> to inform my sketch on what to color something. By also using the loop variable <i>i</i>, it can also be offset by the position of the shape itself. Next, instead of calling <i>ellipse()</i> like I have before, I am instead using <i>beginShape()</i> and <i>endShape()</i>, a pair of functions that can be used to define a custom shape with calls to <i>vertex()</i> between them. In this example, I am using the loop variable <i>j</i> to increment around the radius and place a vertex at a number of equally spaced points. The <i>CLOSE</i> argument simply tells Processing to close off the shape by connecting the final vertex with the first one. A smaller increment means more vertices, meaning our shape is closer to resembling a circle. I encourage you to try this with larger increments, or even dynamic increments to see what sort of shapes and patterns you might get! </p>
+  <p>First, you can probably notice a similar pattern to a previous post where I use the global variable
+    <i>frameCount</i> to inform my sketch on what to color something. By also using the loop variable <i>i</i>, it can
+    also be offset by the position of the shape itself. Next, instead of calling <i>ellipse()</i> like I have before, I
+    am instead using <i>beginShape()</i> and <i>endShape()</i>, a pair of functions that can be used to define a custom
+    shape with calls to <i>vertex()</i> between them. In this example, I am using the loop variable <i>j</i> to
+    increment around the radius and place a vertex at a number of equally spaced points. The <i>CLOSE</i> argument
+    simply tells Processing to close off the shape by connecting the final vertex with the first one. A smaller
+    increment means more vertices, meaning our shape is closer to resembling a circle. I encourage you to try this with
+    larger increments, or even dynamic increments to see what sort of shapes and patterns you might get!
+  </p>
 
-  <p>Now let's have our big reveal. By applying <i>rotateX()</i> (and remember, we have to supply our angle in radians), we tell our renderer to perform the necessary transformations for the illusion of depth. Now our Z axis comes fully into view. </p>
+  <p>Now let's have our big reveal. By applying <i>rotateX()</i> (and remember, we have to supply our angle in radians),
+    we tell our renderer to perform the necessary transformations for the illusion of depth. Now our Z axis comes fully
+    into view. </p>
 
   <center> <img src="./images/post4_2.gif" title="Sine 3D Circles" height="600px" width="600px"> </center> <br>
 
-  <p>Another satisfying and smooth loop! Thanks to the oscillatory nature of the sine function, we are able to capture the entirety of one phase, export our frames, and stitch it together into a nice gif! </p>
+  <p>Another satisfying and smooth loop! Thanks to the oscillatory nature of the sine function, we are able to capture
+    the entirety of one phase, export our frames, and stitch it together into a nice gif! </p>
 
 </div>
 
@@ -479,4 +515,7 @@
     <hr>
   </div>
   <br>
+
+  <p>Entries here are currently on hold as I pursue a few other projects. In fact, other parts of my blog may be more
+    active currently. I'll try to keep this series going as I get the time and more interesting ideas! </p>
 </div>
