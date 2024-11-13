@@ -67,16 +67,16 @@
 
     <p>
       Thanks for visiting my corner of the internet. My name is Varun and I am
-      a software engineer, data scientist, and musician from Massachusetts. If you need a
+      a software engineer, data scientist, and technical artist from Massachusetts. If you need a
       motivated and creative problem solver for your team, look no further!
       For my work history and contact information, please see my
       <a href="/docs/VNResume.pdf" target="_blank">resume</a>.
     </p>
 
-    <p>
-      I am currently taking a course to look into becoming a Technical Artist in game development so I can branch out my skills. Keep an eye out on my blog or portfolio for projects or demos that I have finished or am working on!
-    </p>
-    
+    <h2>Most Recent:</h2>
+    <div id="recent-content"></div>
+
+    <br>
     <p>
       In addition to programming, I also enjoy writing music. I have been
       commissioned for a few tracks in the past and am open to new projects,
@@ -128,6 +128,14 @@
       v.show();
     }
   }
+</script>
+
+<!-- load recent-article div -->
+<script>
+  $(document).ready(function () {
+    $('#recent-content').load('recent-article.html');
+  });
+
 </script>
 
 </html>
