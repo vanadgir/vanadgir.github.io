@@ -186,6 +186,9 @@ textarea {
  * Addresses margins handled incorrectly in IE6/7
  */
 body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin: 0;
 }
 
@@ -653,10 +656,15 @@ strong {
 }
 
 .wrapper {
-  max-width: 650px;
-  margin: 0 auto;
-  position: relative;
-  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 65vw;
+
+}
+
+section {
+  width: 100%;
 }
 
 section img {
@@ -856,6 +864,8 @@ dt {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  padding-top: 5%;
+  padding-bottom: 7%;
 }
 
 .recent-article {
