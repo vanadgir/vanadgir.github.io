@@ -659,7 +659,7 @@ strong {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 65vw;
+  max-width: 650px;
 
 }
 
