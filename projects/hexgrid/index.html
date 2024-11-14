@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HexGrid</title>
+  <link rel='shortcut icon' href='../favicons/docfav.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="../../stylesheets/styles.css">
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
+  <style>
+    canvas {
+      display: block;
+      max-height: 65vh;
+      max-width: 99vw;
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #controls {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-items: center;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      #controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      #controls .control {
+        width: 100%;
+      }
+    }
+
+    #controls input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 250px;
+      height: 12px;
+      border-radius: 5px;
+      background: #000000;
+      outline: none;
+      transition: background 0.3s ease;
+    }
+
+    #controls input[type="range"]:focus {
+      background: #000000;
+    }
+
+    #controls input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 30px;
+      height: 15px;
+      border-radius: 5px;
+      border-color: #000000;
+      background: #000000;
+      cursor: pointer;
+    }
+
+    #controls input[type="range"]:active::-webkit-slider-thumb {
+      background: #000000;
+    }
+
+    #controls input[type="range"]::-moz-range-thumb {
+      width: 30px;
+      height: 30px;
+      border-radius: 5px;
+      border-color: #000000;
+      background: #ff0000;
+      cursor: pointer;
+    }
+
+    #controls label {
+      font-size: 1.2em;
+      margin-right: 10px;
+    }
+
+    #controls span {
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@latest/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@latest/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@latest/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simplex-noise@2.4.0/simplex-noise.min.js"></script>
+
+  <script>
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBP8C5TMB1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-SBP8C5TMB1');
+</script>
+
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
+
+  <div class="wrapper"> <!-- start content -->
+    <section>
+      <div id="title">
+        <h1>HexGrid</h1>
+        <br>
+        <hr>
+      </div>
+
+  </div> <!-- end content -->
+
+  <!-- UI for Three scene -->
+  <div id="controls">
+    <label for="row-slider">Rows:</label>
+    <input id="row-slider" type="range" min="1" max="50" value="5">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <label for="col-slider">Columns:</label>
+    <input id="col-slider" type="range" min="1" max="50" value="5">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <label for="noise-slider">Noise Mult:</label>
+    <input id="noise-slider" type="range" min="0.02" max="0.2" value="0.1" step="0.001">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="new-seed-btn">New Seed</button>
+  </div>
+
+  <!--Three.js scene -->
+  <script src="app.js">
+
+  </script>
+
+</body>
+
+</html>
