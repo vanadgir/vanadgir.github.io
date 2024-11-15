@@ -12,8 +12,8 @@
   <style>
     canvas {
       display: block;
-      max-height: 65vh;
-      max-width: 99vw;
+      max-height: 50vh;
+      max-width: 80vw;
     }
 
     section {
@@ -24,10 +24,9 @@
 
     #controls {
       display: flex;
-      flex-direction: row;
       justify-content: space-around;
       align-items: center;
-      gap: 20px;
+      gap: 1%;
     }
 
     @media (max-width: 768px) {
@@ -64,12 +63,12 @@
       height: 15px;
       border-radius: 5px;
       border-color: #000000;
-      background: #000000;
+      background: #ff0000;
       cursor: pointer;
     }
 
     #controls input[type="range"]:active::-webkit-slider-thumb {
-      background: #000000;
+      background: #ff0000;
     }
 
     #controls input[type="range"]::-moz-range-thumb {

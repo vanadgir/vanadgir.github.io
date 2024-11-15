@@ -162,6 +162,15 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHexGrid(rows, cols);
   });
 
+  // adaptive canvas size
+  window.addEventListener("resize", () => {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    camera.aspect = viewportWidth / viewportHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(viewportWidth, viewportHeight);
+  });
+
   // load first grid
   if (hexModel) {
     updateHexGrid(rows, cols);
