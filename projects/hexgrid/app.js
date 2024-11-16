@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // top drag bar div
   const dragBar = document.createElement("div");
-  dragBar.style.height = "36px";
+  dragBar.style.height = "30px";
   dragBar.style.backgroundColor = "#777";
   dragBar.style.cursor = "move";
 
@@ -258,24 +258,26 @@ document.addEventListener("DOMContentLoaded", () => {
   gui.domElement.style.left = "10px";
   document.body.appendChild(gui.domElement);
 
+  // mouse and touch handling
+  let isDragging = false;
+  let offsetX = 0;
+  let offsetY = 0;
+
   function startDrag(e) {
     isDragging = true;
 
-    // For mouse event, we use clientX and clientY, for touch we need to use touches[0]
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
     offsetX = clientX - gui.domElement.offsetLeft;
     offsetY = clientY - gui.domElement.offsetTop;
 
-    document.body.style.userSelect = "none"; // Prevent text selection while dragging
+    document.body.style.userSelect = "none";
   }
 
-  // common drag move handler
   function dragMove(e) {
     if (!isDragging) return;
 
-    // For mouse event, we use clientX and clientY, for touch we need to use touches[0]
     const clientX = e.clientX || (e.touches && e.touches[0].clientX);
     const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
@@ -283,10 +285,9 @@ document.addEventListener("DOMContentLoaded", () => {
     gui.domElement.style.top = `${clientY - offsetY}px`;
   }
 
-  // common drag end handler
   function endDrag() {
     isDragging = false;
-    document.body.style.userSelect = ""; // Reset text selection after dragging
+    document.body.style.userSelect = ""; 
   }
 
   // mouse events
