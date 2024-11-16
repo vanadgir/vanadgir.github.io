@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "./BeveledHex.glb",
     (gltf) => {
       hexModel = gltf.scene;
-      updateHexGrid(rows, cols);
+      updateHexGrid(params.height, params.width);
     },
     undefined,
     (error) => {
@@ -62,14 +62,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // color mapping
   function getColorBasedOnNoise(noiseValue) {
-    let colorIndex = Math.floor(((noiseValue + 1) / 2) * 4); // map to 0 - 4
-    const colors = [
-      0x0000ff, // blue
-      0x8b4513, // dark brown
-      0x009800, // dark green
-      0xffffff, // white
-    ];
-    return colors[colorIndex];
+    const numColors = params.colors.length;
+    const binWidth = 2 / numColors; // divide noise range (-1 to 1) into bins
+    const index = Math.min(
+      numColors - 1,
+      Math.floor((noiseValue + 1) / binWidth) // map noiseValue to bin index
+    );
+    return new THREE.Color(params.colors[index]);
   }
 
   // grid logic
@@ -110,17 +109,198 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // default grid size
-  let rows = 5;
-  let cols = 5;
+  // export the hex grid to GLTF
+  function exportHexGrid() {
+    const exporter = new THREE.GLTFExporter();
 
-  // adaptive canvas size
+    exporter.parse(
+      hexGrid, // the group or object to export
+      function (result) {
+        // convert result to binary GLTF (.glb)
+        const blob = new Blob([result], { type: "application/octet-stream" });
+
+        // create a link to download the exported file
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `HexGrid_Export_${seed}.glb`; // file name
+        link.click();
+      },
+      { binary: true }
+    );
+  }
+
+  // default grid size and GUI parameters
+  const params = {
+    height: 5,
+    width: 5,
+    noiseMultiplier: 0.1,
+    colors: ["#0000ff", "#8b4513", "#009800", "#ffffff"], // blue > brown > green > white
+    newSeed: () => {
+      seed = Math.floor(Math.random() * 10000);
+      noise = new SimplexNoise(seed);
+      updateHexGrid(params.height, params.width);
+    },
+  };
+
+  // dat.GUI setup
+  const gui = new dat.GUI({ autoplace: true });
+  // height
+  gui
+    .add(params, "height", 1, 100, 1)
+    .name("Rows")
+    .onChange(() => updateHexGrid(params.height, params.width));
+  // width
+  gui
+    .add(params, "width", 1, 100, 1)
+    .name("Columns")
+    .onChange(() => updateHexGrid(params.height, params.width));
+  // noise mult
+  gui
+    .add(params, "noiseMultiplier", 0.02, 0.2, 0.001)
+    .name("Noise Mult")
+    .onChange(() => {
+      noiseMultiplier = params.noiseMultiplier;
+      updateHexGrid(params.height, params.width);
+    });
+  // new seed
+  gui.add(params, "newSeed").name("Generate New Seed");
+  // export grid glb
+  gui
+    .add({ exportHexGrid: exportHexGrid }, "exportHexGrid")
+    .name("Export Hex Grid (.glb)");
+
+  // colors section
+  const colorFolder = gui.addFolder("Colors");
+
+  function clearFolder(folder) {
+    const controllers = [...folder.__controllers];
+    controllers.forEach((controller) => folder.remove(controller));
+  }
+
+  // generate a random RGB color and convert it to hex
+  function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+
+    return `#${((1 << 24) | (r << 16) | (g << 8) | b)
+      .toString(16)
+      .slice(1)
+      .padStart(6, "0")}`;
+  }
+
+  //  add a new random color that doesn't already exist
+  function addRandomColor() {
+    let newColor;
+    do {
+      newColor = getRandomColor();
+    } while (params.colors.includes(newColor));
+
+    params.colors.push(newColor);
+    updateColorControls();
+    updateHexGrid(params.height, params.width);
+  }
+
+  // modify the updateColorControls function to use addRandomColor
+  function updateColorControls() {
+    clearFolder(colorFolder); // remove all existing controllers
+
+    // add color controllers
+    params.colors.forEach((color, index) => {
+      colorFolder
+        .addColor(params.colors, index.toString())
+        .name(`Color ${index + 1}`)
+        .onChange(() => updateHexGrid(params.height, params.width));
+    });
+
+    // button to add a random color
+    colorFolder
+      .add(
+        {
+          addColor: addRandomColor, // use the function to add random color
+        },
+        "addColor"
+      )
+      .name("New Color");
+
+    // button to remove the last color
+    colorFolder
+      .add(
+        {
+          removeColor: () => {
+            if (params.colors.length > 1) {
+              params.colors.pop();
+              updateColorControls();
+              updateHexGrid(params.height, params.width);
+            }
+          },
+        },
+        "removeColor"
+      )
+      .name("Remove Color");
+
+    colorFolder.open(); // keep folder open
+  }
+
+  // initialize color controls
+  updateColorControls();
+
+  // top drag bar div
+  const dragBar = document.createElement("div");
+  dragBar.style.height = "20px";
+  dragBar.style.backgroundColor = "#777";
+  dragBar.style.cursor = "move";
+
+  // insert at top of gui
+  gui.domElement.insertBefore(dragBar, gui.domElement.firstChild);
+  gui.domElement.style.position = "absolute";
+  gui.domElement.style.top = "15vh";
+  gui.domElement.style.left = "10px";
+  document.body.appendChild(gui.domElement);
+
+  dragBar.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - gui.domElement.offsetLeft;
+    offsetY = e.clientY - gui.domElement.offsetTop;
+
+    // Prevent text selection while dragging
+    document.body.style.userSelect = "none";
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      gui.domElement.style.left = `${e.clientX - offsetX}px`;
+      gui.domElement.style.top = `${e.clientY - offsetY}px`;
+    }
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+    document.body.style.userSelect = ""; 
+  });
+
+  // resize on refocus
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      camera.aspect = viewportWidth / viewportHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(viewportWidth, viewportHeight);
+    }
+  });
+
   window.addEventListener("resize", () => {
-    const containerWidth = titleElement.parentElement.offsetWidth;
-    const containerHeight = window.innerHeight;
-    camera.aspect = containerWidth / containerHeight;
+    // update the renderer and camera aspect ratio
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    camera.aspect = viewportWidth / viewportHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(containerWidth, containerHeight);
+    renderer.setSize(viewportWidth, viewportHeight);
+
+    // adjust dat.GUI size if necessary
+    gui.domElement.style.height = `${viewportHeight}px`;
+    gui.domElement.style.width = `${viewportWidth / 4}px`;
   });
 
   // render loop
@@ -130,49 +310,4 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(animate);
   }
   animate();
-
-  // UI elements and listeners
-  const rowSlider = document.getElementById("row-slider");
-  const colSlider = document.getElementById("col-slider");
-  const noiseSlider = document.getElementById("noise-slider");
-  const newSeedButton = document.getElementById("new-seed-btn");
-
-  rowSlider.value = rows;
-  colSlider.value = cols;
-  noiseSlider.value = noiseMultiplier;
-
-  rowSlider.addEventListener("input", (e) => {
-    rows = parseInt(e.target.value, 10);
-    updateHexGrid(rows, cols);
-  });
-
-  colSlider.addEventListener("input", (e) => {
-    cols = parseInt(e.target.value, 10);
-    updateHexGrid(rows, cols);
-  });
-
-  noiseSlider.addEventListener("input", (e) => {
-    noiseMultiplier = e.target.value;
-    updateHexGrid(rows, cols);
-  });
-
-  newSeedButton.addEventListener("click", () => {
-    seed = Math.floor(Math.random() * 10000);
-    noise = new SimplexNoise(seed);
-    updateHexGrid(rows, cols);
-  });
-
-  // adaptive canvas size
-  window.addEventListener("resize", () => {
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-    camera.aspect = viewportWidth / viewportHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(viewportWidth, viewportHeight);
-  });
-
-  // load first grid
-  if (hexModel) {
-    updateHexGrid(rows, cols);
-  }
 });
