@@ -247,7 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // top drag bar div
   const dragBar = document.createElement("div");
-  dragBar.style.height = "20px";
+  dragBar.style.height = "36px";
   dragBar.style.backgroundColor = "#777";
   dragBar.style.cursor = "move";
 
@@ -258,26 +258,46 @@ document.addEventListener("DOMContentLoaded", () => {
   gui.domElement.style.left = "10px";
   document.body.appendChild(gui.domElement);
 
-  dragBar.addEventListener("mousedown", (e) => {
+  function startDrag(e) {
     isDragging = true;
-    offsetX = e.clientX - gui.domElement.offsetLeft;
-    offsetY = e.clientY - gui.domElement.offsetTop;
 
-    // Prevent text selection while dragging
-    document.body.style.userSelect = "none";
-  });
+    // For mouse event, we use clientX and clientY, for touch we need to use touches[0]
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-  document.addEventListener("mousemove", (e) => {
-    if (isDragging) {
-      gui.domElement.style.left = `${e.clientX - offsetX}px`;
-      gui.domElement.style.top = `${e.clientY - offsetY}px`;
-    }
-  });
+    offsetX = clientX - gui.domElement.offsetLeft;
+    offsetY = clientY - gui.domElement.offsetTop;
 
-  document.addEventListener("mouseup", () => {
+    document.body.style.userSelect = "none"; // Prevent text selection while dragging
+  }
+
+  // common drag move handler
+  function dragMove(e) {
+    if (!isDragging) return;
+
+    // For mouse event, we use clientX and clientY, for touch we need to use touches[0]
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+    gui.domElement.style.left = `${clientX - offsetX}px`;
+    gui.domElement.style.top = `${clientY - offsetY}px`;
+  }
+
+  // common drag end handler
+  function endDrag() {
     isDragging = false;
-    document.body.style.userSelect = ""; 
-  });
+    document.body.style.userSelect = ""; // Reset text selection after dragging
+  }
+
+  // mouse events
+  dragBar.addEventListener("mousedown", startDrag);
+  document.addEventListener("mousemove", dragMove);
+  document.addEventListener("mouseup", endDrag);
+
+  // touch events
+  dragBar.addEventListener("touchstart", startDrag);
+  document.addEventListener("touchmove", dragMove);
+  document.addEventListener("touchend", endDrag);
 
   // resize on refocus
   document.addEventListener("visibilitychange", () => {
