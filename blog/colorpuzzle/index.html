@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <title>UE5 Color Puzzle</title>
+  <link rel='shortcut icon' href='../../favicons/docfav.ico' type='image/x-icon' />
+  <link rel="stylesheet" href="../../stylesheets/styles.css">
+  <link rel="stylesheet" href="../../stylesheets/github-dark.css">
+  <link rel="stylesheet" href="../../stylesheets/code-blog.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script>
+    // page tracker
+    var page = 0;
+    var maxPage = 8;
+
+    // import nav
+    $(function () {
+      $("#header").load("../../header.html");
+    });
+
+    // content load function
+    function loadContent() {
+      document.documentElement.scrollTop = 0;
+      $("#page-content").load(`entries.html .page-${page}`, function () {
+        hljs.highlightAll(); // reinitialize highlight.js after content loads
+      });
+    }
+
+
+    // initial content load
+    document.addEventListener("DOMContentLoaded", function () {
+      loadContent();
+      toggleButtons();
+    });
+
+    // copy code block text to clipboard
+    function copyToClipboard(button) {
+      // get the code block sibling of the button
+      const codeBlock = button.nextElementSibling;
+
+      // create a temporary textarea to copy the code from
+      const textarea = document.createElement('textarea');
+      textarea.value = codeBlock.textContent; 
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBP8C5TMB1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+
+  gtag('config', 'G-SBP8C5TMB1');
+</script>
+
+<body>
+  <div id="header"></div> <!-- imported header/navbar -->
+  <div class="wrapper">
+    <section>
+      <div id="blog-controls">
+        <button id="prevBtn">Prev</button>
+        <button id="indexBtn">Index</button>
+        <button id="nextBtn">Next</button>
+      </div>
+      <div id="page-content">
+
+      </div>
+
+  </div> <!-- end wrapper -->
+
+</body>
+<script>
+  // prev button
+  document.getElementById("prevBtn").addEventListener("click", function () {
+    if (page > 0) {
+      page--;
+      loadContent();
+      toggleButtons();
+    }
+  });
+
+  // next button
+  document.getElementById("nextBtn").addEventListener("click", function () {
+    if (page < maxPage) {
+      page++;
+      loadContent();
+      toggleButtons();
+    }
+  });
+
+  // index button
+  document.getElementById("indexBtn").addEventListener("click", function () {
+    if (page != 0) {
+      page = 0;
+      loadContent();
+      toggleButtons();
+    }
+  });
+
+  // button rendering
+  function toggleButtons() {
+    var prevBtn = document.getElementById('prevBtn');
+    var indexBtn = document.getElementById('indexBtn');
+    var nextBtn = document.getElementById('nextBtn');
+
+    if (page === 0) {
+      prevBtn.style.display = 'none';
+      indexBtn.style.display = 'none';
+    } else {
+      prevBtn.style.display = 'block';
+      indexBtn.style.display = 'block';
+    }
+
+    if (page === maxPage) {
+      nextBtn.style.display = 'none';
+    } else {
+      nextBtn.style.display = 'block';
+    }
+  }
+
+  // index page links
+  $("#page-content").on("click", ".page-link", function (event) {
+    event.preventDefault();
+    const targetPage = $(this).data("page");
+    page = parseInt(targetPage);
+    loadContent();
+    toggleButtons();
+  });
+
+</script>
+<!-- Highlight.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+
+</html>
