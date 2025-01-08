@@ -5,7 +5,22 @@ pre {
 }
 
 .code-container {
-  padding-bottom: 20px;
+  max-width: 90vw; 
+  width: 100%; 
+  margin: 0 auto;
+  transform: none;
+  margin-bottom: 4%;
+}
+
+/* for larger screens */
+@media (min-width: 768px) {
+  .code-container {
+    width: 40vw;
+    min-width: 650px;
+    position: relative;
+    left: calc(-20vw + 50%);
+    margin-bottom: 4%;
+  }
 }
 
 .copy-button {
@@ -15,6 +30,7 @@ pre {
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  
 }
 
 .copy-button:hover {
@@ -28,3 +44,10 @@ p {
 code {
   font-size: 17px;
 }
+
+.yt-embed{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4%;
+}
+

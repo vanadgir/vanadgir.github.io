@@ -1,0 +1,215 @@
+<div class="page-0">
+  <div id="title">
+    <h1>UE5 Color Puzzle</h1>
+    <h3>Creating a Puzzle Prototype Game in Unreal Engine 5</h3>
+    <hr>
+  </div>
+  <br>
+  <p> In this blog series, I'd like to walk you through the development of my UE5 puzzle game prototype. Using
+    Blueprints and some assets from the Epic Games Marketplace, I took a simple idea and turned it into a
+    fully functional color puzzle. I'll go through my motivations and goals for the project and provide videos of the
+    progress made during each iteration. Hope you enjoy!</p>
+  <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
+  <b> ii. </b> <a href="#" class="page-link" data-page="2"> Base Puzzle Logic </a> <br>
+  <b> iii. </b> <a href="#" class="page-link" data-page="3"> Dynamic Material Instances</a> <br>
+  <b> iv. </b> <a href="#" class="page-link" data-page="4"> Shader Design</a> <br>
+  <b> v. </b> <a href="#" class="page-link" data-page="5"> Level Design </a> <br>
+  <b> vi. </b> <a href="#" class="page-link" data-page="6"> Summary & Final Thoughts </a> <br>
+</div>
+
+<div class="page-1">
+  <div id="title">
+    <h1>Introduction</h1>
+    <br>
+    <hr>
+  </div>
+  <img src="../../images/PuzzleHighlight.png" title="UE5 Quinn Standing Next To Completed Puzzle"> </img>
+
+  <br>
+
+  <p>The rules of the game are simple: set the individual R, G, and B color channels so that they mix into the color
+    provided (chosen randomly). If the player's color is close enough (based on a tolerance we can set), the player
+    succeeds.</p>
+
+  <p>By keeping the basic rules and win condition of this puzzle brief and straightforward, I wanted to use this project
+    as an opportunity to get hands-on with a variety of tools and features in Unreal Engine 5. Being somewhat new to
+    this engine, but comfortable with graphics otherwise, I wanted to see how multiple Actors can communicate.
+    Additionally, I want to create a visually pleasing shader/material to complement the puzzle scenario.</p>
+
+  <p>Using Unreal Engine 5.3.2, I began with the basic third-person template with Quinn as my ThirdPersonCharacter. I
+    created a new empty level and set up a few more inputs in the Input Controller: Z (Crank Down), X (Crank Up), and E
+    (Interact). For now, I am using the default world lighting that Unreal provides and I gave myself a large plane
+    to stand on. At this point, I have an empty level I can run around in as Quinn.</p>
+
+  <p>To reach the image above, we'll take this in stages. Let's first get the basic game logic working!</p>
+  <br>
+</div>
+
+<div class="page-2">
+  <div id="title">
+    <h1>Base Puzzle Logic</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>There are a few things our puzzle needs to do at minimum. We need to generate a random color when the level
+    starts, we need to let the player control the three independent color channels, and we need to be checking if the
+    combination of those color channels matches the random color we generated. Using Unreal's GameState Actor, we can
+    achieve a lot of this!</p>
+
+  <p>I first created a Blueprint for an Actor called ColorPicker. This would be a generic Actor that holds a valve that
+    can be spun by the player. As the parent Actor, it holds only rotation logic; but if we create three instances of
+    it, then allow them to control three different GameState variables, we can keep the node graphs clean. Below is a
+    clip of the generic ColorPicker responding to the Player when they are within the interaction range.</p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/PBWVvygjrjM?si=-Xq3kqtnWDVYVTvu"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>Next we have to set the GameState up with the variables we want to track. I won't go into the details of their
+    Blueprints here, but I do have all of my Blueprints documented in my final walkthrough video if you are interested.
+    Stick around for the link!</p>
+
+  <p>To keep it brief, we need to track six float values that are between 0.0 and 1.0. Three of them are static and
+    determine the color the Player must create, and three of them are initialized to an abritrary value. By hooking up
+    the Z and X keys to the independent ColorPickers, we can allow the Player to control those three values. In the clip
+    below, notice the details pane and how the values are changing in accordance with the Player's input. </p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/l09F0-4wawo?si=1jRx6-g-Pv9aIksj"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>Next, let's actually use these GameState values to affect the scene! By creating a base material that defines
+    a fluid aesthetic, we can then create Dynamic Material Instances so that the same liquid effect can be given
+    different base colors.</p>
+
+</div>
+
+<div class="page-3">
+  <div id="title">
+    <h1>Dynamic Material Instances</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>Just like the Blueprints, I give a full breakdown of my final material effect in my walkthrough video, so I
+    encourage you to check that out if interested. Essentially, I played around with various combinations of noise
+    patterns to create an effect that looked like a liquid and wanted it to be interesting enough to work during
+    this testing phase. By using Event Dispatchers, I was able to use the ColorPickers to inform the separate material
+    instances to update their base color, which I had exposed as a Vector Parameter. Below you can see a clip of my
+    three ColorPickers being used to update the colors of several materials.</p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/P3kN90Jq2sc?si=PaYtS6kIUrkjI9gN"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>After getting this communication in place, I was able to take some time to play with some different arrangements
+    and meshes. Ultimately, I decided I wanted to have three falling streams of liquid mixing into a single pool. Below
+    is a clip that shows the basic idea I am going for. </p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/vSsnTednDTc?si=xyyCjKhe0YW9FdWq"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>Now comes one of the super fun parts of the project - developing the shader!</p>
+
+</div>
+
+<div class="page-4">
+  <div id="title">
+    <h1>Shader Design</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>After a couple of iterations, I stumbled on a visual style that stuck out to me. The clip below shows an early
+    stage of the style I would proceed with.</p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/WY1sYFSQheA?si=x_Y7NqV9CLtVNpo0"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>Not only do we want the shader to mimic a fluid somewhat, we also want to sell the illusion of there being one
+    continuous body of liquid. One idea was to add some color lerping near the bottoms of the falling streams, making
+    the transition between meshes appear smoother. Next, I also went with a world position offset effect to make the
+    liquid appear as if it were bubbling, which added some activity to the liquid so it didn't appear flat. On top of
+    that, I wanted to provide additional feedback in the form of a UI progress bar. This would give the player an even
+    better idea of how close they were getting to the right answer. The below clips include a percentage in the bar,
+    which I ultimately did not keep in the final.</p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/eiiWlyeAGVk?si=XcnjGFvtGn81f8A5"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/HSRYe9c7AYA?si=-jIOyRxC1GtnVEjW"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+</div>
+
+<div class="page-5">
+  <div id="title">
+    <h1>Level Design</h1>
+    <br>
+    <hr>
+  </div>
+  <br>
+
+  <p>With the shader effect coming together, I started to brainstorm a scene and environment that would complement it.
+    The
+    first that came to mind was an alchemist's lab or a sewer. Thanks to the rotating free assets in the Epic Games
+    Marketplace, I was fortunate to have some set pieces and prefabs that fit this idea ready to use. I also found some
+    free SFX for things like the sound of steam releasing or ambient water drops. With all of these elements, the level
+    really started coming alive. See the clip below for the first demo in the new environment.</p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ujl7vWGiBJM?si=rbI1AOFB7KxBrPC9"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>In addition to some background props to help set the scene, I have also updated the ColorPickers to appear as pipes
+    so that they are more convincing. Although I continued to tweak and adjust things past this point, it is safe to say
+    we have achieved our original goals! Having connected all of these parts together in my first prototype, I am very
+    happy with the progress I've made. In the next and final post, I'll do an overview of the project architecture, talk
+    about some of the final tweaks I made, and share my final walkthrough video with you so you can see it all in
+    detail. Thanks for reading!</p>
+
+</div>
+
+
+<div class="page-6">
+  <div id="title">
+    <h1>Summary & Final Thoughts</h1>
+    <br>
+    <hr>
+
+    <p>This Page Under Construction</p>
+  </div>
+  <br>
+
+</div>
