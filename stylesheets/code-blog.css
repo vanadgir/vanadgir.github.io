@@ -13,7 +13,7 @@ pre {
 }
 
 /* for larger screens */
-@media (min-width: 768px) {
+@media (min-width: 860px) {
   .code-container {
     width: 40vw;
     min-width: 650px;
