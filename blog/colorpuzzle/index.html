@@ -10,6 +10,18 @@
   <link rel="stylesheet" href="../../stylesheets/github-dark.css">
   <link rel="stylesheet" href="../../stylesheets/code-blog.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+  <style>
+    img {
+      transition: transform 0.25s ease, z-index 0s;
+      cursor: pointer;
+    }
+
+    img.scaled {
+      transform: scale(2);
+      z-index: 999;
+      position: relative;
+    }
+  </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script>
     // page tracker
@@ -43,12 +55,29 @@
 
       // create a temporary textarea to copy the code from
       const textarea = document.createElement('textarea');
-      textarea.value = codeBlock.textContent; 
+      textarea.value = codeBlock.textContent;
       document.body.appendChild(textarea);
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
     }
+
+    document.addEventListener("click", function (event) {
+      if (event.target.tagName === "IMG") {
+        // check if the image is already scaled
+        if (event.target.classList.contains("scaled")) {
+          // down scale
+          event.target.classList.remove("scaled");
+        } else {
+          // down scale all other images
+          document.querySelectorAll("img.scaled").forEach(img => img.classList.remove("scaled"));
+
+          // scale only clicked image
+          event.target.classList.add("scaled");
+        }
+      }
+    });
+
 
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=0.5, user-scalable=yes">
@@ -72,9 +101,9 @@
       <div id="page-content">
 
       </div>
-      
+
       <div id="blog-controls">
-        <button id="prevBtn"><</button>
+        <button id="prevBtn"><</button>  
         <button id="indexBtn">Home</button>
         <button id="nextBtn">></button>
       </div>

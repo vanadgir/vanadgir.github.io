@@ -8,7 +8,8 @@
   <p> In this blog series, I'd like to walk you through the development of my UE5 puzzle game prototype. Using
     Blueprints and some assets from the Epic Games Marketplace, I took a simple idea and turned it into a
     fully functional color puzzle. I'll go through my motivations and goals for the project and provide videos of the
-    progress made during each iteration. Hope you enjoy!</p>
+    progress made during each iteration. This overview will be mostly high level, but I will also provide my node graphs
+    at the end if you are interested in the technicals as well. Hope you enjoy!</p>
   <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
   <b> ii. </b> <a href="#" class="page-link" data-page="2"> Base Puzzle Logic </a> <br>
   <b> iii. </b> <a href="#" class="page-link" data-page="3"> Dynamic Material Instances</a> <br>
@@ -33,13 +34,13 @@
 
   <p>By keeping the basic rules and win condition of this puzzle brief and straightforward, I wanted to use this project
     as an opportunity to get hands-on with a variety of tools and features in Unreal Engine 5. Being somewhat new to
-    this engine, but comfortable with graphics otherwise, I wanted to see how multiple Actors can communicate.
+    the engine, but otherwise comfortable with graphics, I wanted to see how multiple Actors can communicate.
     Additionally, I want to create a visually pleasing shader/material to complement the puzzle scenario.</p>
 
   <p>Using Unreal Engine 5.3.2, I began with the basic third-person template with Quinn as my ThirdPersonCharacter. I
-    created a new empty level and set up a few more inputs in the Input Controller: Z (Crank Down), X (Crank Up), and E
+    created a new empty level and set up a few Input Actions: Z (Crank Down), X (Crank Up), and E
     (Interact). For now, I am using the default world lighting that Unreal provides and I gave myself a large plane
-    to stand on. At this point, I have an empty level I can run around in as Quinn.</p>
+    to stand on. At this point, I have an empty level that I can run around in as Quinn.</p>
 
   <p>To reach the image above, we'll take this in stages. Let's first get the basic game logic working!</p>
   <br>
@@ -207,9 +208,29 @@
     <h1>Summary & Final Thoughts</h1>
     <br>
     <hr>
-
-    <p>This Page Under Construction</p>
   </div>
   <br>
+
+  <p>To visualize the communication of parts, here is a sequence diagram of the running game loop. The classes in this
+    diagram are the Blueprints, and the processes being run are functions or events found within them. Click to enlarge
+    the diagram.</p>
+
+  <img src="./images/UMLDiagram.png">
+
+  <p>The diagram only contains the actions and events that are crucial to the game loop and resolution of the win
+    condition; to see everything in detail, please watch the full walkthrough video. In it, I describe the project
+    in its entirety and walk through every node graph. </p>
+
+  <span class="yt-embed">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/bzhkDNROZVk?si=zPTG5mw4OIF9Jq5e"
+      title="YouTube video player" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  </span>
+
+  <p>Thanks for reading til the end! This project was a blast to work on, since it let me use a bunch of different parts
+    of Unreal Engine that I hadn't explored before. Having set up character input, dynamic materials, and cross-actor
+    communication in this project, I feel great about whatever idea I may pursue next. For now, I appreciate you
+    following along and I hope you enjoyed!</p>
 
 </div>
