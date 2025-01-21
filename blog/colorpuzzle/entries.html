@@ -7,9 +7,9 @@
   <br>
   <p> In this blog series, I'd like to walk you through the development of my UE5 puzzle game prototype. Using
     Blueprints and some assets from the Epic Games Marketplace, I took a simple idea and turned it into a
-    fully functional color puzzle. I'll go through my motivations and goals for the project and provide videos of the
-    progress made during each iteration. This overview will be mostly high level, but I will also provide my node graphs
-    at the end if you are interested in the technicals as well. Hope you enjoy!</p>
+    fully functional color puzzle. I'll give a high level overview of the structure and logic of the puzzle, as well as
+    provide videos of the progress made during each iteration. At the end, I'll share my full walkthrough video so you
+    can see all of the node graphs in full detail if you are intersted. Hope you enjoy!</p>
   <b> i.</b> <a href="#" class="page-link" data-page="1"> Introduction </a> <br>
   <b> ii. </b> <a href="#" class="page-link" data-page="2"> Base Puzzle Logic </a> <br>
   <b> iii. </b> <a href="#" class="page-link" data-page="3"> Dynamic Material Instances</a> <br>
@@ -28,19 +28,19 @@
 
   <br>
 
-  <p>The rules of the game are simple: set the individual R, G, and B color channels so that they mix into the color
-    provided (chosen randomly). If the player's color is close enough (based on a tolerance we can set), the player
+  <p>The rules of the game are simple: set the individual R, G, and B color channels so that they mix into the target
+    color (chosen randomly). If the player's color is close enough (based on a tolerance we can set), the player
     succeeds.</p>
 
   <p>By keeping the basic rules and win condition of this puzzle brief and straightforward, I wanted to use this project
     as an opportunity to get hands-on with a variety of tools and features in Unreal Engine 5. Being somewhat new to
     the engine, but otherwise comfortable with graphics, I wanted to see how multiple Actors can communicate.
-    Additionally, I want to create a visually pleasing shader/material to complement the puzzle scenario.</p>
+    Additionally, I hoped to create a visually pleasing shader/material to complement the puzzle scenario.</p>
 
   <p>Using Unreal Engine 5.3.2, I began with the basic third-person template with Quinn as my ThirdPersonCharacter. I
     created a new empty level and set up a few Input Actions: Z (Crank Down), X (Crank Up), and E
-    (Interact). For now, I am using the default world lighting that Unreal provides and I gave myself a large plane
-    to stand on. At this point, I have an empty level that I can run around in as Quinn.</p>
+    (Interact). For now, I am using the default world lighting that Unreal provides and have given myself a large plane
+    to stand on, which means I have an empty level that I can run around in as Quinn.</p>
 
   <p>To reach the image above, we'll take this in stages. Let's first get the basic game logic working!</p>
   <br>
@@ -60,9 +60,9 @@
     achieve a lot of this!</p>
 
   <p>I first created a Blueprint for an Actor called ColorPicker. This would be a generic Actor that holds a valve that
-    can be spun by the player. As the parent Actor, it holds only rotation logic; but if we create three instances of
-    it, then allow them to control three different GameState variables, we can keep the node graphs clean. Below is a
-    clip of the generic ColorPicker responding to the Player when they are within the interaction range.</p>
+    can be spun by the player. As the parent Actor, it carries only rotation logic; but if we create three instances of
+    it, then allow them to independently control three different GameState variables, we can keep our node graphs clean.
+    Below is a clip of the generic ColorPicker responding to the Player when they are within the interaction range.</p>
 
   <span class="yt-embed">
     <iframe width="560" height="315" src="https://www.youtube.com/embed/PBWVvygjrjM?si=-Xq3kqtnWDVYVTvu"
@@ -71,14 +71,11 @@
       referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </span>
 
-  <p>Next we have to set the GameState up with the variables we want to track. I won't go into the details of their
-    Blueprints here, but I do have all of my Blueprints documented in my final walkthrough video if you are interested.
-    Stick around for the link!</p>
-
-  <p>To keep it brief, we need to track six float values that are between 0.0 and 1.0. Three of them are static and
-    determine the color the Player must create, and three of them are initialized to an abritrary value. By hooking up
-    the Z and X keys to the independent ColorPickers, we can allow the Player to control those three values. In the clip
-    below, notice the details pane and how the values are changing in accordance with the Player's input. </p>
+  <p>Next we have to set the GameState up with the variables we want to track. To keep it brief, we need to track six
+    float values that are between 0.0 and 1.0. Three of them are static and determine the color the Player must create,
+    and three of them are initialized to an abritrary value. By hooking up the Z and X keys to the independent
+    ColorPickers, we can allow the Player to control those three values. In the clip below, notice the details pane and
+    how the values are changing in accordance with the Player's input. </p>
 
   <span class="yt-embed">
     <iframe width="560" height="315" src="https://www.youtube.com/embed/l09F0-4wawo?si=1jRx6-g-Pv9aIksj"
@@ -149,8 +146,8 @@
   </span>
 
   <p>Not only do we want the shader to mimic a fluid somewhat, we also want to sell the illusion of there being one
-    continuous body of liquid. One idea was to add some color lerping near the bottoms of the falling streams, making
-    the transition between meshes appear smoother. Next, I also went with a world position offset effect to make the
+    continuous body of liquid. Here, I chose to add some color lerping near the bottoms of the falling streams, making
+    the transition between meshes appear smoother. I also went with a world position offset effect to make the
     liquid appear as if it were bubbling, which added some activity to the liquid so it didn't appear flat. On top of
     that, I wanted to provide additional feedback in the form of a UI progress bar. This would give the player an even
     better idea of how close they were getting to the right answer. The below clips include a percentage in the bar,
@@ -180,8 +177,7 @@
   <br>
 
   <p>With the shader effect coming together, I started to brainstorm a scene and environment that would complement it.
-    The
-    first that came to mind was an alchemist's lab or a sewer. Thanks to the rotating free assets in the Epic Games
+    The first that came to mind was an alchemist's lab or a sewer. Thanks to the rotating free assets in the Epic Games
     Marketplace, I was fortunate to have some set pieces and prefabs that fit this idea ready to use. I also found some
     free SFX for things like the sound of steam releasing or ambient water drops. With all of these elements, the level
     really started coming alive. See the clip below for the first demo in the new environment.</p>
@@ -228,9 +224,9 @@
       referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </span>
 
-  <p>Thanks for reading til the end! This project was a blast to work on, since it let me use a bunch of different parts
+  <p>Thanks for reading to the end! This project was a blast to work on, since it let me use a bunch of different parts
     of Unreal Engine that I hadn't explored before. Having set up character input, dynamic materials, and cross-actor
-    communication in this project, I feel great about whatever idea I may pursue next. For now, I appreciate you
-    following along and I hope you enjoyed!</p>
+    communication in this project, I'm excited to play around in game engines and DCC software further. For now, I
+    appreciate you following along and I hope you enjoyed!</p>
 
 </div>
