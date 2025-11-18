@@ -7,6 +7,8 @@ const R3F = () => {
   return (
     <div className="r3f-root">
       <Canvas
+        style={{ width: "100vw", height: "100vh", background: "#000" }}
+        gl={{ alpha: false }}
         camera={{
           position: HOME_FOCUS.cameraPos,
           fov: 50,
@@ -14,6 +16,7 @@ const R3F = () => {
           far: 1000,
         }}
       >
+        <color attach="background" args={["black"]} />
         <Suspense fallback={null}>
           <Universe />
         </Suspense>

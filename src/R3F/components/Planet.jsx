@@ -26,23 +26,17 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   // Base roughness/normal-like texture
   const baseRoughTex = useLoader(THREE.TextureLoader, normalRoughUrl);
 
-  // Per-planet cloned texture with random offset/scale
   const roughnessMap = useMemo(() => {
     const t = baseRoughTex.clone();
 
-    // Horizontal wraps, vertical clamped (like sun)
-    t.wrapS = THREE.RepeatWrapping;
+    // No repeat: just sample the texture once
+    t.wrapS = THREE.ClampToEdgeWrapping;
     t.wrapT = THREE.ClampToEdgeWrapping;
+    t.repeat.set(1, 1);
+    t.offset.set(0, 0);
     t.anisotropy = 4;
-
-    // Only vary horizontal scale; keep vertical scale = 1
-    const horizontalScale = 0.5 + Math.random() * 1.5;
-    t.repeat.set(horizontalScale, 1);
-
-    // Only shift horizontally; keep vertical offset = 0
-    t.offset.set(Math.random(), 0);
-
     t.needsUpdate = true;
+
     return t;
   }, [baseRoughTex]);
 
@@ -93,8 +87,14 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
     setHovered(false);
   };
 
-  // Slow, subtle self-rotation speed
-  const selfRotationSpeed = Math.random() * 0.5 + 0.1; // radians/sec
+  const selfRotationSpeed = useMemo(() => Math.random() * 0.5 + 0.1, []);
+
+  // optional: random starting rotation so planets don't share seam orientation
+  useEffect(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = Math.random() * Math.PI * 2;
+    }
+  }, []);
 
   useFrame((_, delta) => {
     if (paused) return;
