@@ -9,7 +9,7 @@ const SNAP_DISTANCE = 0.4; // tweak to taste
 
 export default function CameraRig({
   homeFocus,
-  followPos,
+  getFollowPos,
   selectedPlanetId,
   isHome,
   onTransitionStart,
@@ -56,14 +56,10 @@ export default function CameraRig({
     s.fromTarget.copy(currentTarget.current);
 
     // Static fallback targets (used for home transitions or when followPos is missing)
-    if (isHome || !followPos || !selectedPlanetId) {
+    if (isHome || !selectedPlanetId) {
       s.toPos.set(...homeFocus.cameraPos);
       s.toTarget.set(...homeFocus.target);
-    } else {
-      const target = new THREE.Vector3().fromArray(followPos);
-      s.toTarget.copy(target);
-      s.toPos.copy(target).add(PLANET_OFFSET);
-    }
+    } 
 
     if (controls.current) {
       controls.current.enabled = false;
@@ -77,6 +73,7 @@ export default function CameraRig({
 
   useFrame((_, delta) => {
     const s = state.current;
+    const followPos = getFollowPos ? getFollowPos() : null;
 
     // 1) Transition phase
     if (s.active) {

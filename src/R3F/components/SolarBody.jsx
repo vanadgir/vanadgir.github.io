@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { useLoader, useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 
 import { useSettings } from "../../contexts/SettingsContext";
 import sunTextureUrl from "../../assets/textures/sun.png";
@@ -10,11 +10,12 @@ const SolarBody = () => {
 
   const sunTexture = useLoader(THREE.TextureLoader, sunTextureUrl);
 
-  // Repeat only horizontally; clamp vertically to avoid the equator seam
-  sunTexture.wrapS = THREE.RepeatWrapping;
-  sunTexture.wrapT = THREE.ClampToEdgeWrapping;
-  sunTexture.anisotropy = 8;
-  sunTexture.center.set(0.5, 0.5);
+  useEffect(() => {
+    sunTexture.wrapS = THREE.RepeatWrapping;
+    sunTexture.wrapT = THREE.ClampToEdgeWrapping;
+    sunTexture.anisotropy = 8;
+    sunTexture.center.set(0.5, 0.5);
+  }, [sunTexture]);
 
   const scrollSpeed = 0.1; // horizontal UV scroll
   const rotationSpeed = 0.25; // mesh rotation

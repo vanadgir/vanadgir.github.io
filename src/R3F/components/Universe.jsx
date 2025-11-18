@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { Stars } from "@react-three/drei";
 import { useLocation } from "wouter";
 import { PLANETS, HOME_FOCUS } from "../../config/planets";
@@ -13,12 +13,12 @@ const Universe = () => {
 
   const { setCameraLockedOnPlanet, setActivePlanetId } = usePlanetUI();
 
-  const [planetPositions, setPlanetPositions] = useState(
+  const planetPositionsRef = useRef(
     Object.fromEntries(PLANETS.map((c) => [c.id, null]))
   );
 
   const updatePlanetPos = (id, pos) => {
-    setPlanetPositions((prev) => ({ ...prev, [id]: pos }));
+    planetPositionsRef.current[id] = pos;
   };
 
   const selectedPlanet = useMemo(() => {
@@ -26,9 +26,7 @@ const Universe = () => {
     return PLANETS.find((c) => c.path === location) ?? null;
   }, [location]);
 
-  const followPos =
-    selectedPlanet != null ? planetPositions[selectedPlanet.id] : null;
-  const hasCameraTarget = isHome || followPos != null;
+  const hasCameraTarget = isHome || selectedPlanet != null;
 
   // Track active Planet
   useEffect(() => {
@@ -54,7 +52,11 @@ const Universe = () => {
       {hasCameraTarget && (
         <CameraRig
           homeFocus={HOME_FOCUS}
-          followPos={followPos}
+          getFollowPos={() =>
+            selectedPlanet
+              ? planetPositionsRef.current[selectedPlanet.id]
+              : null
+          }
           selectedPlanetId={selectedPlanet?.id ?? null}
           isHome={isHome}
           onTransitionStart={() => {

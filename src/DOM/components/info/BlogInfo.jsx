@@ -4,7 +4,7 @@ import AboutMeOverlay from "../../content/AboutMeOverlay";
 const BlogInfo = ({ planet, openDetail }) => {
   const handleAboutMe = () => {
     if (!openDetail) return;
-    openDetail(<AboutMeOverlay />);
+    openDetail("about");
   };
 
   return (

@@ -6,18 +6,14 @@ export const PlanetUIProvider = ({ children }) => {
   const [cameraLockedOnPlanet, setCameraLockedOnPlanet] = useState(false);
   const [activePlanetId, setActivePlanetId] = useState(null);
 
-  const [overlayPos, setOverlayPos] = useState(null);
-
   const value = useMemo(
     () => ({
       cameraLockedOnPlanet,
       setCameraLockedOnPlanet,
       activePlanetId,
       setActivePlanetId,
-      overlayPos,
-      setOverlayPos,
     }),
-    [cameraLockedOnPlanet, activePlanetId, overlayPos]
+    [cameraLockedOnPlanet, activePlanetId]
   );
 
   return (
