@@ -1,16 +1,15 @@
-// DOM/components/ClusterInfoOverlay.jsx
-import { useEffect, useRef, useState } from "react";
-import { useClusterUI } from "../../contexts/ClusterUIContext";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { usePlanetUI } from "../../contexts/PlanetUIContext";
 
 const NAV_MARGIN = 12;
 const SCREEN_MARGIN = 12;
 
-const ClusterInfoOverlay = ({ cluster }) => {
-  if (!cluster) return null;
+const InfoOverlay = ({ planet }) => {
+  if (!planet) return null;
 
-  const InfoComponent = cluster.InfoComponent ?? DefaultClusterInfo;
+  const InfoComponent = planet.InfoComponent ?? DefaultInfo;
 
-  const { overlayPos, setOverlayPos } = useClusterUI();
+  const { overlayPos, setOverlayPos } = usePlanetUI();
 
   const boxRef = useRef(null);
 
@@ -66,14 +65,17 @@ const ClusterInfoOverlay = ({ cluster }) => {
   };
 
   // Initial position:
-  // - first time ever: bottom-left, above screen margin
+  // - first time ever: halfway between center and top-right (below nav)
   // - later: reuse persisted overlayPos (clamped to viewport)
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = boxRef.current;
     if (!el) return;
     if (pos != null) return;
 
     function initPosition() {
+      const el = boxRef.current;
+      if (!el) return;
+
       const rect = el.getBoundingClientRect();
 
       if (overlayPos) {
@@ -83,11 +85,30 @@ const ClusterInfoOverlay = ({ cluster }) => {
         return;
       }
 
-      // First time: bottom-left
-      // First time: bottom-right
-      const x = clampX(window.innerWidth - rect.width - SCREEN_MARGIN, rect);
+      // Screen center
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
 
-      const y = clampY(window.innerHeight - rect.height - SCREEN_MARGIN, rect);
+      // "Full" top-right position (what you had before)
+      const fullRightX = clampX(
+        window.innerWidth - rect.width - SCREEN_MARGIN,
+        rect
+      );
+
+      let fullTopY = SCREEN_MARGIN;
+      const navEl = document.querySelector(".dom-nav");
+      if (navEl) {
+        const navRect = navEl.getBoundingClientRect();
+        fullTopY = navRect.bottom + NAV_MARGIN;
+      }
+      fullTopY = clampY(fullTopY, rect);
+
+      // Halfway between center and that top-right position
+      const midX = centerX + (fullRightX - centerX) * 0.6;
+      const midY = centerY + (fullTopY - centerY) * 0.8;
+
+      const x = clampX(midX, rect);
+      const y = clampY(midY, rect);
 
       setPos({ x, y });
     }
@@ -238,9 +259,9 @@ const ClusterInfoOverlay = ({ cluster }) => {
         };
 
   return (
-    <div className="cluster-overlay-root">
+    <div className="planet-overlay-root">
       <div
-        className="cluster-overlay-box"
+        className="planet-overlay-box"
         ref={boxRef}
         style={style}
         onMouseDown={handleMouseDown}
@@ -248,7 +269,7 @@ const ClusterInfoOverlay = ({ cluster }) => {
       >
         {/* Tail from nearest edge point to center */}
         <div
-          className="cluster-overlay-tail"
+          className="planet-overlay-tail"
           style={{
             "--tail-length": `${tail.length}px`,
             "--tail-angle": `${tail.angle}deg`,
@@ -256,17 +277,17 @@ const ClusterInfoOverlay = ({ cluster }) => {
             "--tail-anchor-y": `${tail.anchorLocalY}px`,
           }}
         />
-        <InfoComponent cluster={cluster} />
+        <InfoComponent planet={planet} />
       </div>
     </div>
   );
 };
 
-const DefaultClusterInfo = ({ cluster }) => (
+const DefaultInfo = ({ planet }) => (
   <div>
-    <h2>{cluster.label}</h2>
+    <h2>{planet.label}</h2>
     <p>Content coming soon.</p>
   </div>
 );
 
-export default ClusterInfoOverlay;
+export default InfoOverlay;

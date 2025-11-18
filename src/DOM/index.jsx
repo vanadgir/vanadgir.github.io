@@ -1,22 +1,32 @@
 import { useLocation } from "wouter";
-import { CLUSTERS } from "../config/clusters";
+import { PLANETS } from "../config/planets";
 import GithubIcon from "../assets/images/github.svg";
 import LinkedInIcon from "../assets/images/linkedin.svg";
-import ClusterInfoOverlay from "./components/ClusterInfoOverlay";
-import { useClusterUI } from "../contexts/ClusterUIContext";
+import SettingsIcon from "../assets/images/settings.svg";
+import PlanetInfoOverlay from "./components/InfoOverlay";
+import { usePlanetUI } from "../contexts/PlanetUIContext";
+import { useSettings } from "../contexts/SettingsContext";
 
 const DOM = () => {
   const [location, navigate] = useLocation();
-  const { cameraLockedOnCluster, activeClusterId } = useClusterUI();
+  const { cameraLockedOnPlanet, activePlanetId } = usePlanetUI();
+  const {
+    paused,
+    togglePaused,
+    showOrbits,
+    toggleShowOrbits,
+    settingsOpen,
+    toggleSettingsOpen,
+  } = useSettings();
 
   const isHome = location === "/";
-  const activeCluster = !isHome
-    ? CLUSTERS.find((c) => c.id === activeClusterId) ?? null
+  const activePlanet = !isHome
+    ? PLANETS.find((c) => c.id === activePlanetId) ?? null
     : null;
 
   return (
     <div className="dom-root">
-      <nav className="dom-nav" aria-label="Cluster navigation">
+      <nav className="dom-nav" aria-label="Planet navigation">
         {/* Router-controlled buttons */}
         <button
           type="button"
@@ -26,14 +36,14 @@ const DOM = () => {
           Home
         </button>
 
-        {CLUSTERS.map((cluster) => (
+        {PLANETS.map((planet) => (
           <button
-            key={cluster.id}
+            key={planet.id}
             type="button"
-            onClick={() => navigate(cluster.path)}
-            aria-pressed={location === cluster.path}
+            onClick={() => navigate(planet.path)}
+            aria-pressed={location === planet.path}
           >
-            {cluster.label}
+            {planet.label}
           </button>
         ))}
 
@@ -59,6 +69,7 @@ const DOM = () => {
           <img src={LinkedInIcon} alt="" />
         </a>
       </nav>
+
       {isHome && (
         <div className="dom-body">
           <h1>Welcome, Visitor</h1>
@@ -68,11 +79,42 @@ const DOM = () => {
         </div>
       )}
 
-      {!isHome && activeCluster && cameraLockedOnCluster && (
-        <ClusterInfoOverlay
-          cluster={activeCluster}
-        />
+      {!isHome && activePlanet && cameraLockedOnPlanet && (
+        <PlanetInfoOverlay planet={activePlanet} />
       )}
+
+      {/* Bottom-left settings gear + tray */}
+      <div className="dom-footer" aria-label="Simulation controls">
+        {/* Gear: always visible */}
+        <button
+          type="button"
+          className="dom-nav-icon settings-gear-button"
+          onClick={toggleSettingsOpen}
+          aria-label="Simulation settings"
+          aria-pressed={settingsOpen}
+        >
+          <img src={SettingsIcon} alt="" />
+        </button>
+
+        {/* Tray: slides out to the right of the gear */}
+        <div
+          className={`settings-tray ${
+            settingsOpen ? "settings-tray--open" : ""
+          }`}
+        >
+          <button type="button" onClick={togglePaused} aria-pressed={paused}>
+            {paused ? "Resume" : "Pause"}
+          </button>
+
+          <button
+            type="button"
+            onClick={toggleShowOrbits}
+            aria-pressed={showOrbits}
+          >
+            {showOrbits ? "Hide orbits" : "Show orbits"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

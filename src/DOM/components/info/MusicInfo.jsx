@@ -1,9 +1,10 @@
-const DocsClusterInfo = ({ cluster }) => {
+const MusicInfo = ({ planet }) => {
   return (
     <div>
-      <h2>{cluster.label}</h2>
+      <h2>{planet.label}</h2>
       <p>
-        Various documents and certifications able to be viewed or downloaded.
+        Music-related work: tracks, tools, visualizers. You can plug in players
+        and visual components here.
       </p>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -18,4 +19,4 @@ const DocsClusterInfo = ({ cluster }) => {
   );
 };
 
-export default DocsClusterInfo;
+export default MusicInfo;

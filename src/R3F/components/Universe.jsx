@@ -1,75 +1,72 @@
 import { useMemo, useState, useEffect } from "react";
 import { Stars } from "@react-three/drei";
 import { useLocation } from "wouter";
-import { CLUSTERS, HOME_FOCUS } from "../../config/clusters";
+import { PLANETS, HOME_FOCUS } from "../../config/planets";
 import CameraRig from "./CameraRig";
-import ClusterStar from "./ClusterStar";
-import { useClusterUI } from "../../contexts/ClusterUIContext";
+import Planet from "./Planet";
+import { usePlanetUI } from "../../contexts/PlanetUIContext";
+import SolarBody from "./SolarBody";
 
 const Universe = () => {
   const [location, navigate] = useLocation();
   const isHome = location === "/";
 
-  const { setCameraLockedOnCluster, setActiveClusterId } = useClusterUI();
+  const { setCameraLockedOnPlanet, setActivePlanetId } = usePlanetUI();
 
-  const [clusterPositions, setClusterPositions] = useState(
-    Object.fromEntries(CLUSTERS.map((c) => [c.id, c.position]))
+  const [planetPositions, setPlanetPositions] = useState(
+    Object.fromEntries(PLANETS.map((c) => [c.id, null]))
   );
 
-  const updateClusterPos = (id, pos) => {
-    setClusterPositions((prev) => ({ ...prev, [id]: pos }));
+  const updatePlanetPos = (id, pos) => {
+    setPlanetPositions((prev) => ({ ...prev, [id]: pos }));
   };
 
-  const selectedCluster = useMemo(() => {
+  const selectedPlanet = useMemo(() => {
     if (location === "/") return null;
-    return CLUSTERS.find((c) => c.path === location) ?? null;
+    return PLANETS.find((c) => c.path === location) ?? null;
   }, [location]);
 
   const followPos =
-    selectedCluster != null ? clusterPositions[selectedCluster.id] : null;
+    selectedPlanet != null ? planetPositions[selectedPlanet.id] : null;
+  const hasCameraTarget = isHome || followPos != null;
 
-  // Track active cluster
+  // Track active Planet
   useEffect(() => {
-    setActiveClusterId(selectedCluster?.id ?? null);
-  }, [selectedCluster?.id, setActiveClusterId]);
+    setActivePlanetId(selectedPlanet?.id ?? null);
+  }, [selectedPlanet?.id, setActivePlanetId]);
 
   return (
     <>
-      <ambientLight intensity={0.25} />
-      <directionalLight position={[30, 40, 20]} intensity={1.2} />
+      <Stars radius={150} depth={80} count={9000} factor={4} saturation={0} />
 
-      <Stars
-        radius={150}
-        depth={80}
-        count={9000}
-        factor={4}
-        saturation={0}
-      />
+      <SolarBody />
 
-      {CLUSTERS.map((cluster) => (
-        <ClusterStar
-          key={cluster.id}
-          cluster={cluster}
-          selected={selectedCluster?.id === cluster.id}
+      {PLANETS.map((planet) => (
+        <Planet
+          key={planet.id}
+          planet={planet}
+          selected={selectedPlanet?.id === planet.id}
           onSelect={(path) => navigate(path)}
-          onUpdate={updateClusterPos}
+          onUpdate={updatePlanetPos}
         />
       ))}
 
-      <CameraRig
-        homeFocus={HOME_FOCUS}
-        followPos={followPos}
-        selectedClusterId={selectedCluster?.id ?? null}
-        isHome={isHome}
-        onTransitionStart={() => {
-          // whenever a move begins, hide overlay
-          setCameraLockedOnCluster(false);
-        }}
-        onTransitionEnd={({ isHome: endedAtHome }) => {
-          // show only when we end on a cluster
-          setCameraLockedOnCluster(!endedAtHome);
-        }}
-      />
+      {hasCameraTarget && (
+        <CameraRig
+          homeFocus={HOME_FOCUS}
+          followPos={followPos}
+          selectedPlanetId={selectedPlanet?.id ?? null}
+          isHome={isHome}
+          onTransitionStart={() => {
+            // whenever a move begins, hide overlay
+            setCameraLockedOnPlanet(false);
+          }}
+          onTransitionEnd={({ isHome: endedAtHome }) => {
+            // show only when we end on a Planet
+            setCameraLockedOnPlanet(!endedAtHome);
+          }}
+        />
+      )}
     </>
   );
 };

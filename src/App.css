@@ -74,7 +74,8 @@ body,
 
 /* TEXT BUTTONS */
 .dom-nav button,
-.dom-nav a {
+.dom-nav a,
+.dom-footer button {
   font-family: "alagard", sans-serif;
   font-size: 16px;
   min-height: var(--nav-item-height);
@@ -95,6 +96,72 @@ body,
   justify-content: center;
 }
 
+/* FOOTER CONTROLS BAR */
+.dom-footer {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* SETTINGS TRAY - sits to the right of gear, slides out */
+.settings-tray {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(5, 10, 30, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  box-shadow: 0 0 24px rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+
+  /* animation */
+  transform: translateX(-8px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.25s ease-out, opacity 0.25s ease-out;
+}
+
+/* open state: tray visible, extended to the right of the gear */
+.settings-tray--open {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* tray buttons reuse your button style */
+.settings-tray button {
+  font-family: "alagard", sans-serif;
+  font-size: 14px;
+  min-height: var(--nav-item-height);
+
+  padding: 0 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-tray button[aria-pressed="true"] {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
 .dom-nav button[aria-pressed="true"] {
   border-color: white;
   background: rgba(255, 255, 255, 0.15);
@@ -109,8 +176,8 @@ body,
   width: var(--nav-item-height);
   height: var(--nav-item-height);
 
-  padding: 0 !important;      /* FORCE no padding */
-  border-radius: 4px;         /* match text button shape */
+  padding: 0 !important; /* FORCE no padding */
+  border-radius: 4px; /* match text button shape */
   flex: 0 0 var(--nav-item-height);
 
   display: inline-flex;
@@ -122,7 +189,7 @@ body,
 .dom-nav-icon img {
   width: 100%;
   height: 100%;
-  object-fit: contain;  /* keeps proportions, prevents squish */
+  object-fit: contain; /* keeps proportions, prevents squish */
   display: block;
   padding: 0;
   margin: 0;
@@ -145,14 +212,14 @@ body,
   margin-left: 1vw;
 }
 
-.cluster-overlay-root {
+.planet-overlay-root {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 10;
 }
 
-.cluster-overlay-box {
+.planet-overlay-box {
   font-size: 18px;
   position: fixed;
   top: 16px;
@@ -176,7 +243,7 @@ body,
   -webkit-user-select: none;
 }
 
-.cluster-overlay-tail {
+.planet-overlay-tail {
   position: absolute;
   top: var(--tail-anchor-y, 50%);
   left: var(--tail-anchor-x, 0px);
@@ -186,13 +253,12 @@ body,
   transform: rotate(var(--tail-angle, 0deg));
   background: linear-gradient(
     to right,
-    rgba(148, 163, 184, 0.0),
+    rgba(148, 163, 184, 0),
     rgba(148, 163, 184, 0.9)
   );
   box-shadow: 0 0 10px rgba(148, 163, 184, 0.8);
   pointer-events: none;
 }
-
 
 /* ========================================== */
 /* MOBILE */
@@ -211,7 +277,8 @@ body,
   }
 
   .dom-nav button,
-  .dom-nav a {
+  .dom-nav a,
+  .dom-footer button {
     font-size: 12px;
     padding: 0 6px;
   }

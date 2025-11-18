@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
-import { HOME_FOCUS } from "../config/clusters";
+import { HOME_FOCUS } from "../config/planets";
 import Universe from "./components/Universe";
 
 const R3F = () => {

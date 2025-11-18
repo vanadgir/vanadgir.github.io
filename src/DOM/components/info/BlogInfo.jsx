@@ -1,10 +1,10 @@
-const MusicClusterInfo = ({ cluster }) => {
+const BlogInfo = ({ planet }) => {
   return (
     <div>
-      <h2>{cluster.label}</h2>
+      <h2>{planet.label}</h2>
       <p>
-        Music-related work: tracks, tools, visualizers. You can plug in players
-        and visual components here.
+        Dev logs, writeups, and thoughts. This can later become a list of blog
+        cards, filters, etc.
       </p>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -19,4 +19,4 @@ const MusicClusterInfo = ({ cluster }) => {
   );
 };
 
-export default MusicClusterInfo;
+export default BlogInfo;

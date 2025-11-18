@@ -1,7 +1,7 @@
-const ProjectsClusterInfo = ({ cluster }) => {
+const ProjectsInfo = ({ planet }) => {
   return (
     <div>
-      <h2>{cluster.label}</h2>
+      <h2>{planet.label}</h2>
       <p>
         Highlighted projects: games, tools, and experiments. Expand this into
         interactive project tiles later.
@@ -19,4 +19,4 @@ const ProjectsClusterInfo = ({ cluster }) => {
   );
 };
 
-export default ProjectsClusterInfo;
+export default ProjectsInfo;

@@ -1,10 +1,9 @@
-const BlogClusterInfo = ({ cluster }) => {
+const DocsInfo = ({ planet }) => {
   return (
     <div>
-      <h2>{cluster.label}</h2>
+      <h2>{planet.label}</h2>
       <p>
-        Dev logs, writeups, and thoughts. This can later become a list of blog
-        cards, filters, etc.
+        Various documents and certifications able to be viewed or downloaded.
       </p>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -19,4 +18,4 @@ const BlogClusterInfo = ({ cluster }) => {
   );
 };
 
-export default BlogClusterInfo;
+export default DocsInfo;

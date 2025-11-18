@@ -3,13 +3,14 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 
-const CLUSTER_OFFSET = new THREE.Vector3(0, 15, 35);
+const PLANET_OFFSET = new THREE.Vector3(0, 15, 35);
 const TRANSITION_TIME = 0.35;
+const SNAP_DISTANCE = 0.4; // tweak to taste
 
 export default function CameraRig({
   homeFocus,
   followPos,
-  selectedClusterId,
+  selectedPlanetId,
   isHome,
   onTransitionStart,
   onTransitionEnd,
@@ -27,6 +28,10 @@ export default function CameraRig({
     toPos: new THREE.Vector3(),
     toTarget: new THREE.Vector3(),
   });
+
+  // temp vectors reused in useFrame to avoid allocations
+  const tmpTarget = useRef(new THREE.Vector3());
+  const tmpPos = useRef(new THREE.Vector3());
 
   useEffect(() => {
     camera.position.set(...homeFocus.cameraPos);
@@ -50,25 +55,25 @@ export default function CameraRig({
     s.fromPos.copy(camera.position);
     s.fromTarget.copy(currentTarget.current);
 
-    if (isHome || !followPos || !selectedClusterId) {
+    // Static fallback targets (used for home transitions or when followPos is missing)
+    if (isHome || !followPos || !selectedPlanetId) {
       s.toPos.set(...homeFocus.cameraPos);
       s.toTarget.set(...homeFocus.target);
     } else {
       const target = new THREE.Vector3().fromArray(followPos);
       s.toTarget.copy(target);
-      s.toPos.copy(target).add(CLUSTER_OFFSET);
+      s.toPos.copy(target).add(PLANET_OFFSET);
     }
 
     if (controls.current) {
       controls.current.enabled = false;
     }
 
-    // notify parent: transition started
     onTransitionStart?.({
       isHome,
-      selectedClusterId: selectedClusterId ?? null,
+      selectedPlanetId: selectedPlanetId ?? null,
     });
-  }, [isHome, selectedClusterId, camera, homeFocus]);
+  }, [isHome, selectedPlanetId, camera, homeFocus]);
 
   useFrame((_, delta) => {
     const s = state.current;
@@ -77,19 +82,39 @@ export default function CameraRig({
     if (s.active) {
       s.t += delta / TRANSITION_TIME;
       const t = Math.min(1, s.t);
-      const k = t;
 
-      camera.position.lerpVectors(s.fromPos, s.toPos, k);
-      currentTarget.current.lerpVectors(s.fromTarget, s.toTarget, k);
+      const desiredTarget = tmpTarget.current;
+      const desiredPos = tmpPos.current;
+
+      if (!isHome && followPos && selectedPlanetId) {
+        // Use the star's *current* position as the moving target
+        desiredTarget.fromArray(followPos);
+        desiredPos.copy(desiredTarget).add(PLANET_OFFSET);
+      } else {
+        // Home transitions: just use the static home focus
+        desiredTarget.copy(s.toTarget);
+        desiredPos.copy(s.toPos);
+      }
+
+      // Lerp from original fromPos/fromTarget to the *current* desired point
+      camera.position.lerpVectors(s.fromPos, desiredPos, t);
+      currentTarget.current.lerpVectors(s.fromTarget, desiredTarget, t);
       camera.lookAt(currentTarget.current);
 
-      if (t >= 1) {
+      const dist = camera.position.distanceTo(desiredPos);
+      const reached = dist < SNAP_DISTANCE || t >= 1;
+
+      if (reached) {
         s.active = false;
 
-        // notify parent: transition ended
+        // Snap exactly to the live desired position/target
+        camera.position.copy(desiredPos);
+        currentTarget.current.copy(desiredTarget);
+        camera.lookAt(currentTarget.current);
+
         onTransitionEnd?.({
           isHome,
-          selectedClusterId: selectedClusterId ?? null,
+          selectedPlanetId: selectedPlanetId ?? null,
         });
 
         if (isHome && controls.current) {
@@ -102,10 +127,10 @@ export default function CameraRig({
       return;
     }
 
-    // 2) Hard-follow cluster with fixed offset
+    // 2) Hard-follow planet with fixed offset (uses live followPos)
     if (!isHome && followPos) {
       const target = currentTarget.current.fromArray(followPos);
-      const desiredPos = new THREE.Vector3().copy(target).add(CLUSTER_OFFSET);
+      const desiredPos = tmpPos.current.copy(target).add(PLANET_OFFSET);
 
       camera.position.copy(desiredPos);
       camera.lookAt(target);
@@ -125,6 +150,8 @@ export default function CameraRig({
       enableDamping
       dampingFactor={0.08}
       enablePan={false}
+      minDistance={40}
+      maxDistance={200}
     />
   ) : null;
 }
