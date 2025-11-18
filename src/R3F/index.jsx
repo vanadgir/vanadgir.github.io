@@ -15,6 +15,7 @@ const R3F = () => {
           near: 0.1,
           far: 1000,
         }}
+        shadows
       >
         <color attach="background" args={["black"]} />
         <Suspense fallback={null}>

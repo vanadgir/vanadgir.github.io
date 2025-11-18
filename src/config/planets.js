@@ -14,6 +14,10 @@ const randomSpeed = () => {
   return Math.random() * 0.15 + 0.1;
 };
 
+const randomSize = () => {
+  return Math.random() * 5 + 1.5;
+}
+
 export const PLANETS = [
   {
     id: "blog",
@@ -23,7 +27,7 @@ export const PLANETS = [
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
-    size: Math.random() * 3 + 1,
+    size: randomSize(),
     InfoComponent: BlogInfo,
   },
   {
@@ -34,29 +38,29 @@ export const PLANETS = [
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
-    size: Math.random() * 3 + 1,
+    size: randomSize(),
     InfoComponent: ProjectsInfo,
   },
   {
     id: "music",
     label: "Music",
     path: "/music",
-    position: [-20, 0, -30],
+    position: [-30, 0, -45],
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
-    size: Math.random() * 3 + 1,
+    size: randomSize(),
     InfoComponent: MusicInfo,
   },
   {
     id: "docs",
     label: "Docs",
     path: "/docs",
-    position: [-40, 0, -55],
+    position: [-60, 0, -75],
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
-    size: Math.random() * 3 + 1,
+    size: randomSize(),
     InfoComponent: DocsInfo,
   },
 ];

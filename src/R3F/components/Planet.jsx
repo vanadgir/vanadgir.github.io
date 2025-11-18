@@ -8,6 +8,8 @@ import normalRoughUrl from "../../assets/textures/normalrough.png";
 import normalRough2Url from "../../assets/textures/normalrough2.jpg";
 import normalRough3Url from "../../assets/textures/normalrough3.jpg";
 
+import Moon from "./Moon.jsx";
+
 const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   const { position, color, secondaryColor, label, path, speed, size } = planet;
 
@@ -24,6 +26,28 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   const tempVec = useRef(new THREE.Vector3());
 
   const { paused, showOrbits } = useSettings();
+
+  const moonCount = useMemo(() => {
+    if (size >= 5.5) return 2;
+    if (size >= 3) return 1;
+    return 0;
+  }, [size]);
+
+  const randomColor = () => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
+  const moons = useMemo(
+    () =>
+      Array.from({ length: moonCount }, () => ({
+        color: randomColor(),
+        secondaryColor: randomColor(),
+      })),
+    [moonCount]
+  );
 
   // Load all candidate normal/rough textures
   const normalTextures = useLoader(THREE.TextureLoader, [
@@ -47,10 +71,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   }, [normalTextures]);
 
   // Roughness variation per planet
-  const roughnessValue = useMemo(
-    () => 0.6 + Math.random() * 0.3,
-    []
-  );
+  const roughnessValue = useMemo(() => 0.6 + Math.random() * 0.3, []);
 
   // Color objects for vertex coloring
   const primaryColor = useMemo(() => new THREE.Color(color), [color]);
@@ -150,10 +171,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
     setHovered(false);
   };
 
-  const selfRotationSpeed = useMemo(
-    () => Math.random() * 0.5 + 0.1,
-    []
-  );
+  const selfRotationSpeed = useMemo(() => Math.random() * 0.5 + 0.1, []);
 
   // Random starting rotation so seams don't line up
   useEffect(() => {
@@ -206,12 +224,14 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
           color={color}
           lineWidth={1}
           transparent
-          opacity={0.35}
+          opacity={0.5}
         />
       )}
 
       <group ref={groupRef} visible={visible}>
         <mesh
+          castShadow
+          receiveShadow={false}
           ref={meshRef}
           onClick={handleClick}
           onPointerOver={handlePointerOver}
@@ -249,6 +269,15 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
             {label}
           </Html>
         )}
+
+        {moons.map((moon, i) => (
+          <Moon
+            key={i}
+            parentSize={size}
+            color={moon.color}
+            secondaryColor={moon.secondaryColor}
+          />
+        ))}
       </group>
     </>
   );

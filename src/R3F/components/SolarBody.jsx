@@ -51,14 +51,13 @@ const SolarBody = () => {
       {/* Strong radial light to illuminate planets */}
       <pointLight
         position={[0, 0, 0]}
-        intensity={4000} // crank this up a lot
+        intensity={6000} // crank this up a lot
         distance={0} // 0 = no falloff; all planets get light
         decay={2}
         color="#ffe9c4"
-        // optional shadows, if you later want them:
-        // castShadow
-        // shadow-mapSize-width={2048}
-        // shadow-mapSize-height={2048}
+        castShadow
+        shadow-mapSize-width={2048}
+        shadow-mapSize-height={2048}
       />
     </group>
   );
