@@ -9,10 +9,11 @@
   --nav-item-height: 32px;
 }
 
+/* Global font with Cambria fallback */
 html,
 body,
 #root {
-  font-family: "alagard", sans-serif;
+  font-family: "alagard", Cambria, "Times New Roman", serif;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -77,7 +78,7 @@ body,
 .dom-nav button,
 .dom-nav a,
 .dom-footer button {
-  font-family: "alagard", sans-serif;
+  font-family: "alagard", Cambria, "Times New Roman", serif;
   font-size: 16px;
   min-height: var(--nav-item-height);
 
@@ -140,7 +141,7 @@ body,
 
 /* tray buttons reuse your button style */
 .settings-tray button {
-  font-family: "alagard", sans-serif;
+  font-family: "alagard", Cambria, "Times New Roman", serif;
   font-size: 14px;
   min-height: var(--nav-item-height);
 
@@ -213,54 +214,210 @@ body,
   margin-left: 1vw;
 }
 
+/* ========================================== */
+/* OVERLAY: BASE + TWO-PANE VARIANTS          */
+/* ========================================== */
+
 .planet-overlay-root {
   position: fixed;
   inset: 0;
   z-index: 10;
   font-size: 20px;
-
   pointer-events: none;
 }
 
-/* Single, bounded right-hand pane */
+/* Base box: fixed, right-hand pane by default */
 .planet-overlay-box {
   position: fixed;
-  /* distance from top nav and bottom edge */
-  top: 72px;      /* tweak to clear nav */
+  top: 72px;
   right: 24px;
-  bottom: 24px;
 
-  /* responsive width, a bit wider */
-  width: clamp(380px, 36vw, 720px);
+  max-height: calc(100vh - 72px - 80px);
+  height: auto;
 
-  box-sizing: border-box; /* include padding + border inside the bounds */
+  box-sizing: border-box;
 
-  padding: 1.25rem 1.5rem;
+  padding: 0.75rem 1.5rem 1.5rem; /* top, left/right, bottom */
+
   border-radius: 18px;
-
   background: rgba(5, 10, 30, 0.86);
   border: 1px solid rgba(148, 163, 184, 0.7);
   box-shadow: 0 0 30px rgba(15, 23, 42, 0.95);
   color: #e5e7eb;
 
   backdrop-filter: blur(10px);
-
-  overflow-y: auto;  /* scroll inside, never past bottom */
+  overflow-y: auto;
   pointer-events: auto;
+
+  font-family: "alagard", Cambria, "Times New Roman", serif;
 }
+
+/* Normalize headings inside overlay panes */
+.planet-overlay-box h2 {
+  margin: 0 0 0.25rem 0;  /* no top margin, small bottom margin */
+}
+
+
+/* Left detail panel: big content area */
+.planet-overlay-box--left {
+  left: 24px;
+  right: auto;
+  max-width: clamp(380px, 36vw, 720px);
+  width: auto;
+  max-height: calc(100vh - 72px - 80px);
+  height: auto;
+}
+
+/* Right primary panel: narrower info list, default width */
+.planet-overlay-box--right {
+  right: 24px;
+  left: auto;
+  max-width: clamp(380px, 36vw, 720px);
+  width: auto;
+}
+
+/* Close button for the left detail panel */
+.overlay-close-button {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.overlay-close-button:hover {
+  opacity: 0.8;
+}
+
 /* ========================================== */
-/* MOBILE */
+/* RIGHT-PANE ITEMS (OverlayContentLink, etc) */
+/* ========================================== */
+
+.info-item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.info-item-list-item {
+  margin: 0;
+}
+
+.info-item-button {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  background: rgba(15, 23, 42, 0.85);
+  padding: 8px 10px;
+  cursor: pointer;
+
+  color: #e5e7eb;
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+}
+
+.info-item-button:hover {
+  background: rgba(30, 64, 175, 0.6);
+}
+
+.info-item-title {
+  font-size: 20px;
+}
+
+.info-item-description {
+  font-size: 16px;
+  opacity: 0.8;
+}
+
+/* ========================================== */
+/* Generic detail panel content (left pane)   */
+/* ========================================== */
+
+.detail-pane {
+  max-width: 100%;
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+}
+
+.detail-pane-header {
+  margin-bottom: 0.75rem;
+}
+
+.detail-pane-header h2 {
+  margin: 0 0 0.25rem 0;
+}
+
+.detail-pane-subtitle {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.detail-pane-body {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+/* ========================================== */
+/* MOBILE                                     */
 /* ========================================== */
 
 @media (max-width: 600px) {
+  /* Common mobile behavior for both panes */
   .planet-overlay-box {
-    top: auto;
-    right: 0;
-    left: 0;
-    bottom: 0;
+    left: 8px;
+    right: 8px;
+    max-width: none;
+    width: auto;
 
-    width: 100%;
-    height: 45vh;
-    border-radius: 16px 16px 0 0;
+    /* vertical size controlled explicitly below */
+    max-height: none;
+  }
+
+  .dom-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.6px;
+    flex-wrap: nowrap; /* FORCE SINGLE LINE */
+    white-space: nowrap; /* PREVENT TEXT WRAPPING */
+    overflow-x: auto; /* allow side-scroll if needed */
+    scrollbar-width: none; /* hide scrollbar (Firefox) */
+  }
+
+  .dom-nav::-webkit-scrollbar {
+    display: none; /* hide scrollbar (Chrome/Safari) */
+  }
+
+  /* Constants (adjust if your nav/footer change):
+     - nav area ≈ 56px from top
+     - footer/gear ≈ 72px from bottom
+     - middleRegion = 100vh - 56px - 72px
+     - left pane = 70% of middleRegion
+     - right pane = 30% of middleRegion
+  */
+
+  .planet-overlay-box--left {
+    top: 56px; /* just below nav */
+    bottom: auto;
+    height: calc(0.7 * (100vh - 56px - 72px)); /* 70% of middle */
+    border-radius: 12px;
+  }
+
+  .planet-overlay-box--right {
+    top: calc(56px + 0.7 * (100vh - 56px - 72px)); /* below left pane */
+    bottom: 72px; /* just above footer/gear */
+    height: auto; /* implied by top/bottom */
+    border-radius: 12px;
   }
 }
