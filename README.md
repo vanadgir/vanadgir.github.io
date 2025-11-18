@@ -1,3 +1,3 @@
 # Varun Nadgir Portfolio Website
 
-Made with Vite and React-three-fiber
+Interactive solar system simulation made with Vite and React-three-fiber

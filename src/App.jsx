@@ -1,5 +1,5 @@
-import R3F from "./R3F/R3F";
-import DOM from "./DOM/DOM";
+import R3F from "./R3F";
+import DOM from "./DOM";
 import "./App.css";
 
 const App = () => {

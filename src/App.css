@@ -1,11 +1,14 @@
 @font-face {
   font-family: "alagard";
-  src: url("./fonts/alagard.ttf") format("truetype");
+  src: url("./assets/fonts/alagard.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
-/* Full viewport baseline */
+:root {
+  --nav-item-height: 32px;
+}
+
 html,
 body,
 #root {
@@ -14,26 +17,23 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* no scrollbars; you control camera/panning */
+  overflow: hidden;
 }
 
-/* Root React container */
 .app-root {
   position: relative;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
-  background: #000; /* or your space gradient */
+  background: #000;
 }
 
-/* 3D layer (R3F) – full screen */
 .r3f-root {
   position: absolute;
-  inset: 0;          /* top: 0; right: 0; bottom: 0; left: 0 */
+  inset: 0;
   z-index: 0;
 }
 
-/* If R3F uses Canvas directly, you can also ensure it fills: */
 .r3f-root canvas,
 .r3f-canvas {
   width: 100%;
@@ -41,11 +41,178 @@ body,
   display: block;
 }
 
-/* 2D UI layer (DOM) – full screen overlay */
+/* ========================================== */
+/* SINGLE DOM ROOT CONTAINER */
+/* ========================================== */
+
 .dom-root {
+  position: absolute;
+  inset: 0;
+  color: white;
+  pointer-events: none;
+}
+
+/* ========================================== */
+/* NAVIGATION BAR */
+/* ========================================== */
+
+.dom-nav {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  max-width: calc(100% - 20px);
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* TEXT BUTTONS */
+.dom-nav button,
+.dom-nav a {
+  font-family: "alagard", sans-serif;
+  font-size: 16px;
+  min-height: var(--nav-item-height);
+
+  padding: 0 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+
+  text-decoration: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dom-nav button[aria-pressed="true"] {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================== */
+/* ICON BUTTONS (NO INTERNAL PADDING) */
+/* ========================================== */
+
+/* Makes icon button EXACT square, full size */
+.dom-nav-icon {
+  width: var(--nav-item-height);
+  height: var(--nav-item-height);
+
+  padding: 0 !important;      /* FORCE no padding */
+  border-radius: 4px;         /* match text button shape */
+  flex: 0 0 var(--nav-item-height);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG fills full button with no squeezing */
+.dom-nav-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;  /* keeps proportions, prevents squish */
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+/* External icons get white background ONLY */
+.dom-nav a.external-icon {
+  background: rgba(146, 146, 146, 0.866);
+}
+
+/* ========================================== */
+/* BODY CONTENT */
+/* ========================================== */
+
+.dom-body {
   user-select: none;
   pointer-events: none;
-  color: white;
   position: absolute;
-  inset: 10px;
+  margin-top: 5vh;
+  margin-left: 1vw;
+}
+
+.cluster-overlay-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cluster-overlay-box {
+  font-size: 18px;
+  position: fixed;
+  top: 16px;
+  right: 16px; /* fallback until JS sets left/top */
+  /* Shrink to always fit horizontally inside margins */
+  max-width: min(28rem, calc(100vw - 2 * 12px));
+  width: min(28rem, calc(100vw - 2 * 12px));
+
+  padding: 1rem 1.25rem;
+  border-radius: 16px;
+  background: rgba(5, 10, 30, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  box-shadow: 0 0 24px rgba(15, 23, 42, 0.9);
+  color: #e5e7eb;
+
+  pointer-events: auto;
+  overflow: visible;
+
+  /* drag cursors controlled via inline style */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cluster-overlay-tail {
+  position: absolute;
+  top: var(--tail-anchor-y, 50%);
+  left: var(--tail-anchor-x, 0px);
+  transform-origin: left center;
+  width: var(--tail-length, 0px);
+  height: 2px;
+  transform: rotate(var(--tail-angle, 0deg));
+  background: linear-gradient(
+    to right,
+    rgba(148, 163, 184, 0.0),
+    rgba(148, 163, 184, 0.9)
+  );
+  box-shadow: 0 0 10px rgba(148, 163, 184, 0.8);
+  pointer-events: none;
+}
+
+
+/* ========================================== */
+/* MOBILE */
+/* ========================================== */
+
+@media (max-width: 600px) {
+  :root {
+    --nav-item-height: 28px;
+  }
+
+  .dom-nav {
+    gap: 4px;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+  }
+
+  .dom-nav button,
+  .dom-nav a {
+    font-size: 12px;
+    padding: 0 6px;
+  }
 }
