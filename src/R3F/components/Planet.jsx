@@ -28,8 +28,8 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   const { paused, showOrbits } = useSettings();
 
   const moonCount = useMemo(() => {
-    if (size >= 5.5) return 2;
-    if (size >= 3) return 1;
+    if (size >= 6) return 2;
+    if (size >= 3.5) return 1;
     return 0;
   }, [size]);
 
@@ -231,7 +231,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
       <group ref={groupRef} visible={visible}>
         <mesh
           castShadow
-          receiveShadow={false}
+          receiveShadow
           ref={meshRef}
           onClick={handleClick}
           onPointerOver={handlePointerOver}

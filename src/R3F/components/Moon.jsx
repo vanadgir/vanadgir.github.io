@@ -60,7 +60,7 @@ const Moon = ({ parentSize = 1, color = "#aaaaaa" }) => {
     const roughnessValue = 0.6 + Math.random() * 0.3;
 
     // Subtle self-rotation
-    const selfRotationSpeed = 0.2 + Math.random() * 0.4;
+    const selfRotationSpeed = 0.05 + Math.random() * 0.15;
 
     return {
       radius,

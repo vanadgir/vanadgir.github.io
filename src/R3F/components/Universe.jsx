@@ -6,6 +6,7 @@ import CameraRig from "./CameraRig";
 import Planet from "./Planet";
 import { usePlanetUI } from "../../contexts/PlanetUIContext";
 import SolarBody from "./SolarBody";
+import SpaceDust from "./SpaceDust";
 
 const Universe = () => {
   const [location, navigate] = useLocation();
@@ -36,6 +37,8 @@ const Universe = () => {
   return (
     <>
       <Stars radius={150} depth={80} count={9000} factor={4} saturation={0} />
+
+      <SpaceDust />
 
       <SolarBody />
 
