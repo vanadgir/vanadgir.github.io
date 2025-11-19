@@ -1,19 +1,46 @@
-const DocsInfo = ({ planet }) => {
+import OverlayContentLink from "../OverlayContentLink";
+
+const DocsInfo = ({ planet, openDetail }) => {
+  const openResume = () => {
+    openDetail?.("docs:resume");
+  };
+
+  const openElvtr = () => {
+    openDetail?.("docs:elvtr");
+  };
+
+  const openDataSci = () => {
+    openDetail?.("docs:datasci");
+  };
+
   return (
-    <div>
+    <div className="blog-info">
       <h2>{planet.label}</h2>
-      <p>
-        Various documents and certifications able to be viewed or downloaded.
-      </p>
-      <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
-      </p>
+      <p>View or Download</p>
+
+      <ul className="info-item-list">
+        <li className="info-item-list-item">
+          <OverlayContentLink
+            title="Resume"
+            description="Skills & Work History"
+            onActivate={openResume}
+          />
+        </li>
+        <li className="info-item-list-item">
+          <OverlayContentLink
+            title="ELVTR Tech Art"
+            description="Certificate & Letter of Recommendation"
+            onActivate={openElvtr}
+          />
+        </li>
+        <li className="info-item-list-item">
+          <OverlayContentLink
+            title="Data Science"
+            description="Certificates & Projects"
+            onActivate={openDataSci}
+          />
+        </li>
+      </ul>
     </div>
   );
 };

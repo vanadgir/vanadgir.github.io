@@ -1,3 +1,7 @@
+/* ========================================== */
+/* FONTS & ROOT VARIABLES                     */
+/* ========================================== */
+
 @font-face {
   font-family: "alagard";
   src: url("./assets/fonts/alagard.ttf") format("truetype");
@@ -9,7 +13,10 @@
   --nav-item-height: 32px;
 }
 
-/* Global font with Cambria fallback */
+/* ========================================== */
+/* GLOBAL LAYOUT / TYPOGRAPHY                 */
+/* ========================================== */
+
 html,
 body,
 #root {
@@ -45,7 +52,38 @@ body,
 }
 
 /* ========================================== */
-/* SINGLE DOM ROOT CONTAINER */
+/* GLOBAL SCROLLBARS                          */
+/* ========================================== */
+
+/* WebKit */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(3px);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7aa7ff, #3e5bd6);
+  border-radius: 10px;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #98b7ff, #4c6ce0);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4c6ce0 rgba(255, 255, 255, 0.08);
+}
+
+/* ========================================== */
+/* SINGLE DOM ROOT CONTAINER & BODY CONTENT   */
 /* ========================================== */
 
 .dom-root {
@@ -55,8 +93,30 @@ body,
   pointer-events: none;
 }
 
+.dom-body {
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  margin-top: 5vh;
+  margin-left: 1vw;
+}
+
+.debug-panel {
+  position: fixed;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  color: white;
+  font-size: 0.75rem;
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+  background: none;
+  border: none;
+  padding: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+
 /* ========================================== */
-/* NAVIGATION BAR */
+/* NAVIGATION BAR & FOOTER                    */
 /* ========================================== */
 
 .dom-nav {
@@ -75,14 +135,27 @@ body,
   z-index: 10;
 }
 
-/* TEXT BUTTONS */
+.dom-footer {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* Shared button-like controls (nav, footer, trays, pane footers) */
 .dom-nav button,
 .dom-nav a,
-.dom-footer button {
+.dom-footer button,
+.settings-tray button,
+.detail-pane-footer button {
   font-family: "alagard", Cambria, "Times New Roman", serif;
-  font-size: 16px;
   min-height: var(--nav-item-height);
-
   padding: 0 10px;
   border-radius: 4px;
   box-sizing: border-box;
@@ -99,21 +172,57 @@ body,
   justify-content: center;
 }
 
-/* FOOTER CONTROLS BAR */
-.dom-footer {
-  position: absolute;
-  left: 2px;
-  bottom: 2px;
-
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  pointer-events: auto;
-  z-index: 10;
+/* Font-size distinctions */
+.dom-nav button,
+.dom-nav a,
+.dom-footer button,
+.detail-pane-footer button {
+  font-size: 16px;
 }
 
-/* SETTINGS TRAY - sits to the right of gear, slides out */
+.settings-tray button {
+  font-size: 14px;
+}
+
+/* Pressed state for nav & settings tray buttons */
+.dom-nav button[aria-pressed="true"],
+.settings-tray button[aria-pressed="true"] {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Icon buttons (square, no padding) */
+.dom-nav-icon {
+  width: var(--nav-item-height);
+  height: var(--nav-item-height);
+
+  padding: 0 !important;
+  border-radius: 4px;
+  flex: 0 0 var(--nav-item-height);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dom-nav-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+/* External icons */
+.dom-nav a.external-icon {
+  background: rgba(146, 146, 146, 0.866);
+}
+
+/* ========================================== */
+/* SETTINGS TRAY                              */
+/* ========================================== */
+
 .settings-tray {
   display: flex;
   flex-direction: row;
@@ -126,97 +235,20 @@ body,
   box-shadow: 0 0 24px rgba(15, 23, 42, 0.9);
   color: #e5e7eb;
 
-  /* animation */
   transform: translateX(-8px);
   opacity: 0;
   pointer-events: none;
   transition: transform 0.25s ease-out, opacity 0.25s ease-out;
 }
 
-/* open state: tray visible, extended to the right of the gear */
 .settings-tray--open {
   transform: translateX(0);
   opacity: 1;
   pointer-events: auto;
 }
 
-/* tray buttons reuse your button style */
-.settings-tray button {
-  font-family: "alagard", Cambria, "Times New Roman", serif;
-  font-size: 14px;
-  min-height: var(--nav-item-height);
-
-  padding: 0 10px;
-  border-radius: 4px;
-  box-sizing: border-box;
-  cursor: pointer;
-
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: rgba(0, 0, 0, 0.6);
-  color: white;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.settings-tray button[aria-pressed="true"] {
-  border-color: white;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.dom-nav button[aria-pressed="true"] {
-  border-color: white;
-  background: rgba(255, 255, 255, 0.15);
-}
-
 /* ========================================== */
-/* ICON BUTTONS (NO INTERNAL PADDING) */
-/* ========================================== */
-
-/* Makes icon button EXACT square, full size */
-.dom-nav-icon {
-  width: var(--nav-item-height);
-  height: var(--nav-item-height);
-
-  padding: 0 !important; /* FORCE no padding */
-  border-radius: 4px; /* match text button shape */
-  flex: 0 0 var(--nav-item-height);
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* SVG fills full button with no squeezing */
-.dom-nav-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* keeps proportions, prevents squish */
-  display: block;
-  padding: 0;
-  margin: 0;
-}
-
-/* External icons get white background ONLY */
-.dom-nav a.external-icon {
-  background: rgba(146, 146, 146, 0.866);
-}
-
-/* ========================================== */
-/* BODY CONTENT */
-/* ========================================== */
-
-.dom-body {
-  user-select: none;
-  pointer-events: none;
-  position: absolute;
-  margin-top: 5vh;
-  margin-left: 1vw;
-}
-
-/* ========================================== */
-/* OVERLAY: BASE + TWO-PANE VARIANTS          */
+/* OVERLAY ROOT / BASE PANEL STYLES           */
 /* ========================================== */
 
 .planet-overlay-root {
@@ -227,18 +259,10 @@ body,
   pointer-events: none;
 }
 
-/* Base box: fixed, right-hand pane by default */
+/* Base overlay panel card styling */
 .planet-overlay-box {
-  position: fixed;
-  top: 72px;
-  right: 24px;
-
-  max-height: calc(100vh - 72px - 80px);
-  height: auto;
-
   box-sizing: border-box;
-
-  padding: 0.75rem 1.5rem 1.5rem; /* top, left/right, bottom */
+  padding: 0.75rem 1.5rem 1.5rem;
 
   border-radius: 18px;
   background: rgba(5, 10, 30, 0.86);
@@ -247,34 +271,42 @@ body,
   color: #e5e7eb;
 
   backdrop-filter: blur(10px);
-  overflow-y: auto;
   pointer-events: auto;
-
   font-family: "alagard", Cambria, "Times New Roman", serif;
 }
 
 /* Normalize headings inside overlay panes */
 .planet-overlay-box h2 {
-  margin: 0 0 0.25rem 0;  /* no top margin, small bottom margin */
+  margin: 0 0 0.25rem 0;
 }
 
-
-/* Left detail panel: big content area */
+/* Left detail panel */
 .planet-overlay-box--left {
+  position: fixed;
+  top: 72px;
   left: 24px;
-  right: auto;
+
   max-width: clamp(380px, 36vw, 720px);
-  width: auto;
   max-height: calc(100vh - 72px - 80px);
-  height: auto;
+  height: calc(100vh - 72px - 80px);
+
+  display: flex;
+  flex-direction: column;
 }
 
-/* Right primary panel: narrower info list, default width */
+/* Right primary panel */
 .planet-overlay-box--right {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 72px;
   right: 24px;
-  left: auto;
+
+  height: calc(100vh - 72px - 80px);
   max-width: clamp(380px, 36vw, 720px);
-  width: auto;
+  max-height: calc(100vh - 72px - 80px);
+
+  overflow: hidden;
 }
 
 /* Close button for the left detail panel */
@@ -296,13 +328,31 @@ body,
 }
 
 /* ========================================== */
-/* RIGHT-PANE ITEMS (OverlayContentLink, etc) */
+/* RIGHT-PANE INFO LIST                       */
 /* ========================================== */
 
+.blog-info {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.blog-info p {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.blog-info ul {
+  margin-top: 1%;
+}
+
 .info-item-list {
-  list-style: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   padding: 0;
   margin: 0.75rem 0 0;
+
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -343,15 +393,20 @@ body,
 }
 
 /* ========================================== */
-/* Generic detail panel content (left pane)   */
+/* LEFT-PANE DETAIL CONTENT                   */
 /* ========================================== */
 
 .detail-pane {
   max-width: 100%;
   font-family: "alagard", Cambria, "Times New Roman", serif;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .detail-pane-header {
+  flex: 0 0 auto;
   margin-bottom: 0.75rem;
 }
 
@@ -366,8 +421,183 @@ body,
 }
 
 .detail-pane-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   font-size: 22px;
   line-height: 1.5;
+}
+
+.detail-pane-body h3 {
+  margin: 0.5rem 0 0.25rem;
+  font-size: 22px;
+}
+
+.detail-pane-body p {
+  margin: 0.4rem 0;
+}
+
+.detail-pane-body strong,
+.detail-pane-body b {
+  font-weight: bold;
+}
+
+.detail-pane-body ul,
+.detail-pane-body ol {
+  margin: 0.4rem 0 0.4rem 1.4rem;
+  padding: 0;
+}
+
+/* Overall docs layout: vertical stack */
+.detail-pane-body--docs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Row that holds the list of buttons (can expand later if needed) */
+.docs-controls-row {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Left column: flexbox of buttons, wide enough for labels */
+.docs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%; /* use full width since preview is below */
+}
+
+/* Each entry block */
+.docs-item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Active highlight */
+.docs-item--active .docs-item-title {
+  background: rgba(120, 140, 255, 0.55);
+}
+
+/* Name button */
+.docs-item-title {
+  width: 100%;
+  text-align: center;
+  padding: 0.35rem 0.6rem;
+
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.5);
+
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+  font-size: clamp(0.7rem, 1.6vw, 0.95rem);
+  color: #ffffff;
+
+  cursor: pointer;
+  box-shadow: none;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.docs-item-title:hover {
+  background: rgba(80, 110, 255, 0.75);
+}
+
+/* View + Download row */
+.docs-item-actions {
+  margin-top: 0.25rem;
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+/* View + Download buttons */
+.docs-action-button {
+  padding: 0.2rem 0.5rem;
+
+  border-radius: 0;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.5);
+
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+  font-size: 0.75rem;
+  color: #ffffff;
+
+  cursor: pointer;
+  box-shadow: none;
+  text-decoration: none; /* for <a> */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.docs-action-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.docs-viewer {
+  height: 45vh;
+  max-height: 60vh;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.docs-viewer-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Generic blog images used by all entries */
+.blog-image,
+.blog-entry-image {
+  display: block;
+  width: 85%;
+  justify-self: center;
+  margin: 0.75rem 0 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+}
+
+/* Footer pager controls */
+.detail-pane-footer {
+  flex: 0 0 auto;
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.6);
+  display: flex;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.detail-pane-footer button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Index page "Day N" / post title links */
+.page-link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+
+  font: inherit;
+  color: #e5e7eb;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.page-link:hover {
+  color: #fd7e00;
+}
+
+.page-link:focus-visible {
+  outline: 2px solid rgba(248, 250, 252, 0.9);
+  outline-offset: 2px;
 }
 
 /* ========================================== */
@@ -381,8 +611,6 @@ body,
     right: 8px;
     max-width: none;
     width: auto;
-
-    /* vertical size controlled explicitly below */
     max-height: none;
   }
 
@@ -390,14 +618,14 @@ body,
     display: flex;
     align-items: center;
     gap: 1.6px;
-    flex-wrap: nowrap; /* FORCE SINGLE LINE */
-    white-space: nowrap; /* PREVENT TEXT WRAPPING */
-    overflow-x: auto; /* allow side-scroll if needed */
-    scrollbar-width: none; /* hide scrollbar (Firefox) */
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 
   .dom-nav::-webkit-scrollbar {
-    display: none; /* hide scrollbar (Chrome/Safari) */
+    display: none;
   }
 
   /* Constants (adjust if your nav/footer change):
@@ -409,16 +637,16 @@ body,
   */
 
   .planet-overlay-box--left {
-    top: 56px; /* just below nav */
+    top: 56px;
     bottom: auto;
-    height: calc(0.7 * (100vh - 56px - 72px)); /* 70% of middle */
+    height: calc(0.7 * (100vh - 56px - 72px));
     border-radius: 12px;
   }
 
   .planet-overlay-box--right {
-    top: calc(56px + 0.7 * (100vh - 56px - 72px)); /* below left pane */
-    bottom: 72px; /* just above footer/gear */
-    height: auto; /* implied by top/bottom */
+    top: calc(56px + 0.7 * (100vh - 56px - 72px));
+    bottom: 72px;
+    height: auto;
     border-radius: 12px;
   }
 }

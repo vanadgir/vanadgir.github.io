@@ -6,6 +6,8 @@ export const SettingsProvider = ({ children }) => {
   const [paused, setPaused] = useState(false);
   const [showOrbits, setShowOrbits] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [shadowsEnabled, setShadowsEnabled] = useState(true);
+  const [debugEnabled, setDebugEnabled] = useState(false);
 
   const value = useMemo(
     () => ({
@@ -23,8 +25,18 @@ export const SettingsProvider = ({ children }) => {
       settingsOpen,
       setSettingsOpen,
       toggleSettingsOpen: () => setSettingsOpen((v) => !v),
+
+      // shadows toggle
+      shadowsEnabled,
+      setShadowsEnabled,
+      toggleShadowsEnabled: () => setShadowsEnabled((v) => !v),
+
+      // debug toggle
+      debugEnabled,
+      setDebugEnabled,
+      toggleDebugEnabled: () => setDebugEnabled((v) => !v),
     }),
-    [paused, showOrbits, settingsOpen]
+    [paused, showOrbits, settingsOpen, shadowsEnabled, debugEnabled]
   );
 
   return (

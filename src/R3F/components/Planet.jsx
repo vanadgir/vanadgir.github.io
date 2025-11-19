@@ -25,7 +25,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   const geomRef = useRef();
   const tempVec = useRef(new THREE.Vector3());
 
-  const { paused, showOrbits } = useSettings();
+  const { paused, showOrbits, shadowsEnabled } = useSettings();
 
   const moonCount = useMemo(() => {
     if (size >= 6) return 2;
@@ -230,14 +230,14 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
 
       <group ref={groupRef} visible={visible}>
         <mesh
-          castShadow
-          receiveShadow
+          castShadow={shadowsEnabled}
+          receiveShadow={shadowsEnabled}
           ref={meshRef}
           onClick={handleClick}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
-          <sphereGeometry ref={geomRef} args={[size, 32, 32]} />
+          <sphereGeometry ref={geomRef} args={[size, 48, 48]} />
           <meshStandardMaterial
             vertexColors
             emissive="#000000"

@@ -3,8 +3,12 @@ import { useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
 
+import { useSettings } from "../../contexts/SettingsContext";
+
 const SpaceDust = ({ count = 4000, radius = 100 }) => {
   const pointsRef = useRef();
+
+  const { paused } = useSettings();
 
   const { basePositions, positions, colors, phases } = useMemo(() => {
     const basePositions = new Float32Array(count * 3);
@@ -43,6 +47,8 @@ const SpaceDust = ({ count = 4000, radius = 100 }) => {
   }, [count, radius]);
 
   useFrame(({ clock }) => {
+    if (paused) return;
+    
     const t = clock.getElapsedTime();
     const points = pointsRef.current;
     if (!points) return;
@@ -80,16 +86,11 @@ const SpaceDust = ({ count = 4000, radius = 100 }) => {
   });
 
   return (
-    <Points
-      ref={pointsRef}
-      positions={positions}
-      colors={colors}
-      stride={3}
-    >
+    <Points ref={pointsRef} positions={positions} colors={colors} stride={3}>
       <PointMaterial
         transparent
         vertexColors
-        size={0.15}          // same scale you already see
+        size={0.15} // same scale you already see
         sizeAttenuation
         depthWrite={false}
       />

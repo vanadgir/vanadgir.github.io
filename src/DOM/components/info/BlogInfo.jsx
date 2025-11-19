@@ -1,5 +1,4 @@
 import OverlayContentLink from "../OverlayContentLink";
-import AboutMeOverlay from "../../content/AboutMeOverlay";
 
 const BlogInfo = ({ planet, openDetail }) => {
   const handleAboutMe = () => {
@@ -7,8 +6,13 @@ const BlogInfo = ({ planet, openDetail }) => {
     openDetail("about");
   };
 
+  const handleRoadtrip = () => {
+    if (!openDetail) return;
+    openDetail("roadtrip");
+  };
+
   return (
-    <div>
+    <div className="blog-info">
       <h2>{planet.label}</h2>
       <p>Dev logs, writeups, and thoughts.</p>
 
@@ -20,6 +24,14 @@ const BlogInfo = ({ planet, openDetail }) => {
             onActivate={handleAboutMe}
           />
         </li>
+        <li className="info-item-list-item">
+          <OverlayContentLink
+            title="Roadtrip2020"
+            description="A journal of my cross-country adventure"
+            onActivate={handleRoadtrip}
+          />
+        </li>
+
       </ul>
     </div>
   );

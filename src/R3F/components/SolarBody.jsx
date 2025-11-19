@@ -12,7 +12,7 @@ const SolarBody = () => {
 
   useEffect(() => {
     sunTexture.wrapS = THREE.RepeatWrapping;
-    sunTexture.wrapT = THREE.ClampToEdgeWrapping;
+    sunTexture.wrapT = THREE.RepeatWrapping;
     sunTexture.anisotropy = 8;
     sunTexture.center.set(0.5, 0.5);
   }, [sunTexture]);
@@ -20,7 +20,7 @@ const SolarBody = () => {
   const scrollSpeed = 0.1; // horizontal UV scroll
   const rotationSpeed = 0.25; // mesh rotation
 
-  const { paused } = useSettings();
+  const { paused, shadowsEnabled } = useSettings();
 
   useFrame((_, delta) => {
     if (paused) return;
@@ -55,7 +55,7 @@ const SolarBody = () => {
         distance={0} // 0 = no falloff; all planets get light
         decay={2}
         color="#ffe9c4"
-        castShadow
+        castShadow={shadowsEnabled}
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />

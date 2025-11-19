@@ -15,7 +15,7 @@ const Moon = ({ parentSize = 1, color = "#aaaaaa" }) => {
   const tempVec = useRef(new THREE.Vector3());
   const angleRef = useRef(Math.random() * Math.PI * 2);
 
-  const { paused, showOrbits } = useSettings();
+  const { paused, showOrbits, shadowsEnabled } = useSettings();
 
   // Load normal/rough textures (same set as planet)
   const normalTextures = useLoader(THREE.TextureLoader, [
@@ -59,8 +59,10 @@ const Moon = ({ parentSize = 1, color = "#aaaaaa" }) => {
     // Roughness variation
     const roughnessValue = 0.6 + Math.random() * 0.3;
 
+    const direction = Math.random() >= 0.5 ? -1 : 1;
+
     // Subtle self-rotation
-    const selfRotationSpeed = 0.05 + Math.random() * 0.15;
+    const selfRotationSpeed = (0.05 + Math.random() * 0.15) * direction;
 
     return {
       radius,
@@ -126,7 +128,12 @@ const Moon = ({ parentSize = 1, color = "#aaaaaa" }) => {
       )}
 
       <group ref={groupRef}>
-        <mesh ref={meshRef} raycast={null} castShadow receiveShadow>
+        <mesh
+          ref={meshRef}
+          raycast={null}
+          castShadow={shadowsEnabled}
+          receiveShadow={shadowsEnabled}
+        >
           <sphereGeometry ref={geomRef} args={[params.moonSize, 16, 16]} />
           <meshStandardMaterial
             color={color}

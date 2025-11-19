@@ -16,14 +16,28 @@ const randomSpeed = () => {
 
 const randomSize = () => {
   return Math.random() * 5 + 1.5;
-}
+};
+
+const randomAngle = () => Math.random() * Math.PI * 2;
+
+const randomRadiusBetween = (min, max) => {
+  return min + Math.random() * (max - min);
+};
+
+const positionOnRing = (minRadius, maxRadius) => {
+  const radius = randomRadiusBetween(minRadius, maxRadius);
+  const angle = randomAngle();
+  const x = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
+  return [x, 0, z];
+};
 
 export const PLANETS = [
   {
     id: "blog",
     label: "Blog",
     path: "/blog",
-    position: [25, 0, 30],
+    position: positionOnRing(28, 32),
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
@@ -34,7 +48,7 @@ export const PLANETS = [
     id: "projects",
     label: "Projects",
     path: "/projects",
-    position: [35, 0, 40],
+    position: positionOnRing(48, 54),
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
@@ -45,7 +59,7 @@ export const PLANETS = [
     id: "music",
     label: "Music",
     path: "/music",
-    position: [-30, 0, -45],
+    position: positionOnRing(64, 72),
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),
@@ -56,7 +70,7 @@ export const PLANETS = [
     id: "docs",
     label: "Docs",
     path: "/docs",
-    position: [-60, 0, -75],
+    position: positionOnRing(86, 94),
     color: randomColor(),
     secondaryColor: randomColor(),
     speed: randomSpeed(),

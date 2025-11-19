@@ -5,7 +5,8 @@ import * as THREE from "three";
 
 const PLANET_OFFSET = new THREE.Vector3(0, 15, 35);
 const TRANSITION_TIME = 0.35;
-const SNAP_DISTANCE = 0.4; // tweak to taste
+const SNAP_DISTANCE = 0.4;
+const ORBIT_SPEED = 0.05;
 
 export default function CameraRig({
   homeFocus,
@@ -33,6 +34,8 @@ export default function CameraRig({
   const tmpTarget = useRef(new THREE.Vector3());
   const tmpPos = useRef(new THREE.Vector3());
 
+  const orbitAngle = useRef(0);
+
   useEffect(() => {
     camera.position.set(...homeFocus.cameraPos);
     currentTarget.current.set(...homeFocus.target);
@@ -55,11 +58,16 @@ export default function CameraRig({
     s.fromPos.copy(camera.position);
     s.fromTarget.copy(currentTarget.current);
 
+    // when we start focusing a planet again, reset orbit angle
+    if (!isHome && selectedPlanetId) {
+      orbitAngle.current = 0;
+    }
+
     // Static fallback targets (used for home transitions or when followPos is missing)
     if (isHome || !selectedPlanetId) {
       s.toPos.set(...homeFocus.cameraPos);
       s.toTarget.set(...homeFocus.target);
-    } 
+    }
 
     if (controls.current) {
       controls.current.enabled = false;
@@ -86,6 +94,7 @@ export default function CameraRig({
       if (!isHome && followPos && selectedPlanetId) {
         // Use the star's *current* position as the moving target
         desiredTarget.fromArray(followPos);
+        // During transition, just go to the canonical offset (no spin yet)
         desiredPos.copy(desiredTarget).add(PLANET_OFFSET);
       } else {
         // Home transitions: just use the static home focus
@@ -124,10 +133,22 @@ export default function CameraRig({
       return;
     }
 
-    // 2) Hard-follow planet with fixed offset (uses live followPos)
+    // 2) Planet focus: slow orbit around the vertical axis
     if (!isHome && followPos) {
       const target = currentTarget.current.fromArray(followPos);
-      const desiredPos = tmpPos.current.copy(target).add(PLANET_OFFSET);
+
+      // radius and height derived from PLANET_OFFSET
+      const radius = Math.hypot(PLANET_OFFSET.x, PLANET_OFFSET.z);
+      const height = PLANET_OFFSET.y;
+
+      // advance orbit angle slowly
+      orbitAngle.current += ORBIT_SPEED * delta;
+
+      const desiredPos = tmpPos.current.set(
+        target.x + Math.sin(orbitAngle.current) * radius,
+        target.y + height,
+        target.z + Math.cos(orbitAngle.current) * radius
+      );
 
       camera.position.copy(desiredPos);
       camera.lookAt(target);

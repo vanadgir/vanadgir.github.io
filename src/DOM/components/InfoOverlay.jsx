@@ -1,11 +1,20 @@
 import { useState, useCallback } from "react";
 
 import AboutMeOverlay from "../content/AboutMeOverlay";
+import RoadtripBlogOverlay from "../content/RoadtripBlogOverlay";
+import DocumentsOverlay from "../content/DocumentsOverlay";
 
 const renderDetail = (detailId) => {
+  if (detailId.startsWith("docs:")) {
+    const topicId = detailId.split(":")[1];
+    return <DocumentsOverlay key={topicId} topicId={topicId} />;
+  }
+
   switch (detailId) {
     case "about":
       return <AboutMeOverlay />;
+    case "roadtrip":
+      return <RoadtripBlogOverlay />;
     // case "something-else": return <SomethingElseOverlay />;
     default:
       return null;
@@ -18,7 +27,7 @@ const InfoOverlay = ({ planet }) => {
   const [detailId, setDetailId] = useState(null);
 
   const openDetail = useCallback((id) => {
-    setDetailId(id);
+    setDetailId((current) => (current === id ? null : id));
   }, []);
 
   const closeDetail = useCallback(() => {
@@ -35,7 +44,7 @@ const InfoOverlay = ({ planet }) => {
             type="button"
             style={{
               fontFamily: `"alagard", system-ui, sans-serif`,
-              color: "red"
+              color: "red",
             }}
             className="overlay-close-button"
             onClick={closeDetail}
