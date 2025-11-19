@@ -11,13 +11,14 @@ const SolarBody = () => {
   const sunTexture = useLoader(THREE.TextureLoader, sunTextureUrl);
 
   useEffect(() => {
-    sunTexture.wrapS = THREE.RepeatWrapping;
-    sunTexture.wrapT = THREE.RepeatWrapping;
+    sunTexture.wrapS = THREE.ClampToEdgeWrapping;
+    sunTexture.wrapT = THREE.ClampToEdgeWrapping;
+
     sunTexture.anisotropy = 8;
     sunTexture.center.set(0.5, 0.5);
   }, [sunTexture]);
 
-  const scrollSpeed = 0.1; // horizontal UV scroll
+  // const scrollSpeed = 0.1; // horizontal UV scroll
   const rotationSpeed = 0.25; // mesh rotation
 
   const { paused, shadowsEnabled } = useSettings();
@@ -25,10 +26,8 @@ const SolarBody = () => {
   useFrame((_, delta) => {
     if (paused) return;
 
-    sunTexture.offset.x = (sunTexture.offset.x + scrollSpeed * delta) % 1.0;
-
     if (meshRef.current) {
-      meshRef.current.rotation.y += rotationSpeed * delta;
+      meshRef.current.rotation.y -= rotationSpeed * delta;
     }
   });
 
