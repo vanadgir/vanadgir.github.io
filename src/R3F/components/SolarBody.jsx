@@ -14,7 +14,7 @@ const SolarBody = () => {
     sunTexture.wrapS = THREE.ClampToEdgeWrapping;
     sunTexture.wrapT = THREE.ClampToEdgeWrapping;
 
-    sunTexture.anisotropy = 8;
+    sunTexture.anisotropy = 2;
     sunTexture.center.set(0.5, 0.5);
   }, [sunTexture]);
 
@@ -38,7 +38,7 @@ const SolarBody = () => {
     <group position={[0, 0, 0]}>
       {/* Central sun mesh */}
       <mesh ref={meshRef}>
-        <sphereGeometry args={[8, 64, 64]} />
+        <sphereGeometry args={[8, 32, 32]} />
         <meshStandardMaterial
           map={sunTexture}
           color="#ffffff"

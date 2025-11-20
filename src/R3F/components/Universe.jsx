@@ -36,7 +36,7 @@ const Universe = () => {
 
   return (
     <>
-      <Stars radius={150} depth={80} count={9000} factor={4} saturation={0} />
+      <Stars radius={150} depth={80} count={3000} factor={4} saturation={0} />
 
       <SpaceDust />
 

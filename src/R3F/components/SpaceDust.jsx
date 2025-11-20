@@ -5,8 +5,9 @@ import * as THREE from "three";
 
 import { useSettings } from "../../contexts/SettingsContext";
 
-const SpaceDust = ({ count = 4000, radius = 100 }) => {
+const SpaceDust = ({ count = 1500, radius = 100 }) => {
   const pointsRef = useRef();
+  const frameCount = useRef(0);
 
   const { paused } = useSettings();
 
@@ -49,6 +50,9 @@ const SpaceDust = ({ count = 4000, radius = 100 }) => {
   useFrame(({ clock }) => {
     if (paused) return;
     
+    frameCount.current++;
+    if (frameCount.current % 2 !== 0) return;
+
     const t = clock.getElapsedTime();
     const points = pointsRef.current;
     if (!points) return;
