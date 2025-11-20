@@ -46,6 +46,11 @@ const documentConfig = {
     subtitle: "Certificates & Projects",
     docs: [
       {
+        id: "ncvs",
+        label: "NCVS Data Mining",
+        filename: "NCVSFinalReport.pdf",
+      },
+      {
         id: "mit-adsp",
         label: "MIT ADSP",
         filename: "VarunNadgir-MIT-ADSP.pdf",

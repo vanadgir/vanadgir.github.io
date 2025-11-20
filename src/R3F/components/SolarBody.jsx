@@ -31,6 +31,9 @@ const SolarBody = () => {
     }
   });
 
+  const shadowMapSize = shadowsEnabled ? 1024 : 1;
+  const shadowDistance = shadowsEnabled ? 180 : 0;
+
   return (
     <group position={[0, 0, 0]}>
       {/* Central sun mesh */}
@@ -50,13 +53,13 @@ const SolarBody = () => {
       {/* Strong radial light to illuminate planets */}
       <pointLight
         position={[0, 0, 0]}
-        intensity={6000} // crank this up a lot
-        distance={0} // 0 = no falloff; all planets get light
+        intensity={3500}
+        distance={shadowDistance}
         decay={2}
         color="#ffe9c4"
         castShadow={shadowsEnabled}
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={shadowMapSize}
+        shadow-mapSize-height={shadowMapSize}
       />
     </group>
   );

@@ -9,6 +9,7 @@ const R3F = () => {
       <Canvas
         style={{ width: "100vw", height: "100vh", background: "#000" }}
         gl={{ alpha: false }}
+        dpr={[1, 1.5]}
         camera={{
           position: HOME_FOCUS.cameraPos,
           fov: 50,

@@ -557,7 +557,7 @@ body,
   display: block;
   width: 85%;
   justify-self: center;
-  margin: 0.75rem 0 1rem;
+  margin: 0.75rem auto 1rem;
   border-radius: 10px;
   border: 1px solid rgba(148, 163, 184, 0.7);
 }
