@@ -929,7 +929,7 @@ body,
 
   .planet-overlay-box--right {
     top: calc(56px + 0.58 * (100vh - 56px - 96px));
-    bottom: 96px;   /* clearly above the footer */
+    bottom: 56px;   /* clearly above the footer */
     height: auto;
     border-radius: 12px;
   }
