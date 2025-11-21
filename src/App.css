@@ -901,28 +901,35 @@ body,
   .dom-nav {
     display: flex;
     align-items: center;
-    gap: 1.6px;
-    flex-wrap: nowrap;
-    white-space: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
+    gap: 4px;
+    flex-wrap: wrap;  
+    justify-content: center;
+    white-space: normal;
+    overflow-x: visible;
+    max-width: 100%;
   }
 
-  .dom-nav::-webkit-scrollbar {
-    display: none;
+  .dom-nav button,
+  .dom-nav a {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0 6px;
+    font-size: 14px;
   }
 
-  /* Split overlays into stacked left/right regions */
+  .dom-nav-icon {
+    flex: 0 0 var(--nav-item-height);
+  }
+
   .planet-overlay-box--left {
     top: 56px;
     bottom: auto;
-    height: calc(0.65 * (100vh - 56px - 72px));
-    border-radius: 12px;
+    height: calc(0.58 * (100vh - 56px - 96px)); /* a bit shorter */
   }
 
   .planet-overlay-box--right {
-    top: calc(56px + 0.65 * (100vh - 56px - 72px));
-    bottom: 48px;
+    top: calc(56px + 0.58 * (100vh - 56px - 96px));
+    bottom: 96px;   /* clearly above the footer */
     height: auto;
     border-radius: 12px;
   }
