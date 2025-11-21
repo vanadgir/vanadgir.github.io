@@ -206,9 +206,9 @@ body,
 .detail-pane-doc-iframe {
   width: 100%;
   max-width: 100%;
-  height: 640px; 
+  height: 640px;
   border: none;
-  border-radius: 6px; 
+  border-radius: 6px;
 }
 
 .detail-pane-links {
@@ -322,6 +322,68 @@ body,
 /* External icons */
 .dom-nav a.external-icon {
   background: rgba(146, 146, 146, 0.866);
+}
+
+/* ========================================== */
+/* MUSIC EMBED CARDS                          */
+/* ========================================== */
+
+.detail-pane--music .detail-pane-body {
+  font-size: 18px;
+}
+
+.music-embed-card {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.music-embed-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.05rem;
+}
+
+.music-embed-note {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.music-embed-frame-wrapper {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* 16:9 responsive iframe */
+.music-embed-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  display: block;
+}
+
+.music-profile-link-wrapper {
+  margin-bottom: 1rem;
+}
+
+.music-profile-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  background: rgba(148, 163, 184, 0.16);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  color: #e5e7eb;
+  backdrop-filter: blur(10px);
+}
+
+.music-profile-link:hover {
+  background: rgba(148, 163, 184, 0.3);
 }
 
 /* ========================================== */

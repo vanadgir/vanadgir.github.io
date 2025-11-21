@@ -376,8 +376,8 @@ export const roadtripEntries = [
           src={mediaMap["day4_6.mp4"]}
           className="blog-entry-image"
           controls
-          muted="false"
-          loop="true"
+          muted={false}
+          loop={true}
           autoPlay
         />
         <p>
@@ -467,8 +467,8 @@ export const roadtripEntries = [
           src={mediaMap["day5_5.mp4"]}
           className="blog-entry-image"
           controls
-          muted="false"
-          loop="true"
+          muted={false}
+          loop={true}
           autoPlay
         />
         <p>
@@ -891,8 +891,8 @@ export const roadtripEntries = [
           src={mediaMap["day10_2.mp4"]}
           className="blog-entry-image"
           controls
-          muted="false"
-          loop="true"
+          muted={false}
+          loop={true}
           autoPlay
         />
         <p>

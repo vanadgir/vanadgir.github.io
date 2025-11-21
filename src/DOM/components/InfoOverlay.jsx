@@ -1,9 +1,9 @@
 import { useState, useCallback } from "react";
 
-import AboutMeOverlay from "../content/AboutMeOverlay";
-import RoadtripBlogOverlay from "../content/RoadtripBlogOverlay";
+import BlogOverlay from "../content/BlogOverlay";
 import DocumentsOverlay from "../content/DocumentsOverlay";
 import ProjectsOverlay from "../content/ProjectsOverlay";
+import MusicOverlay from "../content/MusicOverlay";
 
 const renderDetail = (detailId) => {
   if (detailId.startsWith("docs:")) {
@@ -16,15 +16,17 @@ const renderDetail = (detailId) => {
     return <ProjectsOverlay key={projectId} projectId={projectId} />;
   }
 
-  switch (detailId) {
-    case "about":
-      return <AboutMeOverlay />;
-    case "roadtrip":
-      return <RoadtripBlogOverlay />;
-    // case "something-else": return <SomethingElseOverlay />;
-    default:
-      return null;
+  if (detailId.startsWith("music:")) {
+    const platformId = detailId.split(":")[1];
+    return <MusicOverlay key={platformId} platformId={platformId} />;
   }
+
+  if (detailId.startsWith("blog:")) {
+    const blogId = detailId.split(":")[1];
+    return <BlogOverlay key={blogId} blogId={blogId} />;
+  }
+
+  return null;
 };
 
 const InfoOverlay = ({ planet }) => {
