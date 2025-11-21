@@ -931,6 +931,23 @@ body,
     flex: 0 0 var(--nav-item-height);
   }
 
+  .dom-body {
+    position: absolute;
+    top: 56px; /* under nav */
+    left: 50%;
+    transform: translateX(-50%);
+
+    width: 90vw; /* <<< WIDER while still preventing overflow */
+    max-width: 480px; /* optional upper bound */
+
+    margin: 0;
+    text-align: center;
+    padding: 0 8px;
+
+    pointer-events: none;
+    user-select: none;
+  }
+
   /* overlay root: vertical stack between nav and footer */
   .planet-overlay-root {
     padding: 56px 0px 0px;
@@ -953,7 +970,7 @@ body,
   /* Left panel pinned to top */
   .planet-overlay-box--left {
     margin-bottom: 0;
-    max-height: 60vh;
+    max-height: 55vh;
   }
 
   /* Right panel pinned to bottom always.
