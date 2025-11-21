@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { documentsByTopic } from "../content/entries/documentMedia";
+import { useGTag } from "../../contexts/GTagContext";
 
 const DocumentsOverlay = ({ topicId }) => {
   const topic = documentsByTopic[topicId];
+  const { trackEvent } = useGTag();
 
   if (!topic || !topic.docs || topic.docs.length === 0) {
     return (
@@ -26,6 +28,14 @@ const DocumentsOverlay = ({ topicId }) => {
   }, [topicId, docs]);
 
   const selectedDoc = docs.find((d) => d.id === selectedId) ?? docs[0];
+
+  useEffect(() => {
+    if (!selectedDoc) return;
+    trackEvent("doc_select", {
+      topic_id: topicId,
+      doc_id: selectedDoc.id,
+    });
+  }, [topicId, selectedDoc, trackEvent]);
 
   return (
     <article className="detail-pane detail-pane--docs">
@@ -58,9 +68,14 @@ const DocumentsOverlay = ({ topicId }) => {
                   <button
                     type="button"
                     className="docs-action-button"
-                    onClick={() =>
-                      window.open(doc.url, "_blank", "noopener,noreferrer")
-                    }
+                    onClick={() => {
+                      trackEvent("doc_view", {
+                        topic_id: topicId,
+                        doc_id: doc.id,
+                        url: doc.url,
+                      });
+                      window.open(doc.url, "_blank", "noopener,noreferrer");
+                    }}
                   >
                     View
                   </button>
@@ -71,6 +86,13 @@ const DocumentsOverlay = ({ topicId }) => {
                     target="_blank"
                     rel="noreferrer"
                     className="docs-action-button"
+                    onClick={() =>
+                      trackEvent("doc_download", {
+                        topic_id: topicId,
+                        doc_id: doc.id,
+                        url: doc.url,
+                      })
+                    }
                   >
                     Download
                   </a>

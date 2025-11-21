@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { projectsById } from "./entries/projectMedia";
+import { useGTag } from "../../contexts/GTagContext";
 
 const ProjectsOverlay = ({ projectId }) => {
   const project = projectsById[projectId];
+  const { trackEvent, trackExternalLink } = useGTag();
 
   if (!project) {
     return (
@@ -24,6 +27,13 @@ const ProjectsOverlay = ({ projectId }) => {
     hyperlinks,
     previewDocUrl,
   } = project;
+
+  useEffect(() => {
+    trackEvent("project_view", {
+      project_id: projectId,
+      title,
+    });
+  }, [projectId, title, trackEvent]);
 
   return (
     <article className="detail-pane detail-pane--project">
@@ -65,9 +75,15 @@ const ProjectsOverlay = ({ projectId }) => {
                 <button
                   key={link.id}
                   className="detail-pane-link-button"
-                  onClick={() =>
-                    window.open(link.href, "_blank", "noopener,noreferrer")
-                  }
+                  onClick={() => {
+                    trackEvent("project_link_click", {
+                      project_id: projectId,
+                      link_id: link.id,
+                      href: link.href,
+                    });
+                    trackExternalLink("project", link.href);
+                    window.open(link.href, "_blank", "noopener,noreferrer");
+                  }}
                 >
                   {link.text}
                 </button>

@@ -10,6 +10,7 @@ import SpaceDust from "./SpaceDust";
 import { PLANETS, HOME_FOCUS } from "../../config/planets";
 import { usePlanetUI } from "../../contexts/PlanetUIContext";
 import { useSettings } from "../../contexts/SettingsContext";
+import { useGTag } from "../../contexts/GTagContext";
 
 const Universe = () => {
   const [location, navigate] = useLocation();
@@ -18,6 +19,7 @@ const Universe = () => {
   const { setCameraLockedOnPlanet, setActivePlanetId } = usePlanetUI();
 
   const { quality } = useSettings();
+  const { trackPlanetSelect } = useGTag();
 
   const planetPositionsRef = useRef(
     Object.fromEntries(PLANETS.map((c) => [c.id, null]))
@@ -34,10 +36,14 @@ const Universe = () => {
 
   const hasCameraTarget = isHome || selectedPlanet != null;
 
-  // Track active Planet
   useEffect(() => {
-    setActivePlanetId(selectedPlanet?.id ?? null);
-  }, [selectedPlanet?.id, setActivePlanetId]);
+    if (selectedPlanet) {
+      setActivePlanetId(selectedPlanet.id);
+      trackPlanetSelect(selectedPlanet.id);
+    } else {
+      setActivePlanetId(null);
+    }
+  }, [selectedPlanet, setActivePlanetId, trackPlanetSelect]);
 
   const starCountByQuality = {
     low: 3000,

@@ -1,6 +1,7 @@
 import myPic from "../../../assets/images/varunpfp.jpg";
 import barnPic from "../../../assets/images/barnjam.jpg";
 
+import GuestbookEntry from "./GuestbookEntry";
 import { roadtripEntries } from "./roadtripEntries";
 
 const aboutMeEntries = [
@@ -32,6 +33,13 @@ const aboutMeEntries = [
   },
 ];
 
+const guestbookEntries = [
+  {
+    id: 0,
+    body: () => <GuestbookEntry />,
+  },
+];
+
 export const blogsById = {
   about: {
     id: "about",
@@ -41,6 +49,15 @@ export const blogsById = {
     hideNav: true,
   },
 
+  guestbook: {
+    id: "guestbook",
+    label: "Guestbook",
+    description:
+      "Contact me!",
+    entries: guestbookEntries,
+    hideNav: true,
+  },
+  
   roadtrip2020: {
     id: "roadtrip2020",
     label: "Roadtrip 2020",
@@ -48,6 +65,7 @@ export const blogsById = {
     entries: roadtripEntries,
     hideNav: false,
   },
+
 };
 
 // For the right-pane list:

@@ -5,6 +5,8 @@ import DocumentsOverlay from "../content/DocumentsOverlay";
 import ProjectsOverlay from "../content/ProjectsOverlay";
 import MusicOverlay from "../content/MusicOverlay";
 
+import { useGTag } from "../../contexts/GTagContext";
+
 const renderDetail = (detailId) => {
   if (detailId.startsWith("docs:")) {
     const topicId = detailId.split(":")[1];
@@ -31,7 +33,7 @@ const renderDetail = (detailId) => {
 
 const InfoOverlay = ({ planet }) => {
   if (!planet) return null;
-
+  const { trackOverlayClosed, trackOverlayOpen } = useGTag();
   const [detailId, setDetailId] = useState(null);
 
   const openDetail = useCallback((id) => {

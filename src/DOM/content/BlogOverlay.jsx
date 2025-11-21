@@ -1,9 +1,11 @@
 // src/content/BlogOverlay.jsx
 import { useState, useRef, useEffect } from "react";
 import { blogsById } from "../content/entries/blogMedia";
+import { useGTag } from "../../contexts/GTagContext";
 
 const BlogOverlay = ({ blogId }) => {
   const blog = blogsById[blogId];
+  const { trackEvent } = useGTag();
 
   // Safety: missing blogId
   if (!blog) {
@@ -47,6 +49,15 @@ const BlogOverlay = ({ blogId }) => {
   }, [page]);
 
   const entry = entries[page];
+
+  useEffect(() => {
+    if (!entry) return;
+    trackEvent("blog_entry_view", {
+      blog_id: blogId,
+      entry_index: page,
+      entry_id: entry.id,
+    });
+  }, [blogId, page, entry, trackEvent]);
 
   return (
     <article className="detail-pane detail-pane--blog">

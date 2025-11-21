@@ -823,6 +823,68 @@ body,
 }
 
 /* ========================================== */
+/* GUESTBOOK                                  */
+/* ========================================== */
+
+.guestbook-body {
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.guestbook-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.guestbook-label {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 0.25rem;
+}
+
+.guestbook-input,
+.guestbook-textarea,
+.guestbook-captcha-input {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #111;
+  color: white;
+}
+
+.guestbook-submit-button {
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+  padding: 10px 14px;
+  text-align: center;
+  border-radius: 6px;
+  background: #444;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.guestbook-submit-button.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.guestbook-captcha-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.guestbook-warning {
+  color: #f55;
+  font-size: 0.9rem;
+}
+
+/* ========================================== */
 /* MOBILE                                     */
 /* ========================================== */
 
