@@ -900,13 +900,12 @@ body,
 
   .dom-nav {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 4px;
-    flex-wrap: wrap;  
     justify-content: center;
-    white-space: normal;
-    overflow-x: visible;
     max-width: 100%;
+    white-space: normal;
+    overflow: visible;
   }
 
   .dom-nav button,
@@ -922,19 +921,27 @@ body,
   }
 
   .planet-overlay-box--left {
+    position: fixed;
     top: 56px;
     bottom: auto;
-    height: calc(0.58 * (100vh - 56px - 96px)); /* a bit shorter */
+    height: auto;
+    max-height: 53vh;
+    border-radius: 12px;
+    overflow: hidden;
   }
 
   .planet-overlay-box--right {
-    top: calc(56px + 0.58 * (100vh - 56px - 96px));
-    bottom: 56px;   /* clearly above the footer */
-    height: auto;
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    top: auto;
+    height: 40vh;
+    max-height: 60vh;
     border-radius: 12px;
+    overflow: hidden;
   }
 
-  /* Footer stays fixed; settings tray becomes a vertical drop-up above the gear */
   .dom-footer {
     position: fixed;
     bottom: 0;
