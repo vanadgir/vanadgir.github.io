@@ -40,7 +40,12 @@ const SettingsBar = () => {
         className={`settings-tray ${settingsOpen ? "settings-tray--open" : ""}`}
       >
         {/* Pause/Resume */}
-        <button type="button" onClick={togglePaused} aria-pressed={paused} title="Pauses/Resumes the simulation">
+        <button
+          type="button"
+          onClick={togglePaused}
+          aria-pressed={!paused}
+          title="Pauses/Resumes the simulation"
+        >
           {paused ? "Resume" : "Pause"}
         </button>
 

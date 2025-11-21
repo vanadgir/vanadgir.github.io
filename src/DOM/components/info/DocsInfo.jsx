@@ -36,7 +36,7 @@ const DocsInfo = ({ planet, openDetail }) => {
         <li className="info-item-list-item">
           <OverlayContentLink
             title="Data Science"
-            description="Certificates & Projects"
+            description="Courses & Certificates"
             onActivate={openDataSci}
           />
         </li>

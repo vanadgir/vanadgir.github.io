@@ -43,13 +43,8 @@ const documentConfig = {
 
   datasci: {
     title: "Data Science",
-    subtitle: "Certificates & Projects",
+    subtitle: "Courses & Certificates",
     docs: [
-      {
-        id: "ncvs",
-        label: "NCVS Data Mining",
-        filename: "NCVSFinalReport.pdf",
-      },
       {
         id: "mit-adsp",
         label: "MIT ADSP",

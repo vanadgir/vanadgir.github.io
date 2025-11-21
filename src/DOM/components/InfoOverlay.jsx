@@ -3,11 +3,17 @@ import { useState, useCallback } from "react";
 import AboutMeOverlay from "../content/AboutMeOverlay";
 import RoadtripBlogOverlay from "../content/RoadtripBlogOverlay";
 import DocumentsOverlay from "../content/DocumentsOverlay";
+import ProjectsOverlay from "../content/ProjectsOverlay";
 
 const renderDetail = (detailId) => {
   if (detailId.startsWith("docs:")) {
     const topicId = detailId.split(":")[1];
     return <DocumentsOverlay key={topicId} topicId={topicId} />;
+  }
+
+  if (detailId.startsWith("project:")) {
+    const projectId = detailId.split(":")[1];
+    return <ProjectsOverlay key={projectId} projectId={projectId} />;
   }
 
   switch (detailId) {
