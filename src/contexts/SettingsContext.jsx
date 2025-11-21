@@ -10,7 +10,7 @@ export const SettingsProvider = ({ children }) => {
   const [debugEnabled, setDebugEnabled] = useState(false);
   const [quality, setQuality] = useState("low"); // low, medium, high
   const [showMoons, setShowMoons] = useState(true);
-  const [prioritizeDom, setPrioritizeDom] = useState("off"); // off, light, aggressive
+  const [throttlePhysics, setThrottlePhysics] = useState("off"); // off, light, aggressive
   const [domHeavyActive, setDomHeavyActive] = useState(false);
 
   const value = useMemo(
@@ -49,10 +49,10 @@ export const SettingsProvider = ({ children }) => {
         ),
 
       // throttling controls
-      prioritizeDom,
-      setPrioritizeDom,
-      togglePrioritizeDom: () =>
-        setPrioritizeDom((v) =>
+      throttlePhysics,
+      setThrottlePhysics,
+      toggleThrottlePhysics: () =>
+        setThrottlePhysics((v) =>
           v === "off" ? "light" : v === "light" ? "aggressive" : "off"
         ),
 
@@ -72,7 +72,7 @@ export const SettingsProvider = ({ children }) => {
       debugEnabled,
       quality,
       showMoons,
-      prioritizeDom,
+      throttlePhysics,
       domHeavyActive,
     ]
   );

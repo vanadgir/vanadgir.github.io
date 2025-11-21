@@ -3,11 +3,11 @@ import { useFrame } from "@react-three/fiber";
 import { useSettings } from "../contexts/SettingsContext";
 
 export const useThrottledFrame = (callback) => {
-  const { prioritizeDom, domHeavyActive } = useSettings();
+  const { throttlePhysics, domHeavyActive } = useSettings();
   const frameCountRef = useRef(0);
 
   useFrame((state, delta) => {
-    if (!domHeavyActive || prioritizeDom === "off") {
+    if (!domHeavyActive || throttlePhysics === "off") {
       callback(state, delta);
       return;
     }
@@ -15,8 +15,8 @@ export const useThrottledFrame = (callback) => {
     frameCountRef.current += 1;
 
     let step = 1;
-    if (prioritizeDom === "light") step = 3;
-    else if (prioritizeDom === "aggressive") step = 6;
+    if (throttlePhysics === "light") step = 3;
+    else if (throttlePhysics === "aggressive") step = 6;
 
     // Skip this frame if we're not on the right step
     if (frameCountRef.current % step !== 0) return;

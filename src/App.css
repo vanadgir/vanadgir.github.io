@@ -854,13 +854,13 @@ body,
   .planet-overlay-box--left {
     top: 56px;
     bottom: auto;
-    height: calc(0.7 * (100vh - 56px - 72px));
+    height: calc(0.65 * (100vh - 56px - 72px));
     border-radius: 12px;
   }
 
   .planet-overlay-box--right {
-    top: calc(56px + 0.7 * (100vh - 56px - 72px));
-    bottom: 72px;
+    top: calc(56px + 0.65 * (100vh - 56px - 72px));
+    bottom: 48px;
     height: auto;
     border-radius: 12px;
   }

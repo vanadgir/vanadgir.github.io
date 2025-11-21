@@ -17,8 +17,8 @@ const SettingsBar = () => {
     toggleQuality,
     showMoons,
     toggleShowMoons,
-    prioritizeDom,
-    togglePrioritizeDom,
+    throttlePhysics,
+    toggleThrottlePhysics,
   } = useSettings();
 
   const qualityLabel =
@@ -104,14 +104,14 @@ const SettingsBar = () => {
         {/* Prioritize DOM Cycle */}
         <button
           type="button"
-          onClick={togglePrioritizeDom}
-          aria-pressed={prioritizeDom !== "off"}
+          onClick={toggleThrottlePhysics}
+          aria-pressed={throttlePhysics !== "off"}
           title="Throttles 3D frame updates while heavy DOM elements are active"
         >
-          Prioritize DOM:{" "}
-          {prioritizeDom === "off"
+          Throttle Physics:{" "}
+          {throttlePhysics === "off"
             ? "Off"
-            : prioritizeDom === "light"
+            : throttlePhysics === "light"
             ? "Light"
             : "Aggressive"}
         </button>
