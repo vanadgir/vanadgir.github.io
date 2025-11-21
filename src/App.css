@@ -136,16 +136,21 @@ body,
 }
 
 .dom-footer {
-  position: absolute;
-  left: 2px;
-  bottom: 2px;
-
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   display: flex;
   align-items: center;
-  gap: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+  z-index: 20; /* above canvas */
+}
 
+/* gear on the left, tray to the right */
+.settings-gear-button {
   pointer-events: auto;
-  z-index: 10;
+  margin-right: 8px;
 }
 
 /* Shared button-like controls (nav, footer, trays, pane footers) */
@@ -612,7 +617,7 @@ body,
   margin-left: auto;
   margin-right: auto;
 
-  aspect-ratio: 1 / 1; 
+  aspect-ratio: 1 / 1;
   overflow: hidden;
 }
 
@@ -642,7 +647,6 @@ body,
   opacity: 0;
 }
 
-
 /* ========================================== */
 /* MOBILE                                     */
 /* ========================================== */
@@ -671,14 +675,7 @@ body,
     display: none;
   }
 
-  /* Constants (adjust if your nav/footer change):
-     - nav area ≈ 56px from top
-     - footer/gear ≈ 72px from bottom
-     - middleRegion = 100vh - 56px - 72px
-     - left pane = 70% of middleRegion
-     - right pane = 30% of middleRegion
-  */
-
+  /* Split overlays into stacked left/right regions */
   .planet-overlay-box--left {
     top: 56px;
     bottom: auto;
@@ -691,5 +688,39 @@ body,
     bottom: 72px;
     height: auto;
     border-radius: 12px;
+  }
+
+  /* Footer stays fixed; settings tray becomes a vertical drop-up above the gear */
+  .dom-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  .settings-tray {
+    position: absolute;
+    left: 8px; /* align with gear button */
+    bottom: calc(var(--nav-item-height) + 16px); /* sit above footer */
+    flex-direction: column;
+    align-items: stretch;
+    max-width: calc(100% - 16px);
+
+    transform: translateY(8px);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .settings-tray--open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .settings-tray button {
+    width: 100%;
+    text-align: left;
   }
 }

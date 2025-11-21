@@ -25,13 +25,26 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   const geomRef = useRef();
   const tempVec = useRef(new THREE.Vector3());
 
-  const { paused, showOrbits, shadowsEnabled } = useSettings();
+  const { paused, showOrbits, shadowsEnabled, quality, showMoons } = useSettings();
+
+  const segments = useMemo(() => {
+    switch (quality) {
+      case "high":
+        return 48;
+      case "medium":
+        return 24;
+      case "low":
+      default:
+        return 16;
+    }
+  }, [quality]);
 
   const moonCount = useMemo(() => {
+    if (!showMoons) return 0;
     if (size >= 6) return 2;
     if (size >= 3.5) return 1;
     return 0;
-  }, [size]);
+  }, [size, showMoons]);
 
   const randomColor = () => {
     const r = Math.floor(Math.random() * 256);
@@ -78,7 +91,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
 
   const secondaryColorObj = useMemo(
     () => new THREE.Color(secondaryColor || color),
-    [secondaryColor, color]
+    [secondaryColor, color, segments]
   );
 
   // Generate vertex colors on the sphere: blend primary + secondary
@@ -237,7 +250,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
-          <sphereGeometry ref={geomRef} args={[size, 48, 48]} />
+          <sphereGeometry ref={geomRef} args={[size, segments, segments]} />
           <meshStandardMaterial
             vertexColors
             emissive="#000000"

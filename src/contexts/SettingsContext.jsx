@@ -8,6 +8,8 @@ export const SettingsProvider = ({ children }) => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [shadowsEnabled, setShadowsEnabled] = useState(true);
   const [debugEnabled, setDebugEnabled] = useState(false);
+  const [quality, setQuality] = useState("low"); // low, medium, high
+  const [showMoons, setShowMoons] = useState(true);
 
   const value = useMemo(
     () => ({
@@ -35,8 +37,29 @@ export const SettingsProvider = ({ children }) => {
       debugEnabled,
       setDebugEnabled,
       toggleDebugEnabled: () => setDebugEnabled((v) => !v),
+
+      // quality controls
+      quality,
+      setQuality,
+      toggleQuality: () =>
+        setQuality((q) =>
+          q === "low" ? "medium" : q === "medium" ? "high" : "low"
+        ),
+
+      // moon toggle
+      showMoons,
+      setShowMoons,
+      toggleShowMoons: () => setShowMoons((v) => !v),
     }),
-    [paused, showOrbits, settingsOpen, shadowsEnabled, debugEnabled]
+    [
+      paused,
+      showOrbits,
+      settingsOpen,
+      shadowsEnabled,
+      debugEnabled,
+      quality,
+      showMoons,
+    ]
   );
 
   return (
