@@ -963,8 +963,8 @@ body,
     overflow: hidden;
 
     /* adaptive: split space with bottom pane so they never overlap */
-    height: calc((100dvh - 56px) / 2);
-    max-height: calc((100dvh - 56px) / 2);
+    height: calc((100dvh - 56px) * 0.65);
+    max-height: calc((100dvh - 56px) * 0.65);
   }
 
   /* BOTTOM PANE (right) – fixed at far bottom, same adaptive height.
@@ -977,8 +977,8 @@ body,
     border-radius: 12px;
     overflow: hidden;
 
-    height: calc((100dvh - 56px) / 2);
-    max-height: calc((100dvh - 56px) / 2);
+    height: calc((100dvh - 56px) * 0.35);
+    max-height: calc((100dvh - 56px) * 0.35);
   }
 
   /* Footer stays fixed; may be covered by bottom pane (as you allowed) */
