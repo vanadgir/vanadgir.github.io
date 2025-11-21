@@ -115,6 +115,15 @@ const SettingsBar = () => {
             ? "Light"
             : "Aggressive"}
         </button>
+
+        {/* Refresh Page */}
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          title="Refresh page and scene"
+        >
+          Refresh
+        </button>
       </div>
     </div>
   );

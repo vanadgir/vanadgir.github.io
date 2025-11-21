@@ -285,8 +285,15 @@ body,
   font-size: 0.85rem;
 }
 
+/* Settings tray buttons – make interactions feel snappier */
 .settings-tray button {
   font-size: 14px;
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.settings-tray button:active {
+  transform: scale(0.96);
+  filter: brightness(1.2);
 }
 
 /* Pressed state for nav & settings tray buttons */
@@ -418,12 +425,22 @@ body,
 /* OVERLAY ROOT / BASE PANEL STYLES           */
 /* ========================================== */
 
+/* Root flex container: controls layout for both panes */
 .planet-overlay-root {
   position: fixed;
   inset: 0;
   z-index: 10;
   font-size: 20px;
   pointer-events: none;
+
+  /* leave room for nav + footer */
+  padding: 72px 24px 80px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: row; /* left/right */
+  align-items: flex-start;
+  justify-content: space-between; /* push children to edges */
 }
 
 /* Base overlay panel card styling */
@@ -440,6 +457,20 @@ body,
   backdrop-filter: blur(10px);
   pointer-events: auto;
   font-family: "alagard", Cambria, "Times New Roman", serif;
+
+  /* flex child anchored to its side; do NOT grow into center */
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 0;
+  min-height: 0;
+  max-width: clamp(380px, 36vw, 720px);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.planet-overlay-box ul {
+  list-style-type: none;
 }
 
 /* Normalize headings inside overlay panes */
@@ -447,33 +478,15 @@ body,
   margin: 0 0 0.25rem 0;
 }
 
-/* Left detail panel */
+/* Left detail panel – sits on left because it's first child */
 .planet-overlay-box--left {
-  position: fixed;
-  top: 72px;
-  left: 24px;
-
-  max-width: clamp(380px, 36vw, 720px);
-  max-height: calc(100vh - 72px - 80px);
-  height: calc(100vh - 72px - 80px);
-
-  display: flex;
-  flex-direction: column;
+  margin-right: 0;
 }
 
-/* Right primary panel */
+/* Right primary panel – force it to the right edge even
+   if it's the only panel rendered */
 .planet-overlay-box--right {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 72px;
-  right: 24px;
-
-  height: calc(100vh - 72px - 80px);
-  max-width: clamp(380px, 36vw, 720px);
-  max-height: calc(100vh - 72px - 80px);
-
-  overflow: hidden;
+  margin-left: auto;
 }
 
 /* Close button for the left detail panel */
@@ -626,6 +639,12 @@ body,
 .detail-pane-body ol {
   margin: 0.4rem 0 0.4rem 1.4rem;
   padding: 0;
+}
+
+/* Smooth scrolling on mobile for inner panes */
+.detail-pane-body,
+.info-item-list {
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Overall docs layout: vertical stack */
@@ -889,15 +908,7 @@ body,
 /* ========================================== */
 
 @media (max-width: 600px) {
-  /* Common mobile behavior for both panes */
-  .planet-overlay-box {
-    left: 8px;
-    right: 8px;
-    max-width: none;
-    width: auto;
-    max-height: none;
-  }
-
+  /* nav: wrap so it always fits */
   .dom-nav {
     display: flex;
     flex-wrap: wrap;
@@ -920,26 +931,37 @@ body,
     flex: 0 0 var(--nav-item-height);
   }
 
-  .planet-overlay-box--left {
-    position: fixed;
-    top: 56px;
-    bottom: auto;
-    height: auto;
-    max-height: 53vh;
-    border-radius: 12px;
-    overflow: hidden;
+  /* overlay root: vertical stack between nav and footer */
+  .planet-overlay-root {
+    padding: 56px 0px 0px;
+    flex-direction: column; /* top / bottom */
+    justify-content: space-between; /* push children to top & bottom */
+    align-items: stretch;
   }
 
+  .planet-overlay-box {
+    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
+    flex: 0 1 auto; /* size to content, don't auto-fill */
+  }
+
+  .planet-overlay-box ul {
+    list-style-type: none;
+  }
+
+  /* Left panel pinned to top */
+  .planet-overlay-box--left {
+    margin-bottom: 0;
+    min-height: 55vh;
+  }
+
+  /* Right panel pinned to bottom always.
+     If both exist, it sits at bottom.
+     If only right exists, it still sits at bottom. */
   .planet-overlay-box--right {
-    position: fixed;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    top: auto;
-    height: 40vh;
-    max-height: 60vh;
-    border-radius: 12px;
-    overflow: hidden;
+    max-height: 45vh;
+    margin-top: auto;
   }
 
   .dom-footer {
