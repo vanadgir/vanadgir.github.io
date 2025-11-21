@@ -935,9 +935,9 @@ body,
     flex: 0 0 var(--nav-item-height);
   }
 
-  /* OVERLAY: fixed top and fixed bottom, consistent heights */
+  /* OVERLAY: fixed top and fixed bottom, adaptive heights */
   .planet-overlay-root {
-    /* remove desktop padding so fixed panels can sit at true top/bottom */
+    /* no extra padding so panels can sit at true top/bottom */
     padding: 0;
   }
 
@@ -948,30 +948,40 @@ body,
     width: auto;
   }
 
-  /* TOP PANE (left) – fixed near top, fixed height, scrolls internally */
-  .planet-overlay-box--left {
-    position: fixed;
-    top: 56px;          /* just under the nav */
+  /* Fallback height for browsers without dvh support */
+  .planet-overlay-box--left,
+  .planet-overlay-box--right {
     height: 45vh;
     max-height: 45vh;
-    border-radius: 12px;
-    overflow: hidden;
   }
 
-  /* BOTTOM PANE (right) – fixed at full bottom, fixed height.
-     When it's alone, it still has 45vh (does NOT fill the screen). */
+  /* TOP PANE (left) – fixed under nav, height derived from viewport */
+  .planet-overlay-box--left {
+    position: fixed;
+    top: 56px;              /* just under the nav */
+    border-radius: 12px;
+    overflow: hidden;
+
+    /* adaptive: split space with bottom pane so they never overlap */
+    height: calc((100dvh - 56px) / 2);
+    max-height: calc((100dvh - 56px) / 2);
+  }
+
+  /* BOTTOM PANE (right) – fixed at far bottom, same adaptive height.
+     When it's alone, it still uses this height (does NOT fill screen). */
   .planet-overlay-box--right {
     position: fixed;
     left: 8px;
     right: 8px;
-    bottom: 0;          /* FULL FAR BOTTOM */
-    height: 40vh;
-    max-height: 40vh;
+    bottom: 0;              /* full far bottom */
     border-radius: 12px;
     overflow: hidden;
+
+    height: calc((100dvh - 56px) / 2);
+    max-height: calc((100dvh - 56px) / 2);
   }
 
-  /* Footer stays fixed; may be covered by bottom pane, as discussed */
+  /* Footer stays fixed; may be covered by bottom pane (as you allowed) */
   .dom-footer {
     position: fixed;
     bottom: 0;
