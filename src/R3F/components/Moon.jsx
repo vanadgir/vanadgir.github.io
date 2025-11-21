@@ -1,7 +1,9 @@
 import { useRef, useMemo, useState } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useLoader } from "@react-three/fiber";
 import { Line } from "@react-three/drei";
 import * as THREE from "three";
+
+import { useThrottledFrame } from "../../hooks/useThrottledFrame.js";
 
 import { useSettings } from "../../contexts/SettingsContext.jsx";
 import normalRoughUrl from "../../assets/textures/normalrough.png";
@@ -96,7 +98,7 @@ const Moon = ({ parentSize = 1, color = "#aaaaaa" }) => {
   }, [params.radius, orbitEuler]);
 
   // Animate orbit + self-rotation
-  useFrame((_, delta) => {
+  useThrottledFrame((_, delta) => {
     if (paused) return;
     if (!groupRef.current) return;
 

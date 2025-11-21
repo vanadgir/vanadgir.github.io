@@ -94,8 +94,7 @@ const projectConfig = {
     subtitle: "ELVTR Tech Art Capstone",
     summary: "Combine 3 color channels to match a target color",
     description:
-      "Made with " +
-      "Blueprints and free assets taken from Epic Games rotating free assets. " +
+      "Made with Blueprints and free assets taken from Epic Games rotating store. " +
       "Created custom shaders for the liquid effect and used central GameManager " +
       "hooked up with events to determine puzzle completion progress and win condition.",
     imageKey: "PuzzleHighlight",

@@ -1,8 +1,11 @@
 import { useLocation } from "wouter";
 import { PLANETS } from "../config/planets";
+import { useEffect } from "react";
 
 import PlanetInfoOverlay from "./components/InfoOverlay";
 import { usePlanetUI } from "../contexts/PlanetUIContext";
+
+import { useSettings } from "../contexts/SettingsContext";
 
 import NavBar from "./components/NavBar";
 import SettingsBar from "./components/SettingsBar";
@@ -11,11 +14,18 @@ import DebugPanel from "./components/DebugPanel";
 const DOM = () => {
   const [location] = useLocation();
   const { cameraLockedOnPlanet, activePlanetId } = usePlanetUI();
+  const { setDomHeavyActive } = useSettings();
 
   const isHome = location === "/";
   const activePlanet = !isHome
     ? PLANETS.find((c) => c.id === activePlanetId) ?? null
     : null;
+
+  const overlayOpen = !isHome && activePlanet && cameraLockedOnPlanet;
+
+  useEffect(() => {
+    setDomHeavyActive(Boolean(overlayOpen));
+  }, [overlayOpen, setDomHeavyActive]);
 
   return (
     <div className="dom-root">

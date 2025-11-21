@@ -1,6 +1,8 @@
 import * as THREE from "three";
-import { useLoader, useFrame } from "@react-three/fiber";
+import { useLoader } from "@react-three/fiber";
 import { useRef, useEffect } from "react";
+
+import { useThrottledFrame } from "../../hooks/useThrottledFrame";
 
 import { useSettings } from "../../contexts/SettingsContext";
 import sunTextureUrl from "../../assets/textures/sun.png";
@@ -23,7 +25,7 @@ const SolarBody = () => {
 
   const { paused, shadowsEnabled } = useSettings();
 
-  useFrame((_, delta) => {
+  useThrottledFrame((_, delta) => {
     if (paused) return;
 
     if (meshRef.current) {

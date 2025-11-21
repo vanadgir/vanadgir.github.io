@@ -1,7 +1,9 @@
 import { useRef, useEffect } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
+
+import { useThrottledFrame } from "../../hooks/useThrottledFrame";
 
 const PLANET_OFFSET = new THREE.Vector3(0, 15, 35);
 const TRANSITION_TIME = 0.35;
@@ -79,7 +81,7 @@ export default function CameraRig({
     });
   }, [isHome, selectedPlanetId, camera, homeFocus]);
 
-  useFrame((_, delta) => {
+  useThrottledFrame((_, delta) => {
     const s = state.current;
     const followPos = getFollowPos ? getFollowPos() : null;
 

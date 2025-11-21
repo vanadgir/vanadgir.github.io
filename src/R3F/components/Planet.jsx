@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useLoader } from "@react-three/fiber";
 import { Outlines, Html, Line } from "@react-three/drei";
 import * as THREE from "three";
+
+import { useThrottledFrame } from "../../hooks/useThrottledFrame.js";
 
 import { useSettings } from "../../contexts/SettingsContext.jsx";
 import normalRoughUrl from "../../assets/textures/normalrough.png";
@@ -194,7 +196,7 @@ const Planet = ({ planet, onSelect, selected, onUpdate }) => {
   }, []);
 
   // Animate orbit + self-rotation
-  useFrame((_, delta) => {
+  useThrottledFrame((_, delta) => {
     if (paused) return;
     if (!groupRef.current) return;
 

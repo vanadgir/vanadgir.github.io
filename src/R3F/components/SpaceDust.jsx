@@ -1,13 +1,14 @@
 import { useRef, useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
 import * as THREE from "three";
+
+import { useThrottledFrame } from "../../hooks/useThrottledFrame";
 
 import { useSettings } from "../../contexts/SettingsContext";
 
 const SpaceDust = ({ count = 1500, radius = 100 }) => {
   const pointsRef = useRef();
-  const frameCount = useRef(0);
+  // const frameCount = useRef(0);
 
   const { paused } = useSettings();
 
@@ -47,11 +48,11 @@ const SpaceDust = ({ count = 1500, radius = 100 }) => {
     return { basePositions, positions, colors, phases };
   }, [count, radius]);
 
-  useFrame(({ clock }) => {
+  useThrottledFrame(({ clock }) => {
     if (paused) return;
     
-    frameCount.current++;
-    if (frameCount.current % 2 !== 0) return;
+    // frameCount.current++;
+    // if (frameCount.current % 2 !== 0) return;
 
     const t = clock.getElapsedTime();
     const points = pointsRef.current;
