@@ -6,7 +6,7 @@ const BlogInfo = ({ planet, openDetail }) => {
     if (!openDetail) return;
     openDetail(`blog:${blogId}`);
   };
-  
+
   return (
     <div className="blog-info">
       <h2>{planet.label}</h2>

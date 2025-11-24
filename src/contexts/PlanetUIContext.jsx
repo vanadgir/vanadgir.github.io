@@ -6,14 +6,19 @@ export const PlanetUIProvider = ({ children }) => {
   const [cameraLockedOnPlanet, setCameraLockedOnPlanet] = useState(false);
   const [activePlanetId, setActivePlanetId] = useState(null);
 
+  const [homeRecenterToken, setHomeRecenterToken] = useState(0);
+  const requestHomeRecenter = () => setHomeRecenterToken((t) => t + 1);
+
   const value = useMemo(
     () => ({
       cameraLockedOnPlanet,
       setCameraLockedOnPlanet,
       activePlanetId,
       setActivePlanetId,
+      homeRecenterToken,
+      requestHomeRecenter,
     }),
-    [cameraLockedOnPlanet, activePlanetId]
+    [cameraLockedOnPlanet, activePlanetId, homeRecenterToken]
   );
 
   return (

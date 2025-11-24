@@ -3,6 +3,9 @@ import barnPic from "../../../assets/images/barnjam.jpg";
 
 import GuestbookEntry from "./GuestbookEntry";
 import { roadtripEntries } from "./roadtripEntries";
+import { ue5ColorPuzzleEntries } from "./ue5ColorEntries";
+import { ue5HexGridEntries } from "./ue5HexEntries";
+import { learnProcessingEntries } from "./learnProcessingEntries";
 
 const aboutMeEntries = [
   {
@@ -52,12 +55,35 @@ export const blogsById = {
   guestbook: {
     id: "guestbook",
     label: "Guestbook",
-    description:
-      "Contact me!",
+    description: "Contact me!",
     entries: guestbookEntries,
     hideNav: true,
   },
-  
+
+  ue5color: {
+    id: "ue5color",
+    label: "UE5 Color Puzzle",
+    description: "Creating a puzzle game with UE5 Blueprints",
+    entries: ue5ColorPuzzleEntries,
+    hideNav: false,
+  },
+
+  ue5hex: {
+    id: "ue5hex",
+    label: "UE5 Hex Grid",
+    description: "Creating a procedural hex grid in UE5 with C++",
+    entries: ue5HexGridEntries,
+    hideNav: false,
+  },
+
+  learnprocessing: {
+    id: "learnprocessing",
+    label: "Learn Processing",
+    description: "Making Art with Code",
+    entries: learnProcessingEntries,
+    hideNav: false,
+  },
+
   roadtrip2020: {
     id: "roadtrip2020",
     label: "Roadtrip 2020",
@@ -65,7 +91,6 @@ export const blogsById = {
     entries: roadtripEntries,
     hideNav: false,
   },
-
 };
 
 // For the right-pane list:

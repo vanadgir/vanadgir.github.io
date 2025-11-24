@@ -6,6 +6,7 @@ import CameraRig from "./CameraRig";
 import Planet from "./Planet";
 import SolarBody from "./SolarBody";
 import SpaceDust from "./SpaceDust";
+import SkySphere from "./SkySphere";
 
 import { PLANETS, HOME_FOCUS } from "../../config/planets";
 import { usePlanetUI } from "../../contexts/PlanetUIContext";
@@ -16,7 +17,7 @@ const Universe = () => {
   const [location, navigate] = useLocation();
   const isHome = location === "/";
 
-  const { setCameraLockedOnPlanet, setActivePlanetId } = usePlanetUI();
+  const { setCameraLockedOnPlanet, setActivePlanetId, homeRecenterToken } = usePlanetUI();
 
   const { quality } = useSettings();
   const { trackPlanetSelect } = useGTag();
@@ -62,6 +63,8 @@ const Universe = () => {
 
   return (
     <>
+      <SkySphere />
+
       <Stars
         radius={150}
         depth={80}
@@ -94,12 +97,11 @@ const Universe = () => {
           }
           selectedPlanetId={selectedPlanet?.id ?? null}
           isHome={isHome}
+          recenterToken={homeRecenterToken}
           onTransitionStart={() => {
-            // whenever a move begins, hide overlay
             setCameraLockedOnPlanet(false);
           }}
           onTransitionEnd={({ isHome: endedAtHome }) => {
-            // show only when we end on a Planet
             setCameraLockedOnPlanet(!endedAtHome);
           }}
         />

@@ -1,19 +1,27 @@
-
 import { useLocation } from "wouter";
 import { PLANETS } from "../../config/planets";
 import GithubIcon from "../../assets/images/github.svg";
 import LinkedInIcon from "../../assets/images/linkedin.svg";
 
+import { usePlanetUI } from "../../contexts/PlanetUIContext";
+
 const NavBar = () => {
   const [location, navigate] = useLocation();
   const isHome = location === "/";
+  const { requestHomeRecenter } = usePlanetUI();
 
   return (
     <nav className="dom-nav" aria-label="Planet navigation">
       {/* Router-controlled buttons */}
       <button
         type="button"
-        onClick={() => navigate("/")}
+        onClick={() => {
+          if (isHome) {
+            requestHomeRecenter(); // recenter camera when already home
+          } else {
+            navigate("/"); // go to home
+          }
+        }}
         aria-pressed={isHome}
       >
         Home

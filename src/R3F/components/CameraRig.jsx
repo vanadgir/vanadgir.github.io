@@ -15,6 +15,7 @@ export default function CameraRig({
   getFollowPos,
   selectedPlanetId,
   isHome,
+  recenterToken,
   onTransitionStart,
   onTransitionEnd,
 }) {
@@ -60,12 +61,10 @@ export default function CameraRig({
     s.fromPos.copy(camera.position);
     s.fromTarget.copy(currentTarget.current);
 
-    // when we start focusing a planet again, reset orbit angle
     if (!isHome && selectedPlanetId) {
       orbitAngle.current = 0;
     }
 
-    // Static fallback targets (used for home transitions or when followPos is missing)
     if (isHome || !selectedPlanetId) {
       s.toPos.set(...homeFocus.cameraPos);
       s.toTarget.set(...homeFocus.target);
@@ -79,7 +78,7 @@ export default function CameraRig({
       isHome,
       selectedPlanetId: selectedPlanetId ?? null,
     });
-  }, [isHome, selectedPlanetId, camera, homeFocus]);
+  }, [isHome, selectedPlanetId, camera, homeFocus, recenterToken]);
 
   useThrottledFrame((_, delta) => {
     const s = state.current;
@@ -169,7 +168,7 @@ export default function CameraRig({
       ref={controls}
       enableDamping
       dampingFactor={0.08}
-      enablePan={false}
+      enablePan={true}
       minDistance={40}
       maxDistance={200}
     />

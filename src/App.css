@@ -644,7 +644,6 @@ body,
   display: list-item;
 }
 
-
 /* Smooth scrolling on mobile for inner panes */
 .detail-pane-body,
 .info-item-list {
@@ -907,6 +906,82 @@ body,
   font-size: 0.9rem;
 }
 
+.code-block {
+  position: relative;
+  margin: 1.5rem 0;
+  border-radius: 8px;
+  background: #050814;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  font-size: 0.9rem;
+}
+
+.code-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: radial-gradient(circle at top left, #20253b, #050814);
+}
+
+.code-block-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.code-block-copy {
+  font-family: "alagard", Cambria, "Times New Roman", serif;
+  font-size: 0.75rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.code-block-copy:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.code-block-pre {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  overflow-x: auto;
+}
+
+/* Make long lines usable on phone */
+.code-block-pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.code-block-pre::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+}
+
+/* Let code wrap if you prefer that to horizontal scroll */
+.code-block-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  white-space: pre;
+  line-height: 1.5;
+}
+
+/* Optional: slightly smaller font on narrow screens */
+@media (max-width: 600px) {
+  .code-block {
+    margin: 1rem 0;
+    font-size: 0.8rem;
+  }
+
+  .code-block-pre {
+    padding: 0.6rem 0.7rem;
+  }
+}
+
 /* ========================================== */
 /* MOBILE                                     */
 /* ========================================== */
@@ -958,7 +1033,7 @@ body,
   /* TOP PANE (left) – fixed under nav, height derived from viewport */
   .planet-overlay-box--left {
     position: fixed;
-    top: 56px;              /* just under the nav */
+    top: 56px; /* just under the nav */
     border-radius: 12px;
     overflow: hidden;
 
@@ -973,7 +1048,7 @@ body,
     position: fixed;
     left: 8px;
     right: 8px;
-    bottom: 0;              /* full far bottom */
+    bottom: 0; /* full far bottom */
     border-radius: 12px;
     overflow: hidden;
 
@@ -1019,7 +1094,7 @@ body,
   /* Home copy: top, horizontally centered, wide */
   .dom-body {
     position: absolute;
-    top: 56px;                 /* under nav */
+    top: 56px; /* under nav */
     left: 50%;
     transform: translateX(-50%);
     width: 90vw;

@@ -5,6 +5,8 @@ import DocumentsOverlay from "../content/DocumentsOverlay";
 import ProjectsOverlay from "../content/ProjectsOverlay";
 import MusicOverlay from "../content/MusicOverlay";
 
+import { useLocation } from "wouter";
+
 import { useGTag } from "../../contexts/GTagContext";
 
 const renderDetail = (detailId) => {
@@ -33,16 +35,38 @@ const renderDetail = (detailId) => {
 
 const InfoOverlay = ({ planet }) => {
   if (!planet) return null;
-  const { trackOverlayClosed, trackOverlayOpen } = useGTag();
+  const { trackOverlayClose, trackOverlayOpen } = useGTag();
   const [detailId, setDetailId] = useState(null);
+  const [, navigate] = useLocation();
 
-  const openDetail = useCallback((id) => {
-    setDetailId((current) => (current === id ? null : id));
-  }, []);
+  const openDetail = useCallback(
+    (id) => {
+      setDetailId((current) => {
+        const next = current === id ? null : id;
+        if (next) {
+          // opened
+          trackOverlayOpen?.("detail", id);
+        } else {
+          // closed via toggle
+          trackOverlayClose?.("detail", id);
+        }
+        return next;
+      });
+    },
+    [trackOverlayOpen, trackOverlayClose]
+  );
 
   const closeDetail = useCallback(() => {
+    if (detailId) {
+      trackOverlayClose?.("detail", detailId);
+    }
     setDetailId(null);
-  }, []);
+  }, [detailId, trackOverlayClose]);
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    navigate("/");
+  };
 
   const InfoComponent = planet.InfoComponent ?? DefaultInfo;
 
@@ -73,6 +97,18 @@ const InfoOverlay = ({ planet }) => {
           closeDetail={closeDetail}
           hasDetail={!!detailId}
         />
+        <button
+          type="button"
+          style={{
+            fontFamily: `"alagard", system-ui, sans-serif`,
+            color: "red",
+          }}
+          className="overlay-close-button"
+          onClick={handleClick}
+          aria-label="Close detail panel"
+        >
+          X
+        </button>
       </div>
     </div>
   );
