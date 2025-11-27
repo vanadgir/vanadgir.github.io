@@ -46,11 +46,22 @@ const ProjectsOverlay = ({ projectId }) => {
       <section className="detail-pane-body">
         {imageUrl && (
           <div className="detail-pane-project-image-wrapper">
-            <img
-              src={imageUrl}
-              alt={`${title} preview`}
-              className="detail-pane-project-image"
-            />
+            {Array.isArray(imageUrl) ? (
+              imageUrl.map((url, idx) => (
+                <img
+                  key={`${title}-image-${idx}`}
+                  src={url}
+                  alt={`${title} preview ${idx + 1}`}
+                  className="detail-pane-project-image"
+                />
+              ))
+            ) : (
+              <img
+                src={imageUrl}
+                alt={`${title} preview`}
+                className="detail-pane-project-image"
+              />
+            )}
           </div>
         )}
 

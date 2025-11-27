@@ -1,18 +1,22 @@
-const iconModules = import.meta.glob("../../../assets/icons/*.svg", {
-  eager: true,
-});
+const iconModules = import.meta.glob(
+  "../../../assets/icons/*.{svg,png}",
+  { eager: true }
+);
 
-// Map basename-without-ext -> URL
+// Map basename (no extension) -> URL
 const iconUrlMap = {};
 for (const path in iconModules) {
   const url = iconModules[path].default;
   const filename = path.split("/").pop();
-  const basename = filename.replace(/\.svg$/i, "");
+
+  // remove last extension of any type
+  const basename = filename.replace(/\.[^.]+$/i, "");
+
   iconUrlMap[basename] = url;
 }
 
 const imageModules = import.meta.glob(
-  "../../../assets/projects/*.{png,jpg,jpeg,webp}",
+  "../../../assets/projects/*.{png,jpg,jpeg,webp,gif}",
   { eager: true }
 );
 
@@ -69,7 +73,7 @@ const projectConfig = {
       "MURDEER has gone into full development with a small team of 4. " +
       'Primary responsibilities include Rigidbody PlayerController, "infinite" gun attachment system, ' +
       "FMOD dynamic audio and music intensity system, and lots of other features.",
-    imageKey: "murdeer",
+    imageKey: ["murdeer", "murdeergameplay", "murdeercrazygun"],
     hyperlinks: [
       {
         id: "studio-page",
@@ -90,14 +94,15 @@ const projectConfig = {
   },
 
   unrealPuzzle: {
-    title: "Color Puzzle Prototype",
-    subtitle: "ELVTR Tech Art Capstone",
+    title: "Unreal Engine Puzzle Prototype",
+    subtitle: "Color-based UE5 Puzzle",
     summary: "Combine 3 color channels to match a target color",
     description:
       "Made with Blueprints and free assets taken from Epic Games rotating store. " +
       "Created custom shaders for the liquid effect and used central GameManager " +
-      "hooked up with events to determine puzzle completion progress and win condition.",
-    imageKey: "PuzzleHighlight",
+      "hooked up with events to determine puzzle completion progress and win condition. " +
+      "Submitted as my capstone project for ELVTR Become a Technical Artist course.",
+    imageKey: ["PuzzleHighlight"],
     hyperlinks: [
       {
         id: "youtube-link",
@@ -112,6 +117,7 @@ const projectConfig = {
     title: "three20",
     subtitle: "3D Physics-based dice roller",
     summary: "Tabletop assistant for simulating real dice rolls",
+    imageKey: ["three20"],
     description:
       "Made with tabletop gamers in mind, three20 allows visitors to " +
       "get close to the feeling of rolling real dice. Primary responsibilities " +
@@ -141,6 +147,7 @@ const projectConfig = {
     title: "EndLLMless",
     subtitle: "Endless crafting with ChatGPT",
     summary: "Use your imagination to create infinite combinations",
+    imageKey: ["endllmless"],
     description:
       "In this Infinite Craft-inspired game, you select two words as input, which sends a request to " +
       "OpenAI / ChatGPT to create a combined concept and chooses a related emoji. " +
@@ -388,20 +395,35 @@ const projectConfig = {
 };
 
 export const projectsById = Object.fromEntries(
-  Object.entries(projectConfig).map(([projectId, project]) => [
-    projectId,
-    {
-      ...project,
-      imageUrl: project.imageKey ? imageUrlMap[project.imageKey] ?? null : null,
-      technologies: (project.technologies ?? []).map((tech) => ({
-        ...tech,
-        iconUrl: iconUrlMap[tech.iconKey] ?? null,
-      })),
-      previewDocUrl: project.previewDoc
-        ? docUrlMap[project.previewDoc] ?? null
-        : null,
-    },
-  ])
+  Object.entries(projectConfig).map(([projectId, project]) => {
+    let imageUrl = null;
+
+    if (project.imageKey) {
+      if (Array.isArray(project.imageKey)) {
+        // Map each key to a URL, drop any missing ones
+        imageUrl = project.imageKey
+          .map((key) => imageUrlMap[key])
+          .filter(Boolean);
+      } else {
+        imageUrl = imageUrlMap[project.imageKey] ?? null;
+      }
+    }
+
+    return [
+      projectId,
+      {
+        ...project,
+        imageUrl,
+        technologies: (project.technologies ?? []).map((tech) => ({
+          ...tech,
+          iconUrl: iconUrlMap[tech.iconKey] ?? null,
+        })),
+        previewDocUrl: project.previewDoc
+          ? docUrlMap[project.previewDoc] ?? null
+          : null,
+      },
+    ];
+  })
 );
 
 export const projectList = Object.entries(projectsById).map(

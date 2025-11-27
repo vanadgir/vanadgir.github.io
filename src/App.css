@@ -186,8 +186,10 @@ body,
 
 .detail-pane-project-image-wrapper {
   display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
 }
 
 .detail-pane-project-image {

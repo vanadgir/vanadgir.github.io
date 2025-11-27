@@ -2,6 +2,7 @@ import myPic from "../../../assets/images/varunpfp.jpg";
 import barnPic from "../../../assets/images/barnjam.jpg";
 
 import GuestbookEntry from "./GuestbookEntry";
+import TwelveToneMatrix from "./TwelveToneMatrix";
 import { roadtripEntries } from "./roadtripEntries";
 import { ue5ColorPuzzleEntries } from "./ue5ColorEntries";
 import { ue5HexGridEntries } from "./ue5HexEntries";
@@ -40,6 +41,17 @@ const guestbookEntries = [
   {
     id: 0,
     body: () => <GuestbookEntry />,
+  },
+];
+
+const twelveToneMatrixEntries = [
+  {
+    id: 0,
+    body: () => <TwelveToneMatrix />,
+  },
+  {
+    id: 1,
+    body: () => <TwelveToneMatrix />,
   },
 ];
 
@@ -89,6 +101,14 @@ export const blogsById = {
     label: "Roadtrip 2020",
     description: "A journal of my cross-country adventure",
     entries: roadtripEntries,
+    hideNav: false,
+  },
+
+  twelvetone: {
+    id: "twelvetone",
+    label: "12-Tone Atonal Matrix",
+    description: "The Algorithm of Atonal Music",
+    entries: twelveToneMatrixEntries,
     hideNav: false,
   },
 };
