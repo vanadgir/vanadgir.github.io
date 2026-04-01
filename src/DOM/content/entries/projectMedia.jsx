@@ -1,7 +1,6 @@
-const iconModules = import.meta.glob(
-  "../../../assets/icons/*.{svg,png}",
-  { eager: true }
-);
+const iconModules = import.meta.glob("../../../assets/icons/*.{svg,png}", {
+  eager: true,
+});
 
 // Map basename (no extension) -> URL
 const iconUrlMap = {};
@@ -17,7 +16,7 @@ for (const path in iconModules) {
 
 const imageModules = import.meta.glob(
   "../../../assets/projects/*.{png,jpg,jpeg,webp,gif}",
-  { eager: true }
+  { eager: true },
 );
 
 const imageUrlMap = {};
@@ -30,7 +29,7 @@ for (const path in imageModules) {
 
 const docModules = import.meta.glob(
   "../../../assets/projectdocs/*.{pdf,doc,docx}",
-  { eager: true }
+  { eager: true },
 );
 
 const docUrlMap = {};
@@ -66,15 +65,21 @@ const projectConfig = {
 
   murdeerGame: {
     title: "MURDEER",
-    subtitle: "Unity FPS game",
+    subtitle: "Unity FPS Roguelite",
     summary: "You play as a deer with a gun",
     description:
       'Originally developed for Big Mode Gam Jam 2025 for the theme "POWER", ' +
       "MURDEER has gone into full development with a small team of 4. " +
-      'Primary responsibilities include Rigidbody PlayerController, "infinite" gun attachment system, ' +
-      "FMOD dynamic audio and music intensity system, and lots of other features.",
-    imageKey: ["murdeer", "murdeergameplay", "murdeercrazygun"],
+      "As Lead Developer, I am responsible for writing up many of the game's features, " + 
+      "such as the Player Controller, the weapons & attachment system, the dynamic " +
+      "intensity for background music, and much more.",
+    imageKey: ["murdeer", "powergunrekt", "bighead", "noodlerekt2"],
     hyperlinks: [
+      {
+        id: "steam-page",
+        text: "Steam",
+        href: "https://store.steampowered.com/app/3719400/MURDEER/",
+      },
       {
         id: "studio-page",
         text: "Swift Stag Studios",
@@ -419,16 +424,16 @@ export const projectsById = Object.fromEntries(
           iconUrl: iconUrlMap[tech.iconKey] ?? null,
         })),
         previewDocUrl: project.previewDoc
-          ? docUrlMap[project.previewDoc] ?? null
+          ? (docUrlMap[project.previewDoc] ?? null)
           : null,
       },
     ];
-  })
+  }),
 );
 
 export const projectList = Object.entries(projectsById).map(
   ([id, project]) => ({
     id,
     ...project,
-  })
+  }),
 );
