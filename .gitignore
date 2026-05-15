@@ -11,6 +11,9 @@ node_modules
 dist-ssr
 *.local
 
+# build output (deployed by .github/workflows/deploy.yml)
+docs
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
