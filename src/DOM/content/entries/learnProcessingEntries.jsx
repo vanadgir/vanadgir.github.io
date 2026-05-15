@@ -1,0 +1,659 @@
+import CodeBlock from "./CodeBlock";
+
+const files = import.meta.glob("../images/learnprocessing/*.{png,gif}", {
+  eager: true,
+});
+
+const mediaMap = {};
+
+for (const path in files) {
+  const url = files[path].default;
+  const filename = path.split("/").pop();
+  mediaMap[filename] = url;
+}
+
+const post1_1Code = `// setup function
+void setup() {
+  size(600, 600);
+  background(0);
+  ellipse(width/2, height/2, 100, 100);
+}
+
+// render function
+void draw() {
+  // what do we want to make happen?
+}`;
+
+const post1_2Code = `int x, y;
+int speed = 5;
+
+// setup function
+void setup() {
+  size(600, 600);
+  background(0);
+  x = width/2;
+  y = height/2;
+}
+
+// render function
+void draw() {
+  ellipse(x, y, 100, 100);
+  x += speed;
+  if (x >= width) {
+    x = 0;
+  }
+}`;
+
+const post1_3Code = `int x, y;
+int speed = 5;
+
+// setup function
+void setup() {
+  size(600, 600);
+  background(0);
+  x = width/2;
+  y = height/2;
+}
+
+// render function
+void draw() {
+  background(0);
+  ellipse(x, y, 100, 100);
+  x += speed;
+  if (x >= width) {
+    x = 0;
+  }
+}`;
+
+const post2_1Code = `float x, y; // starting position of the shape
+float len = 10; // length of the shape
+float speed = 5; // fall speed
+
+void setup() {
+  size(600, 480);
+  x = width/2;
+  y = 0;
+}
+
+void draw() {
+  background(200);
+  strokeWeight(4);
+  stroke(0, 0, 200);
+  line(x, y, x, y+len);
+  y += speed;
+}`;
+
+const post2_2Code = `class Drop {
+  float x = random(width); // random horizontal position
+  float y = random(-500, -100); // random height, can be offscreen
+  float z = random(0, 20); // create sense of depth
+  float len = map(z, 0, 20, 10, 20); // length of Drop
+  float yspeed = map(z, 0, 20, 4, 10); // speed of Drop
+
+  // fall & reset method
+  void fall() {
+    y = y + yspeed;
+
+    if (y > height) {
+      y = random(-200, -100);
+      yspeed = map(z, 0, 20, 4, 10);
+    }
+  }
+
+  // display method
+  void show() {
+    float thick = map(z, 0, 20, 1, 3);
+    strokeWeight(thick);
+    stroke(0, 0, 200);
+    line(x, y, x, y+len);
+  }
+}`;
+
+const post2_3Code = `// initialize array of 500 Drop objects
+Drop[] drops = new Drop[500];
+
+// setup function 
+void setup() {
+  size(600, 480);
+
+  // loop through and create a new Drop for every index
+  for (int i = 0; i < drops.length; i++) {
+    drops[i] = new Drop();
+  }
+}
+
+// render function
+void draw() {
+  background(200);
+
+  // each frame, show and update the new location
+  for (int i = 0; i < drops.length; i++) {
+    drops[i].show();
+    drops[i].fall();
+  }
+}`;
+
+const post3_1Code = `// setup function
+void setup() {
+  size(600, 600);
+  colorMode(HSB); // hue, saturation, brightness
+}
+
+// render function
+void draw() {
+  background(0);
+  float shift = map(frameCount%60, 0, 60, 0, 255);
+
+  for (int r = 900; r > 0; r -= 20) {
+    strokeWeight(4);
+    stroke((r+shift)%255, 255, 255);
+    noFill();
+    ellipse(width/2, height/2, r, r);
+  }
+  
+  // uncomment to export
+  // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+
+  // if (frameCount == 60) {
+  //   exit();
+  // }
+}`;
+
+const post3_2Code = `// setup function
+void setup() {
+  size(600, 600);
+  colorMode(HSB);
+}
+
+// render function
+void draw() {
+  background(0);
+  float shift = map(frameCount%60, 0, 60, 0, 255);
+
+  for (int r = 900; r > 0; r -= 20) {
+    strokeWeight(4);
+    stroke((r+shift)%255, 255, 255);
+    noFill();
+    ellipse(width/2, height/2, r, r);
+  }
+
+  for (int r = 10; r < 900; r += 20) {
+    strokeWeight(4);
+    stroke((r+255-shift)%255, 255, 255);
+    noFill();
+    ellipse(width/2, height/2, r, r);
+  }
+  
+  // uncomment to export 
+  // saveFrame("output/gif-"+nf(frameCount, 3)+".png");
+
+  // if (frameCount == 60) {
+  //   exit();
+  // }
+}`;
+
+const post4_1Code = `// setup function
+void setup() {
+  size(800, 800, P3D); // use 3D renderer
+  colorMode(HSB); // hue, saturation, brightness
+}
+
+// render function
+void draw() {
+  background(0);
+  translate(width/2, height/2); // translate origin to center
+
+  rotateX(radians(60)); // comment this line out for 2D top view
+
+  noFill();
+  strokeWeight(3);
+
+  for (int i = 0; i < 55; i++) {
+    // define line color using frame count and circle position
+    float strokeCol = map(sin(radians(frameCount + i * 10)), -1, 1, 0, 255);
+    stroke(strokeCol, 255, 255);
+
+    // beginShape & endShape for custom shapes
+    beginShape();
+    for (int j = 0; j < 360; j += 5) {
+      int rad = i * 5;
+      float x = rad * cos(radians(j));
+      float y = rad * sin(radians(j));
+      float z = sin(radians(frameCount + i * 10)) * 200;
+      vertex(x, y, z);
+    }
+    endShape(CLOSE);
+  }
+}`;
+
+export const learnProcessingEntries = [
+  {
+    id: 0,
+    body: ({ goTo }) => (
+      <>
+        <p>
+          Processing is an incredible application, allowing users to create
+          amazing visuals in both 2D and 3D with just some knowledge of Java. In
+          this blog series, I will be documenting my learning journey, both to
+          "think aloud" as well as to share the cool things I make. If you'd
+          like to follow along and learn with me, go ahead and{" "}
+          <a href="https://processing.org/download" target="_blank">
+            download
+          </a>{" "}
+          Processing on your machine.
+        </p>
+        <hr />
+        <p>
+          i.{" "}
+          <button onClick={() => goTo(1)} className="page-link">
+            Introduction
+          </button>
+        </p>
+        <p>
+          ii.{" "}
+          <button onClick={() => goTo(2)} className="page-link">
+            Getting Started
+          </button>
+        </p>
+        <p>
+          iii.{" "}
+          <button onClick={() => goTo(3)} className="page-link">
+            Using Classes
+          </button>
+        </p>
+        <p>
+          iv.{" "}
+          <button onClick={() => goTo(4)} className="page-link">
+            Controlled Looping
+          </button>
+        </p>
+        <p>
+          v.{" "}
+          <button onClick={() => goTo(5)} className="page-link">
+            Dipping Into 3D
+          </button>
+        </p>
+      </>
+    ),
+  },
+
+  {
+    id: 1,
+    body: () => (
+      <>
+        <h3>i. Introduction</h3>
+        <p>
+          Before I begin, let me also shout out two amazing resources I've been
+          using to learn. It's always good to read the docs - and Processing has
+          pretty high quality ones - but this journey has been made so much more
+          fun thanks to{" "}
+          <a href="https://twitter.com/shiffman" target="_blank">
+            Daniel Shiffman
+          </a>{" "}
+          and his channel{" "}
+          <a href="https://www.youtube.com/@TheCodingTrain" target="_blank">
+            The Coding Train
+          </a>
+          . You'll see his name on a lot of the Processing docs, and he has put
+          an insane amount of effort into making hundreds of videos to teach you
+          the fundamentals of Processing and even programming in general. In
+          particular, I watched almost the entirety of his{" "}
+          <a
+            href="https://www.youtube.com/playlist?list=PLRqwX-V7Uu6ZiZxtDDRCi6uhfTH4FilpH"
+            target="_blank"
+          >
+            Coding Challenges
+          </a>{" "}
+          playlist, and I still refer back to a handful of them when trying to
+          brainstorm new creations.{" "}
+        </p>
+
+        <p>
+          The other creator I must thank is{" "}
+          <a href="https://www.youtube.com/@thedotisblack" target="_blank">
+            thedotisblack
+          </a>
+          . On his channel, you can dive right into some incredibly cool
+          animations and see how he makes them. I've picked up a few neat tricks
+          from what he's shared and I'm sure I will be inspired by him again.
+          Sometimes when I am stumped, I'll just browse through his videos to
+          remind myself of the kinds of things I hope to create and hop right
+          back in!
+        </p>
+
+        <p>
+          Since I am still pretty early in my journey, there are bound to be
+          other resources and creators I find along the way. If you come across
+          any art or artist you'd like to share with me, feel free to send me a
+          message or email!
+        </p>
+
+        <p>Now... let's get to it!</p>
+      </>
+    ),
+  },
+
+  {
+    id: 2,
+    body: () => (
+      <>
+        <h3>ii. Getting Started</h3>
+        <p>
+          {" "}
+          When creating animations with Processing, there are two core functions
+          that need to be invoked - <i>setup()</i>
+          and
+          <i>draw()</i>. In the <i>setup()</i> function, we can do things like
+          set the canvas dimensions, assign values to global variables,
+          instantiate objects for later manipulation, and any other steps that
+          need to happen on or before the first frame. Then, in <i>draw()</i>,
+          we can apply transformations, scaling, variable recalculation, and
+          lots more to bring the canvas to life. Each unit of time in our case
+          here is a single frame, or one whole execution of the <i>draw()</i>{" "}
+          function.
+        </p>
+        <CodeBlock code={post1_1Code} language="java" />
+        <p>
+          In this example, we're setting our canvas to 600px by 600px and giving
+          it a black background. Although the default color mode is RGB and
+          usually requires 3 values, we can shorthand black and white with 0 and
+          255 respectively. When creating the ellipse, you'll notice I used
+          variables called <i>width</i> and <i>height</i> without ever creating
+          or assigning them. That's because Processing holds on to a number of
+          system variables as well - <i>width</i> and
+          <i>height</i> being the dimensions of the canvas itself. By setting
+          the center of the ellipse to half the width and height of the canvas,
+          we ensure it will be centered in our view even if we were to set the
+          dimensions to something other than (600, 600).
+        </p>
+        <img
+          src={mediaMap["post1_1.png"]}
+          className="blog-entry-image"
+          title="White Circle Black Background"
+        />
+        <p>
+          Now, we initialize some variables globally, since we would like to
+          change them later on within the <i>draw()</i>
+          scope. The variables <i>x</i> and <i>y</i> are set to half the width
+          and height so that we can simplify our formulas, while <i>speed</i> is
+          set to an arbitrary value of 5. We can play with this one to adjust
+          how quickly the circle will slide.{" "}
+        </p>
+        <CodeBlock code={post1_2Code} language="java" />
+        <p>
+          This time around, we create our ellipse within <i>draw()</i> because
+          we want to be able to change where we place it and draw its new
+          location each frame. We also add a check for when <i>x</i> goes beyond
+          the width of the canvas, setting it back to 0 which would send it back
+          to the left side. Everything seems about right, so then how does it
+          look?{" "}
+        </p>
+        <img
+          src={mediaMap["post1_2.gif"]}
+          className="blog-entry-image"
+          title="White Circle Trail Gif"
+        />
+        <p>
+          Wait a second... ah, that's right. Currently, when we draw new frames,
+          they are being overlaid on each other and creating this trailing
+          effect. It looks cool, but wasn't quite what we wanted. Luckily, this
+          is an easy fix.
+        </p>
+        <CodeBlock code={post1_3Code} language="java" />
+        <img
+          src={mediaMap["post1_3.gif"]}
+          className="blog-entry-image"
+          title="White Circle Motion Gif"
+        />
+        <p>Excellent!</p>
+
+        <p>
+          As we'll see in later entries, both methods can be utilised depending
+          on the context and type of effect we are going for. Next time, we'll
+          look at the <i>map()</i> function for rescaling values as well as the{" "}
+          <i>random()</i>
+          function for some of its clever uses. Thanks for reading and see you
+          in the next one!
+        </p>
+      </>
+    ),
+  },
+
+  {
+    id: 3,
+    body: () => (
+      <>
+        <h3>iii. Using Classes</h3>
+        <p>
+          Now that we have a basic grasp of the two core functions and getting a
+          shape on screen, why not try to make something truly generative? One
+          of the first examples I learned was to create a raining effect, so
+          let's go through that together. Let's first try and get a basic shape
+          to fall from the top of the screen to the bottom, and then extend that
+          logic.
+        </p>
+        <CodeBlock code={post2_1Code} language="java" />
+        <img
+          src={mediaMap["post2_1.gif"]}
+          className="blog-entry-image"
+          title="Single Raindrop Gif"
+        />
+        <p>
+          This gives us a line segment drawn in the center of the screen with
+          weight 4, and it falls at a rate of 5 pixels per frame. If we want to
+          extend this to mimic falling rain, then we can use this basic behavior
+          in the form of a Drop class. To do this in Processing, we just create
+          a new tab and name it Drop. Instead of creating global variables in
+          our main file, we can instead have these be inherent properties of a
+          Drop. At time of creation, we can assign a Drop a new starting height,
+          fall speed, stroke weight, or really anything we want.{" "}
+        </p>
+        <CodeBlock code={post2_2Code} language="java" />
+        <p>
+          Two functions are doing a lot of the heavy lifting in here -{" "}
+          <i>random()</i> and <i>map()</i>. The <i>random()</i>
+          function gives us a number in the given range of two arguments, or a
+          number from 0 to the given single argument. It is being used in this
+          class for multiple purposes, such as giving the Drop a random starting
+          position, both horizontally and vertically. These values are such that
+          a new Drop may start well offscreen before passing through the visible
+          canvas. The value of <i>z</i> here lets us do some neat tricks to
+          create a sense of depth despite rendering in 2D, with the use of the{" "}
+          <i>map()</i> function. To use this function, we tell it a value, its
+          original range, and then the new range to which to scale it. This
+          means we can take the value of <i>z</i> and use it to inform multiple
+          features of the Drop, like its stroke weight and fall speed, allowing
+          us to give each Drop a separated, staggered animation for falling.
+        </p>
+
+        <p>
+          Now that we've defined the class and its methods, we can go back to
+          our main script to initialize, draw, and update a large number of
+          Drops. Since most of our behavior and logic is stored in the Drop
+          class, we should have pretty simple <i>setup()</i> and <i>draw()</i>{" "}
+          functions.
+        </p>
+        <CodeBlock code={post2_3Code} language="java" />
+        <img
+          src={mediaMap["post2_2.gif"]}
+          className="blog-entry-image"
+          title="Rain Simulation Gif"
+        />
+        <p>
+          If you were to run this in Processing, it would appear to rain
+          endlessly. Unfortunately, having to export to gif means I have to use
+          a limited number of frames. In fact, this may even motivate a shift
+          over to p5.js at some point, the Javascript library built to support a
+          lot of the same functionality as Processing. However, before moving
+          on, there are still more fundamentals to Processing to discuss!
+        </p>
+
+        <p>
+          Now that we've built and utilized a Class, we can certainly imagine
+          how dynamic some of our creations can be. Just like <i>random()</i>{" "}
+          and <i>map()</i>, there are lots of functions available to us that are
+          simple in concept, yet lead to awesome results. Next time, we'll take
+          a look at involving a morphing color palette. Additionally, we'll even
+          try to solve the problem of having limited frames for gif uploads - is
+          there a way we can ensure a smooth loop in a limited frame count?
+        </p>
+
+        <p>Thanks for reading and see you next time!</p>
+      </>
+    ),
+  },
+
+  {
+    id: 4,
+    body: () => (
+      <>
+        <h3>iv. Controlled Looping</h3>
+        <p>
+          Technically, we've already achived a smooth loop in one of our first
+          examples - the white circle moving right then reseting to the left.
+          Let's take a quick look at it again to see how it was achieved.
+        </p>
+        <img
+          src={mediaMap["post1_3.gif"]}
+          className="blog-entry-image"
+          title="White Circle Motion Gif"
+        />
+
+        <p>
+          Remember when I told you that Processing provides us with a number of
+          system variables? It's time I introduce the
+          <i>frameCount</i> variable, a counter that is incremented by
+          Processing for us on every render cycle of the
+          <i>draw()</i> function. In the case of the moving circle, I knew I
+          would achieve a loop at 120 frames, based on the width of the canvas
+          and the travel speed (x displacement). By having Processing export a
+          .png image every frame, I can hard stop the program after 120 images,
+          and then use some other method of stitching them together into a gif
+          (I use{" "}
+          <a href="https://ezgif.com/maker" target="_blank">
+            ezgif.com
+          </a>
+          ).
+        </p>
+
+        <p>
+          The uses of <i>frameCount</i> don't stop there - it can even be
+          leveraged for some great artistic generations using colors. You may
+          have once seen colors expressed in a color wheel, showing how various
+          hues can blend into each other seamlessly and eventually loop back to
+          the start. If we can somehow make use of this seamless transitioning,
+          then we should be able to have our colors loop as well.
+        </p>
+        <CodeBlock code={post3_1Code} language="java" />
+        <img
+          src={mediaMap["post3_1.gif"]}
+          className="blog-entry-image"
+          title="Color Circles A 60 Frames"
+        />
+        <p>
+          Couple of things to note - the default color mode in Processing is
+          RGB, where the color is based on values of red, green, and blue. By
+          using color mode HSB, we instead need to provide a hue, saturation,
+          and brightness. In this mode, going from 0 to 255 lets us traverse the
+          "color wheel", meaning it can neatly loop. The other clever trick
+          being used is the modulo operator in combination with the <i>map()</i>{" "}
+          function. With this, we are telling Processing that we want to divide
+          the current <i>frameCount</i> by 60, and use this remainder to inform
+          what color to use. This means, every 60 frames, we should traverse the
+          color wheel one time. To export, we would just un-comment the lines at
+          the bottom and our images would save in an /output folder of our
+          sketch.
+        </p>
+
+        <p>
+          All in all, the output is pretty mesmerizing! Since our loop has the
+          radius of each concentric circle decreasing by 20, what would happen
+          if we create a new set of circles offset from these and have the
+          colors of those propogate outwards instead of inwards? Something like
+          this:{" "}
+        </p>
+        <CodeBlock code={post3_2Code} language="java" />
+        <img
+          src={mediaMap["post3_2.gif"]}
+          className="blog-entry-image"
+          title="Color Circles B 60 Frames"
+        />
+        <p>Now that is cool! And all just in 60 frames!</p>
+
+        <p>
+          I am still currently going through some videos of my own, so no
+          concrete plans yet on the subject of the next entry. At the moment, I
+          am playing around with map generation, noise algorithms, and cellular
+          automata, but with such a vast number of ideas and topics to play
+          with, it's hard to pick just a few! But as always, thank you for
+          reading and I'll see you in the next one.
+        </p>
+      </>
+    ),
+  },
+
+  {
+    id: 5,
+    body: () => (
+      <>
+        <h3>v. Dipping Into 3D</h3>
+        <p>
+          I've been playing around with 3D more recently, and now that I've made
+          something cool enough to share, I thought it would be nice to show you
+          how it works in code and I will do my best to walk you through how to
+          make something like this on your own! One change you might notice
+          immediately in the code below is the addition of a new argument in the{" "}
+          <i>size()</i>
+          function - this is how we tell Processing to use a 3D renderer, in
+          this case P3D.{" "}
+        </p>
+        <CodeBlock code={post4_1Code} language="java" />
+        <p>
+          Here is what this sketch will look like if we comment out the{" "}
+          <i>rotateX()</i> function, meaning our sketch is still functionally 2D
+          like the others. This is basically our "top view".
+        </p>
+        <img
+          src={mediaMap["post4_1.gif"]}
+          className="blog-entry-image"
+          title="Sine 3D Circles Top View"
+        />
+        <p>
+          First, you can probably notice a similar pattern to a previous post
+          where I use the global variable
+          <i>frameCount</i> to inform my sketch on what to color something. By
+          also using the loop variable <i>i</i>, it can also be offset by the
+          position of the shape itself. Next, instead of calling{" "}
+          <i>ellipse()</i> like I have before, I am instead using{" "}
+          <i>beginShape()</i> and <i>endShape()</i>, a pair of functions that
+          can be used to define a custom shape with calls to <i>vertex()</i>{" "}
+          between them. In this example, I am using the loop variable <i>j</i>{" "}
+          to increment around the radius and place a vertex at a number of
+          equally spaced points. The <i>CLOSE</i> argument simply tells
+          Processing to close off the shape by connecting the final vertex with
+          the first one. A smaller increment means more vertices, meaning our
+          shape is closer to resembling a circle. I encourage you to try this
+          with larger increments, or even dynamic increments to see what sort of
+          shapes and patterns you might get!
+        </p>
+
+        <p>
+          Now let's have our big reveal. By applying <i>rotateX()</i> (and
+          remember, we have to supply our angle in radians), we tell our
+          renderer to perform the necessary transformations for the illusion of
+          depth. Now our Z axis comes fully into view.{" "}
+        </p>
+        <img
+          src={mediaMap["post4_2.gif"]}
+          className="blog-entry-image"
+          title="Sine 3D Circles"
+        />
+        <p>
+          Another satisfying and smooth loop! Thanks to the oscillatory nature
+          of the sine function, we are able to capture the entirety of one
+          phase, export our frames, and stitch it together into a nice gif!{" "}
+        </p>
+      </>
+    ),
+  },
+];

@@ -1,0 +1,113 @@
+import { useMemo, useState, useEffect, useRef } from "react";
+import { Stars } from "@react-three/drei";
+import { useLocation } from "wouter";
+
+import CameraRig from "./CameraRig";
+import Planet from "./Planet";
+import SolarBody from "./SolarBody";
+import SpaceDust from "./SpaceDust";
+import SkySphere from "./SkySphere";
+
+import { PLANETS, HOME_FOCUS } from "../../config/planets";
+import { usePlanetUI } from "../../contexts/PlanetUIContext";
+import { useSettings } from "../../contexts/SettingsContext";
+import { useGTag } from "../../contexts/GTagContext";
+
+const Universe = () => {
+  const [location, navigate] = useLocation();
+  const isHome = location === "/";
+
+  const { setCameraLockedOnPlanet, setActivePlanetId, homeRecenterToken } = usePlanetUI();
+
+  const { quality } = useSettings();
+  const { trackPlanetSelect } = useGTag();
+
+  const planetPositionsRef = useRef(
+    Object.fromEntries(PLANETS.map((c) => [c.id, null]))
+  );
+
+  const updatePlanetPos = (id, pos) => {
+    planetPositionsRef.current[id] = pos;
+  };
+
+  const selectedPlanet = useMemo(() => {
+    if (location === "/") return null;
+    return PLANETS.find((c) => c.path === location) ?? null;
+  }, [location]);
+
+  const hasCameraTarget = isHome || selectedPlanet != null;
+
+  useEffect(() => {
+    if (selectedPlanet) {
+      setActivePlanetId(selectedPlanet.id);
+      trackPlanetSelect(selectedPlanet.id);
+    } else {
+      setActivePlanetId(null);
+    }
+  }, [selectedPlanet, setActivePlanetId, trackPlanetSelect]);
+
+  const starCountByQuality = {
+    low: 3000,
+    medium: 5000,
+    high: 9000,
+  };
+
+  const dustCountByQuality = {
+    low: 1500,
+    medium: 2500,
+    high: 4000,
+  };
+
+  const starCount = starCountByQuality[quality] ?? starCountByQuality.low;
+  const dustCount = dustCountByQuality[quality] ?? dustCountByQuality.low;
+
+  return (
+    <>
+      <SkySphere />
+
+      <Stars
+        radius={150}
+        depth={80}
+        count={starCount}
+        factor={4}
+        saturation={0}
+      />
+
+      <SpaceDust count={dustCount} />
+
+      <SolarBody />
+
+      {PLANETS.map((planet) => (
+        <Planet
+          key={planet.id}
+          planet={planet}
+          selected={selectedPlanet?.id === planet.id}
+          onSelect={(path) => navigate(path)}
+          onUpdate={updatePlanetPos}
+        />
+      ))}
+
+      {hasCameraTarget && (
+        <CameraRig
+          homeFocus={HOME_FOCUS}
+          getFollowPos={() =>
+            selectedPlanet
+              ? planetPositionsRef.current[selectedPlanet.id]
+              : null
+          }
+          selectedPlanetId={selectedPlanet?.id ?? null}
+          isHome={isHome}
+          recenterToken={homeRecenterToken}
+          onTransitionStart={() => {
+            setCameraLockedOnPlanet(false);
+          }}
+          onTransitionEnd={({ isHome: endedAtHome }) => {
+            setCameraLockedOnPlanet(!endedAtHome);
+          }}
+        />
+      )}
+    </>
+  );
+};
+
+export default Universe;
